@@ -1,4 +1,4 @@
-package com.example.pyco.ui.theme
+package com.example.pyco.views.ui.theme
 
 import android.app.Activity
 import android.os.Build
