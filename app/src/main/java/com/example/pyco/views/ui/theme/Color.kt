@@ -1,4 +1,4 @@
-package com.example.pyco.ui.theme
+package com.example.pyco.views.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
