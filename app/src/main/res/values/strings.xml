@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">pyco</string>
+    <string name="habits">habits</string>
+    <string name="home">home</string>
 </resources>
