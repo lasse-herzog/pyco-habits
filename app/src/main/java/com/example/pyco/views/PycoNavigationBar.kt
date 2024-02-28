@@ -2,7 +2,9 @@ package com.example.pyco.views
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -11,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -22,13 +25,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.ui.theme.PycoTheme
 
+data class NavBarItem(val screen: Screen, val icon: ImageVector)
 
 @Composable
 fun PycoNavigationBar() {
     val navController = rememberNavController()
-    val items = listOf(
-        Screen.Home,
-        Screen.Habits,
+    val navBarItems = listOf(
+        NavBarItem(Screen.Calendar, Icons.Filled.DateRange),
+        NavBarItem(Screen.Home, Icons.Filled.Home),
+        NavBarItem(Screen.Habits, Icons.Filled.List),
     )
 
 
@@ -37,9 +42,9 @@ fun PycoNavigationBar() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            items.forEach { screen ->
+            navBarItems.forEach { (screen, icon) ->
                 NavigationBarItem(
-                    icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
+                    icon = { Icon(icon, contentDescription = null) },
                     label = { Text(stringResource(screen.resourceId)) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
@@ -67,10 +72,16 @@ fun PycoNavigationBar() {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Calendar.route) { Calendar() }
             composable(Screen.Home.route) { Home() }
             composable(Screen.Habits.route) { Habits() }
         }
     }
+}
+
+@Composable
+fun Calendar() {
+    Text(text = "Calendar")
 }
 
 @Composable
