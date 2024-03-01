@@ -75,7 +75,7 @@ fun PycoNavigationBar() {
         ) {
             composable(Screen.Calendar.route) { Calendar() }
             composable(Screen.Home.route) { Home() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample) }
+            composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController) }
         }
     }
 }
