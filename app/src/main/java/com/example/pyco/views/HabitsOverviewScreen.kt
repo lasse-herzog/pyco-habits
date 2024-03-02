@@ -1,5 +1,6 @@
 package com.example.pyco.views
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,8 +9,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,8 +27,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,8 +46,10 @@ import com.example.pyco.views.ui.theme.PycoTheme
 @Composable
 fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
 
+    var mDropdownMenu by remember { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val mContext = LocalContext.current
     //TODO: implement route for detail view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -66,9 +78,9 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { mDropdownMenu = false }) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
+                            imageVector = Icons.Default.Menu,
                             contentDescription = "Localized description"
                         )
                     }
@@ -100,6 +112,8 @@ fun HabitsList(habits: List<Habit>){
         }
     }
 }
+
+
 
 @Preview
 @Composable
