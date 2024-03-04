@@ -107,14 +107,6 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { /* do something */ }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    },
-                    actions = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
