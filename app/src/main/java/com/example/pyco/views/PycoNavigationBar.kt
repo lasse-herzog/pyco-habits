@@ -1,10 +1,11 @@
 package com.example.pyco.views
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -27,13 +28,16 @@ import com.example.pyco.views.ui.theme.PycoTheme
 
 data class NavBarItem(val screen: Screen, val icon: ImageVector)
 
+/**
+ * The Composable that represents the NavBar at the bottom of the app.
+ */
 @Composable
 fun PycoNavigationBar() {
     val navController = rememberNavController()
     val navBarItems = listOf(
         NavBarItem(Screen.Calendar, Icons.Filled.DateRange),
         NavBarItem(Screen.Home, Icons.Filled.Home),
-        NavBarItem(Screen.Habits, Icons.Filled.List),
+        NavBarItem(Screen.Habits, Icons.AutoMirrored.Filled.List),
     )
 
 
@@ -73,7 +77,7 @@ fun PycoNavigationBar() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Calendar.route) { Calendar() }
-            composable(Screen.Home.route) { Home() }
+            composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
             composable(Screen.Habits.route) { Habits() }
         }
     }
@@ -87,11 +91,6 @@ fun Calendar() {
 @Composable
 fun Habits() {
     Text(text = "Habits")
-}
-
-@Composable
-fun Home() {
-    Text(text = "Home")
 }
 
 @Preview(showBackground = true)
