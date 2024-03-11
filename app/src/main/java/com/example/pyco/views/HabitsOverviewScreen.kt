@@ -4,13 +4,16 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
@@ -35,6 +38,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -54,6 +59,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
+import com.example.pyco.data.Category
+import com.example.pyco.data.CategorySampleData
 import com.example.pyco.data.HabitSampleData
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
@@ -67,7 +74,6 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     //TODO: implement route for detail view
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -112,11 +118,34 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
+                CategoryFilterList(CategorySampleData.catSample)
                 HabitsList(habits)
             }
         }
 }
 
+@Composable
+fun CatFilterChip(categoryName: String){
+    var selected by remember { mutableStateOf(false) }
+
+    FilterChip(
+        selected = selected,
+        onClick = { selected = !selected /*TODO sort function*/ },
+        label = {Text(categoryName)},
+        modifier = Modifier.padding(horizontal = 5.dp),
+        leadingIcon = if (selected) {
+            {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = "Check icon",
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
+        } else {
+            null
+        },
+        )
+}
 @Composable
 fun HabitsList(habits: List<Habit>){
     LazyColumn {
@@ -126,7 +155,16 @@ fun HabitsList(habits: List<Habit>){
     }
 }
 
-
+@Composable
+fun CategoryFilterList(categories: List<Category>){
+    LazyRow (
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ){
+        items(categories){cat ->
+            CatFilterChip(categoryName = cat.name)
+        }
+    }
+}
 
 @Preview
 @Composable
