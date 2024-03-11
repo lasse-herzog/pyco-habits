@@ -46,12 +46,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.pyco.R
 import com.example.pyco.data.HabitSampleData
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
@@ -65,32 +67,8 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     //TODO: implement route for detail view
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text("Sort Habits", modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    icon = { Icons.Default.PlayArrow },
-                    label = { Text(text = "Newest")},
-                    selected = false,
-                    onClick = { /*TODO: implement sort logic */scope.launch { drawerState.close() } })
-                NavigationDrawerItem(
-                    icon = { Icons.AutoMirrored.Filled.List },
-                    label = { Text(text = "Categories")},
-                    selected = false,
-                    onClick = { /*TODO: implement sort logic */scope.launch { drawerState.close() } })
-                NavigationDrawerItem(
-                    icon = { Icons.Default.KeyboardArrowUp },
-                    label = { Text(text = "Name")},
-                    selected = false,
-                    onClick = { /*TODO: implement sort logic */scope.launch { drawerState.close() } })
-            }
-        }
-    ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
@@ -106,11 +84,17 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                             overflow = TextOverflow.Ellipsis
                         )
                     },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                    actions = {
+                        IconButton(onClick = { /* sort habits in alphabetical order */ }) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Localized description"
+                                painter = painterResource(R.drawable.baseline_sort_by_alpha_24),
+                                contentDescription = "Sort in alphabetical order"
+                            )
+                        }
+                        IconButton(onClick = { /* sort habits with newest first */ }) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_new_releases_24),
+                                contentDescription = "Newest first"
                             )
                         }
                     },
@@ -131,7 +115,6 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                 HabitsList(habits)
             }
         }
-    }
 }
 
 @Composable
