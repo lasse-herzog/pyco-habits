@@ -9,7 +9,7 @@ interface CategoryDao {
     @Query("SELECT * FROM category")
     suspend fun getAll(): List<Category>
 
-    @Query("SELECT * FROM category WHERE id = :categoryId")
+    @Query("SELECT * FROM category WHERE categoryId = :categoryId")
     suspend fun getById(categoryId: Int): Category
 
     @Query("SELECT * FROM category WHERE name = :categoryName")
