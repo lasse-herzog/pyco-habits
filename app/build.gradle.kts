@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     val composeVersion = "1.6.2"
     val roomVersion = "2.6.1"
 
