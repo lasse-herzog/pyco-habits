@@ -9,9 +9,12 @@ import com.example.pyco.data.HabitBlueprintsRepositoryImpl
 import com.example.pyco.data.HabitsRepository
 import com.example.pyco.data.HabitsRepositoryImpl
 import com.example.pyco.data.PycoDatabase
+import com.example.pyco.data.QuotesRepository
+import com.example.pyco.data.QuotesRepositoryImpl
 import com.example.pyco.data.daos.CategoryDao
 import com.example.pyco.data.daos.HabitBlueprintDao
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.daos.QuoteDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -37,6 +40,10 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindHabitsRepository(repository: HabitsRepositoryImpl): HabitsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindQuotesRepository(repository: QuotesRepositoryImpl): QuotesRepository
 }
 
 @Module
@@ -54,8 +61,14 @@ object DatabaseModule {
 
     @Provides
     fun provideCategoryDao(database: PycoDatabase): CategoryDao = database.categoryDao()
+
     @Provides
-    fun provideHabitBlueprintDao(database: PycoDatabase): HabitBlueprintDao = database.habitBlueprintDao()
+    fun provideHabitBlueprintDao(database: PycoDatabase): HabitBlueprintDao =
+        database.habitBlueprintDao()
+
     @Provides
     fun provideHabitDao(database: PycoDatabase): HabitDao = database.habitDao()
+
+    @Provides
+    fun provideQuoteDao(database: PycoDatabase): QuoteDao = database.quoteDao()
 }

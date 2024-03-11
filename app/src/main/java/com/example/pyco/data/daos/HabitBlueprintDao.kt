@@ -7,12 +7,16 @@ import androidx.room.Upsert
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprintCategoryCrossRef
 import com.example.pyco.data.entities.HabitBlueprintWithCategories
+import com.example.pyco.data.entities.HabitBlueprintWithQuotes
 
 @Dao
 interface HabitBlueprintDao {
     @Transaction
     @Query("SELECT * FROM habitBlueprint")
     suspend fun getHabitBlueprintWithCategories(): List<HabitBlueprintWithCategories>
+    @Transaction
+    @Query("SELECT * FROM habitBlueprint")
+    suspend fun getHabitBlueprintWithQuotes(): List<HabitBlueprintWithQuotes>
 
     @Query("UPDATE habitBlueprint SET isActive = :active WHERE habitBlueprintId = :habitBlueprintId")
     suspend fun updateActive(habitBlueprintId: Int, active: Boolean)

@@ -26,12 +26,11 @@ data class HabitBlueprintWithCategories(
     val categories: List<Category>
 )
 
-data class CategoryWithHabitBlueprints(
-    @Embedded val category: Category,
+data class HabitBlueprintWithQuotes(
+    @Embedded val habitBlueprint: HabitBlueprint,
     @Relation(
-        parentColumn = "categoryId",
-        entityColumn = "habitBlueprintId",
-        associateBy = Junction(HabitBlueprintCategoryCrossRef::class)
+        parentColumn = "habitBlueprintId",
+        entityColumn = "habitBlueprintId"
     )
-    val habitBlueprints : List<HabitBlueprint>
+    val quotes: List<Quote>
 )
