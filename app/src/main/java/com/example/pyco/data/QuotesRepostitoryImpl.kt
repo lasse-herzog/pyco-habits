@@ -2,6 +2,7 @@ package com.example.pyco.data
 
 import com.example.pyco.data.daos.QuoteDao
 import com.example.pyco.data.entities.Category
+import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.Quote
 import javax.inject.Inject

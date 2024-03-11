@@ -1,5 +1,6 @@
 package com.example.pyco.data
 
+import com.example.pyco.data.entities.Habit
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -7,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface HabitsRepository {
     suspend fun createHabit(title: String)
+    suspend fun getHabitsForDay()
 
     fun getHabitsStream(): Flow<List<Habit>>
 }

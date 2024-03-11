@@ -10,13 +10,14 @@ import com.example.pyco.data.daos.QuoteDao
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprintCategoryCrossRef
-import com.example.pyco.data.entities.LocalHabit
+import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.Quote
 
 /**
  * The Room Database of the App.
  */
 @Database(
-    entities = [Category::class, HabitBlueprint::class, HabitBlueprintCategoryCrossRef::class, LocalHabit::class, QuoteDao::class],
+    entities = [Category::class, HabitBlueprint::class, HabitBlueprintCategoryCrossRef::class, Habit::class, Quote::class],
     version = 1
 )
 @TypeConverters(Converters::class)

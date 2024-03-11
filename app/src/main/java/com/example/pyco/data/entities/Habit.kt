@@ -1,6 +1,5 @@
 package com.example.pyco.data.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
@@ -11,10 +10,14 @@ import java.util.Date
  *
  * See ModelMapping.kt for mapping functions used to convert this model to other
  * models.
+ *
+ * TODO a habit can be stacked on another habit or take place at a certain time at a certain place
  */
 @Entity(tableName = "habit")
-data class LocalHabit(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "createdAt") val createdAt : Date
+data class Habit(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val blueprintId: Int,
+    val start: Date,
+    val end : Date?,
+    val interval: Int
 )
