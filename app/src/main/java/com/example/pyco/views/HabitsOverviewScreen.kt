@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -55,6 +56,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -62,20 +64,19 @@ import com.example.pyco.R
 import com.example.pyco.data.Category
 import com.example.pyco.data.CategorySampleData
 import com.example.pyco.data.HabitSampleData
+import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
-    //drawer side menu values for sorting
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
+    val habits = viewModel.habits
+    var sortAscending by remember{mutableStateOf(true)};
     //TODO: implement route for detail view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-        Scaffold(
+
+    Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 CenterAlignedTopAppBar(
@@ -91,7 +92,10 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                         )
                     },
                     actions = {
-                        IconButton(onClick = { /* sort habits in alphabetical order */ }) {
+                        IconButton(onClick = {
+                            viewModel.sortHabitsAlphabetical(sortAscending)
+                            sortAscending = !sortAscending
+                        }) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_sort_by_alpha_24),
                                 contentDescription = "Sort in alphabetical order"
@@ -170,6 +174,6 @@ fun CategoryFilterList(categories: List<Category>){
 @Composable
 fun PreviewHabitsOverviewScreen(){
     PycoTheme {
-        HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController = rememberNavController())
+        HabitsOverviewScreen()
     }
 }
