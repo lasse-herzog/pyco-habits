@@ -2,5 +2,5 @@
     <string name="app_name">pyco</string>
     <string name="habits">Habits</string>
     <string name="home">Home</string>
-    <string name="calendar">Calendar</string>
+    <string name="streak">Streak</string>
 </resources>

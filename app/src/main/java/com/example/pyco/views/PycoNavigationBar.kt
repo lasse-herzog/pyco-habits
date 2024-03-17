@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.data.HabitSampleData
 import com.example.pyco.views.navigation.Screen
+import com.example.pyco.views.streak.StreakView
 import com.example.pyco.views.ui.theme.PycoTheme
 
 data class NavBarItem(val screen: Screen, val icon: ImageVector)
@@ -36,7 +37,7 @@ data class NavBarItem(val screen: Screen, val icon: ImageVector)
 fun PycoNavigationBar() {
     val navController = rememberNavController()
     val navBarItems = listOf(
-        NavBarItem(Screen.Calendar, Icons.Filled.DateRange),
+        NavBarItem(Screen.Streak, Icons.Filled.DateRange),
         NavBarItem(Screen.Home, Icons.Filled.Home),
         NavBarItem(Screen.Habits, Icons.AutoMirrored.Filled.List),
     )
@@ -77,17 +78,12 @@ fun PycoNavigationBar() {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Calendar.route) { Calendar() }
+            composable(Screen.Streak.route) { StreakView(Modifier) }
             composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController) }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
 
         }
     }
-}
-
-@Composable
-fun Calendar() {
-    Text(text = "Calendar")
 }
 
 @Preview(showBackground = true)
