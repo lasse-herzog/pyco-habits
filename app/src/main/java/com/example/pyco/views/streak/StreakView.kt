@@ -64,7 +64,9 @@ fun StreakCircle() {
             .fillMaxHeight()
     ) {
         HalfCircle(progress = .75f)
-        Flame(.25f)
+        WoodComponent(.25f, -20f, offsetTop = 80f)
+        WoodComponent(.25f, 210f, offsetTop = 80f)
+        Flame(.15f)
     }
 
 }
@@ -79,11 +81,11 @@ fun Flame(size: Float) {
     )
     FlameComponent(
         color = Color(255, 150, 0),
-        size = size / 1.0f,
+        size = size / 1f,
         delay = 10,
         rotation = 2f,
         initialRotation = -25f,
-        offsetLeft = 60f,
+        offsetLeft = 50f,
         offsetTop = -20f
     )
     FlameComponent(
@@ -133,6 +135,30 @@ fun FlameComponent(
             .graphicsLayer(
                 rotationZ = rotation,
                 transformOrigin = TransformOrigin(0.5f, 1f)
+            )
+    )
+}
+
+@Composable
+fun WoodComponent(
+    size: Float,
+    rotation: Float = 0f,
+    offsetLeft: Float = 0f,
+    offsetTop: Float = 0f){
+
+    val start = if (offsetLeft > 0f) offsetLeft else 0f
+    val end = if (offsetLeft < 0f) offsetLeft * -1f else 0f
+    val top = if (offsetTop > 0f) offsetTop else 0f
+    val bottom = if (offsetTop < 0f) offsetTop * -1f else 0f
+
+    Image(
+        painter = painterResource(id = R.drawable.streak_wood),
+        contentDescription = "Wood vector graphic",
+        modifier = Modifier
+            .padding(start.dp, top.dp, end.dp, bottom.dp)
+            .fillMaxSize(size)
+            .graphicsLayer(
+                rotationZ = rotation
             )
     )
 }
