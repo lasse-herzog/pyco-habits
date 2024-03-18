@@ -41,13 +41,13 @@ fun StreakView(
     Column {
         StreakCircle()
 //        Quote()
-//        HabitStreaks()
+        HabitStreaks()
     }
 }
 
 @Composable
 fun HabitStreaks() {
-    TODO("Not yet implemented")
+
 }
 
 @Composable
@@ -222,4 +222,10 @@ fun lerp(start: Float, end: Float, fraction: Float): Float {
 @Composable
 fun StreakCirclePreview() {
     StreakCircle()
+}
+
+@Preview
+@Composable
+fun HabitStreaksPreview() {
+    HabitStreaks()
 }
