@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -42,8 +41,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.pyco.data.Habit
+import com.example.pyco.data.entities.Habit
 import com.example.pyco.viewmodels.PycoHomeViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 
@@ -78,33 +76,21 @@ fun PycoHome(
     modifier: Modifier,
     viewModel: PycoHomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     Box(modifier = modifier.windowInsetsPadding(WindowInsets.statusBars)) {
         QuoteCard()
 
-        val habits = uiState.habits
-
-        HabitsList(habitsLazyListState, habits)
-    }
-}
-
-@Composable
-private fun HabitsList(
-    habitsLazyListState: LazyListState,
-    habits :List<Habit>
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 80.dp),
-        state = habitsLazyListState
-    ) {
-        items(
-            items = habits,
-            key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 80.dp),
+            state = habitsLazyListState
+        ) {
+            items(
+                items = viewModel.uiState.value.habits,
+                key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            }
         }
     }
 }
@@ -160,7 +146,7 @@ fun RemainingHabitsListItem(habit: Habit) {
             Card(elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)) {
                 ListItem(
                     headlineContent = {
-                        Text(habit.title)
+                        Text(habit.toString())
                     },
                     supportingContent = { Text("Swipe me left or right!") }
                 )
@@ -178,6 +164,6 @@ fun RemainingHabitsListItem(habit: Habit) {
 @Composable
 fun HomePreview() {
     PycoTheme {
-        HabitsList(habitsLazyListState = rememberLazyListState(), habits = listOf(Habit(title = "TEST")))
+        //DismissIcon(icon = Icons.Filled.Check, color = MaterialTheme.colorScheme.onSecondary, backgroundColor = MaterialTheme.colorScheme.secondary)
     }
 }
