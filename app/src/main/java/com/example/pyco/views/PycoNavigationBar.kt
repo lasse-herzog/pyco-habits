@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.pyco.data.HabitSampleData
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.streak.StreakView
 import com.example.pyco.views.ui.theme.PycoTheme
@@ -79,7 +78,7 @@ fun PycoNavigationBar() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Streak.route) { StreakView(Modifier) }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController) }
+            composable(Screen.Habits.route) { HabitsOverviewScreen(navController) }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
 
         }
