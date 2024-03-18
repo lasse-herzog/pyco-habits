@@ -85,12 +85,12 @@ fun PycoHome(
                 .padding(top = 80.dp),
             state = habitsLazyListState
         ) {
-            items(
-                items = viewModel.uiState.value.habits,
-                key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
-            item {
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-            }
+//            items(
+//                items = viewModel.uiState.value.habits,
+//                key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
+//            item {
+//                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+//            }
         }
     }
 }
