@@ -1,6 +1,5 @@
 package com.example.pyco.views
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,21 +9,15 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -65,8 +58,12 @@ import com.example.pyco.data.Category
 import com.example.pyco.data.CategorySampleData
 import com.example.pyco.data.HabitSampleData
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
+import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,7 +113,7 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
             }
-        ){ innerPadding ->
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding),
@@ -151,9 +148,9 @@ fun CatFilterChip(categoryName: String){
         )
 }
 @Composable
-fun HabitsList(habits: List<Habit>){
+fun HabitsList(habits: List<HabitAndHabitBlueprint>) {
     LazyColumn {
-        items(habits){ habit ->
+        items(habits) { habit ->
             HabitItem(habit = habit)
         }
     }
@@ -172,7 +169,7 @@ fun CategoryFilterList(categories: List<Category>){
 
 @Preview
 @Composable
-fun PreviewHabitsOverviewScreen(){
+fun PreviewHabitsOverviewScreen() {
     PycoTheme {
         HabitsOverviewScreen()
     }

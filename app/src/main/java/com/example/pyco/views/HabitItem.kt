@@ -48,12 +48,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pyco.R
+import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.views.ui.theme.PycoTheme
-
-data class Habit(val title: String, val intervall: String)
+import java.time.LocalDate
 
 @Composable
-fun HabitItem(habit: Habit){
+fun HabitItem(habit: HabitAndHabitBlueprint) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
     var isExpanded by remember {
@@ -91,11 +93,12 @@ fun HabitItem(habit: Habit){
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column(modifier = Modifier
-                .width(190.dp)
+            Column(
+                modifier = Modifier
+                    .width(190.dp)
             ) {
                 Text(
-                    text = habit.title,
+                    text = habit.habitBlueprint.name,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleSmall
@@ -103,7 +106,7 @@ fun HabitItem(habit: Habit){
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = habit.intervall,
+                    text = habit.habit.interval.toString(),
                     modifier = Modifier.padding(vertical = 3.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -118,15 +121,16 @@ fun HabitItem(habit: Habit){
                     .weight(1f),
                 text = "4 Tage"
             )
-            Box(modifier = Modifier
-                .wrapContentSize(Alignment.TopEnd)
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopEnd)
 
-            ){
+            ) {
                 IconButton(
                     onClick = { showDropdown = !showDropdown },
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        //.weight(1f)
+                    //.weight(1f)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
@@ -139,18 +143,22 @@ fun HabitItem(habit: Habit){
                     onDismissRequest = { showDropdown = !showDropdown }) {
                     DropdownMenuItem(
                         text = { Text("Edit") },
-                        trailingIcon = {Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "Localized description"
-                        )},
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = "Localized description"
+                            )
+                        },
                         onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
                     )
                     DropdownMenuItem(
                         text = { Text("Delete") },
-                        trailingIcon = {Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "Localized description"
-                        )},
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Localized description"
+                            )
+                        },
                         onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
                     )
                 }
@@ -167,10 +175,15 @@ fun HabitItem(habit: Habit){
     name = "Dark Mode"
 )
 @Composable
-fun PreviewHabitsItem(){
+fun PreviewHabitsItem() {
     PycoTheme {
         Surface {
-            HabitItem(habit = Habit("Müll rausbringen", "bitte ich will nicht mehr"))
+            HabitItem(
+                habit = HabitAndHabitBlueprint(
+                    Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 1),
+                    HabitBlueprint(0, "Müll rausbringen", "bitte ich will nicht mehr")
+                )
+            )
         }
     }
 }
