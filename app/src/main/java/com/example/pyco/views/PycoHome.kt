@@ -41,7 +41,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.data.Habit
+import com.example.pyco.data.entities.Habit
 import com.example.pyco.viewmodels.PycoHomeViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 
@@ -85,12 +85,12 @@ fun PycoHome(
                 .padding(top = 80.dp),
             state = habitsLazyListState
         ) {
-            items(
-                items = viewModel.uiState.value.habits,
-                key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
-            item {
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-            }
+//            items(
+//                items = viewModel.uiState.value.habits,
+//                key = { it.id }) { habit -> RemainingHabitsListItem(habit = habit) }
+//            item {
+//                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+//            }
         }
     }
 }
@@ -146,7 +146,7 @@ fun RemainingHabitsListItem(habit: Habit) {
             Card(elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)) {
                 ListItem(
                     headlineContent = {
-                        Text(habit.title)
+                        Text(habit.toString())
                     },
                     supportingContent = { Text("Swipe me left or right!") }
                 )
