@@ -78,7 +78,7 @@ fun PycoNavigationBar() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Calendar.route) { Calendar() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController) }
+            composable(Screen.Habits.route) { HabitsOverviewScreen() }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
 
         }
