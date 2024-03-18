@@ -2,10 +2,19 @@ package com.example.pyco.data.dependency_injection
 
 import android.content.Context
 import androidx.room.Room
+import com.example.pyco.data.CategoriesRepository
+import com.example.pyco.data.CategoriesRepositoryImpl
+import com.example.pyco.data.HabitBlueprintsRepository
+import com.example.pyco.data.HabitBlueprintsRepositoryImpl
 import com.example.pyco.data.HabitsRepository
 import com.example.pyco.data.HabitsRepositoryImpl
 import com.example.pyco.data.PycoDatabase
+import com.example.pyco.data.QuotesRepository
+import com.example.pyco.data.QuotesRepositoryImpl
+import com.example.pyco.data.daos.CategoryDao
+import com.example.pyco.data.daos.HabitBlueprintDao
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.daos.QuoteDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -19,10 +28,22 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-abstract  class RepositoryModule {
+abstract class RepositoryModule {
     @Singleton
     @Binds
-    abstract fun bindHabitsRepository(repository: HabitsRepositoryImpl) : HabitsRepository
+    abstract fun bindCategoriesRepository(repository: CategoriesRepositoryImpl): CategoriesRepository
+
+    @Singleton
+    @Binds
+    abstract fun binHabitBlueprintsRepository(repository: HabitBlueprintsRepositoryImpl): HabitBlueprintsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindHabitsRepository(repository: HabitsRepositoryImpl): HabitsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindQuotesRepository(repository: QuotesRepositoryImpl): QuotesRepository
 }
 
 @Module
@@ -39,5 +60,15 @@ object DatabaseModule {
     }
 
     @Provides
+    fun provideCategoryDao(database: PycoDatabase): CategoryDao = database.categoryDao()
+
+    @Provides
+    fun provideHabitBlueprintDao(database: PycoDatabase): HabitBlueprintDao =
+        database.habitBlueprintDao()
+
+    @Provides
     fun provideHabitDao(database: PycoDatabase): HabitDao = database.habitDao()
+
+    @Provides
+    fun provideQuoteDao(database: PycoDatabase): QuoteDao = database.quoteDao()
 }

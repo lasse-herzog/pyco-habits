@@ -1,6 +1,7 @@
 package com.example.pyco.data
 
 import androidx.room.TypeConverter
+import java.time.LocalDate
 import java.util.Date
 
 class Converters {
@@ -12,5 +13,15 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
+    }
+
+    @TypeConverter
+    fun localDateFromEpochDay(value: Long?): LocalDate? {
+        return value?.let { LocalDate.ofEpochDay(it) }
+    }
+
+    @TypeConverter
+    fun localDateToEpochDay(date: LocalDate?): Long? {
+        return date?.toEpochDay()
     }
 }

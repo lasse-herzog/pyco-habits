@@ -2,15 +2,21 @@ package com.example.pyco.data.daos
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
-import com.example.pyco.data.entities.LocalHabit
+import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 /**
  * Data Access Object for the habit table.
  */
 @Dao
 interface HabitDao {
+    @Transaction
+    @Query("SELECT *  FROM habit WHERE habitId = :habitId")
+    suspend fun getHabitAndHabitBlueprint(habitId: Int): HabitAndHabitBlueprint
 
     /**
      * Observes list of habits.
@@ -18,7 +24,7 @@ interface HabitDao {
      * @return all habits.
      */
     @Query("SELECT * FROM habit")
-    fun observeAll(): Flow<List<LocalHabit>>
+    fun observeAll(): Flow<List<Habit>>
 
     /**
      * Observes a single habit.
@@ -26,8 +32,8 @@ interface HabitDao {
      * @param habitId the habit id.
      * @return the habit with habitId.
      */
-    @Query("SELECT * FROM habit WHERE id = :habitId")
-    fun observeById(habitId: Int): Flow<LocalHabit>
+    @Query("SELECT * FROM habit WHERE habitId = :habitId")
+    fun observeById(habitId: Int): Flow<Habit>
 
     /**
      * Select all habits from the habits table.
@@ -35,7 +41,7 @@ interface HabitDao {
      * @return all habits.
      */
     @Query("SELECT * FROM habit")
-    suspend fun getAll(): List<LocalHabit>
+    suspend fun getAll(): List<Habit>
 
     /**
      * Select a habit by id.
@@ -43,8 +49,8 @@ interface HabitDao {
      * @param habitId the habit id.
      * @return the habit with habitId.
      */
-    @Query("SELECT * FROM habit WHERE id = :habitId")
-    suspend fun getById(habitId: String): LocalHabit?
+    @Query("SELECT * FROM habit WHERE habitId = :habitId")
+    suspend fun getById(habitId: String): Habit?
 
     /**
      * Insert or update a habit in the database. If a habit already exists, replace it.
@@ -52,7 +58,7 @@ interface HabitDao {
      * @param habit the habit to be inserted or updated.
      */
     @Upsert
-    suspend fun upsert(habit: LocalHabit)
+    suspend fun upsert(habit: Habit)
 
     /**
      * Insert or update habits in the database. If a habit already exists, replace it.
@@ -60,14 +66,14 @@ interface HabitDao {
      * @param habits the habits to be inserted or updated.
      */
     @Upsert
-    suspend fun upsertAll(habits: List<LocalHabit>)
+    suspend fun upsertAll(habits: List<Habit>)
 
     /**
      * Delete a habit by id.
      *
      * @return the number of habits deleted. This should always be 1.
      */
-    @Query("DELETE FROM habit WHERE id = :habitId")
+    @Query("DELETE FROM habit WHERE habitId = :habitId")
     suspend fun deleteById(habitId: String): Int
 
     /**
@@ -75,4 +81,7 @@ interface HabitDao {
      */
     @Query("DELETE FROM habit")
     suspend fun deleteAll()
+
+    @Query("SELECT date FROM habitDate WHERE habitId = :habitId ORDER BY date DESC")
+    suspend fun getByLastDate(habitId: Int): List<LocalDate>
 }

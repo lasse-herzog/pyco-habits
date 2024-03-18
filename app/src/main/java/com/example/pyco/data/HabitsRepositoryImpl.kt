@@ -1,9 +1,10 @@
 package com.example.pyco.data
 
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitBlueprint
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import java.util.Calendar
+import java.time.LocalDate
 import javax.inject.Inject
 
 /**
@@ -14,18 +15,30 @@ import javax.inject.Inject
 class HabitsRepositoryImpl @Inject constructor(
     private val habitsDataSource: HabitDao,
 ) : HabitsRepository {
-    override suspend fun createHabit(title: String) {
+    override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval : Int) {
         val habit = Habit(
-            createdAt = Calendar.getInstance().time,
-            title = title
+            blueprintId = habitBlueprint.habitBlueprintId,
+            start = LocalDate.now(),
+            end = null,
+            interval = interval
         )
 
-        habitsDataSource.upsert(habit.toLocal())
+        habitsDataSource.upsert(habit)
+    }
+
+    override suspend fun getHabits(): List<Habit> {
+        return habitsDataSource.getAll()
     }
 
     override fun getHabitsStream(): Flow<List<Habit>> {
-        return habitsDataSource.observeAll().map { habits ->
-            habits.toExternal()
-        }
+        return habitsDataSource.observeAll()
+    }
+
+    override suspend fun getLastHabitDate(habit: Habit): LocalDate {
+        return habitsDataSource.getByLastDate(habit.habitId).first()
+    }
+
+    override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
+        TODO("Not yet implemented")
     }
 }
