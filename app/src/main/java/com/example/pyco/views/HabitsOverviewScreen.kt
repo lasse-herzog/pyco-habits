@@ -56,7 +56,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
 import com.example.pyco.data.Category
 import com.example.pyco.data.CategorySampleData
-import com.example.pyco.data.HabitSampleData
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint

@@ -1,7 +1,5 @@
 package com.example.pyco.data
 
-import com.example.pyco.views.Habit
-
 object CategorySampleData {
     val catSample = listOf(
         Category(

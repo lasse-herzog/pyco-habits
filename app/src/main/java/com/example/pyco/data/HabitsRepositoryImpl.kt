@@ -2,6 +2,7 @@ package com.example.pyco.data
 
 import com.example.pyco.data.daos.HabitDao
 import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -38,6 +39,9 @@ class HabitsRepositoryImpl @Inject constructor(
         return habitsDataSource.getByLastDate(habit.habitId).first()
     }
 
+    override suspend fun getAllHabitsWithBlueprint(): List<HabitAndHabitBlueprint> {
+        return habitsDataSource.getAllHabitsAndBlueprints()
+    }
     override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
         TODO("Not yet implemented")
     }

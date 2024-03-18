@@ -44,6 +44,15 @@ interface HabitDao {
     suspend fun getAll(): List<Habit>
 
     /**
+     * Select all habits and blueprints from the db.
+     *
+     * @return a list of habitandblueprint objects with all habits.
+     */
+    @Transaction
+    @Query("SELECT * FROM habit")
+    suspend fun getAllHabitsAndBlueprints(): List<HabitAndHabitBlueprint>
+
+    /**
      * Select a habit by id.
      *
      * @param habitId the habit id.
