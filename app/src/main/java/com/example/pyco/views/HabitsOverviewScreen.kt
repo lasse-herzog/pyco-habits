@@ -37,6 +37,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +68,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
-    val habits = viewModel.habits
+    val habits = viewModel.uiState.collectAsState().value.habits
     var sortAscending by remember{mutableStateOf(true)};
     //TODO: implement route for detail view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
