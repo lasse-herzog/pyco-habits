@@ -136,7 +136,7 @@ fun CatFilterChip(categoryName: String){
         selected = selected,
         onClick = { selected = !selected /*TODO sort function*/ },
         label = {Text(categoryName)},
-        modifier = Modifier.padding(horizontal = 5.dp),
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
         leadingIcon = if (selected) {
             {
                 Icon(

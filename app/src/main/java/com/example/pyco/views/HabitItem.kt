@@ -61,7 +61,7 @@ fun HabitItem(habit: Habit){
     }
 
     val detailsColor by animateColorAsState(
-        if (isExpanded) MaterialTheme.colorScheme.inverseOnSurface  else MaterialTheme.colorScheme.surface,
+        if (isExpanded) MaterialTheme.colorScheme.inverseOnSurface  else MaterialTheme.colorScheme.surfaceContainerLowest,
     )
 
     Surface(
@@ -70,11 +70,11 @@ fun HabitItem(habit: Habit){
         color = detailsColor,
         modifier = Modifier
             .animateContentSize()
-            .padding(4.dp)
+            .padding(5.dp)
             .clickable { isExpanded = !isExpanded }
     ){
         Row(modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(all = 9.dp)
         ){
             Image(
                 painter = painterResource(R.mipmap.ic_habit_icon),
