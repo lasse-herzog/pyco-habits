@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -25,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -140,17 +140,16 @@ fun HabitsOverviewScreen(navController: NavHostController) {
 @Composable
 fun HabitsList(habits: List<HabitAndHabitBlueprint>) {
     LazyColumn {
-        items(habits){ habit ->
-            HabitItem(habit = habit)
+        items(habits) { habit ->
+            HabitItem(habit = habit, navController = rememberNavController())
         }
     }
 }
 
 
-
 @Preview
 @Composable
-fun PreviewHabitsOverviewScreen(){
+fun PreviewHabitsOverviewScreen() {
     PycoTheme {
         HabitsOverviewScreen(navController = rememberNavController())
     }

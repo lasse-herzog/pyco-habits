@@ -77,101 +77,106 @@ fun HabitDetailsView(habitDetails: HabitDetails, navController: NavHostControlle
             )
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.background(colorLightOrange).padding(innerPadding).fillMaxHeight()) {
-                Text(
-                    text = habitDetails.title,
-                    color = Color.Black,
-                    fontSize = 30.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(top = 20.dp, bottom = 20.dp)
-                        .fillMaxWidth()
-                )
+        Column(
+            modifier = Modifier
+                .background(colorLightOrange)
+                .padding(innerPadding)
+                .fillMaxHeight()
+        ) {
+            Text(
+                text = habitDetails.title,
+                color = Color.Black,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 20.dp)
+                    .fillMaxWidth()
+            )
 
-                Row {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(R.mipmap.ic_habit_icon),
-                            contentDescription = "Placeholder icon",
-                            modifier = Modifier
-                                .size(70.dp)
-                                .clip(CircleShape)
-                                .shadow(
-                                    elevation = 1.dp,
-                                    shape = CircleShape,
-                                    ambientColor = MaterialTheme.colorScheme.surface
-                                )
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(25.dp))
-
-                    Box(
+            Row {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
+                ) {
+                    Image(
+                        painter = painterResource(R.mipmap.ic_habit_icon),
+                        contentDescription = "Placeholder icon",
                         modifier = Modifier
-                            .background(
-                                color = colorLightOrange2,
-                                shape = RoundedCornerShape(30.dp)
+                            .size(70.dp)
+                            .clip(CircleShape)
+                            .shadow(
+                                elevation = 1.dp,
+                                shape = CircleShape,
+                                ambientColor = MaterialTheme.colorScheme.surface
                             )
-                    ) {
-
-                        Column {
-                            Text(
-                                text = "Tags:",
-                                color = Color.White,
-                                fontSize = 30.sp,
-                                modifier = Modifier.padding(horizontal = 40.dp)
-                            )
-                            Text(
-                                text = habitDetails.tags.component1(),
-                                color = Color.White,
-                                modifier = Modifier.padding(horizontal = 70.dp)
-                            )
-                            Text(
-                                text = habitDetails.tags.component2(),
-                                color = Color.White,
-                                modifier = Modifier.padding(horizontal = 70.dp)
-                            )
-                        }
-                    }
+                    )
                 }
 
-                Text(
-                    text = "Habit Details:",
-                    color = Color.Black,
-                    fontSize = 30.sp,
-                    textAlign = TextAlign.Center,
+                Spacer(modifier = Modifier.width(25.dp))
+
+                Box(
                     modifier = Modifier
-                        .padding(top = 20.dp, bottom = 20.dp)
-                        .fillMaxWidth()
-                )
-                Column(Modifier.padding(20.dp)) {
+                        .background(
+                            color = colorLightOrange2,
+                            shape = RoundedCornerShape(30.dp)
+                        )
+                ) {
 
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = colorLightOrange2,
-                                shape = RoundedCornerShape(20.dp)
-                            )
-                            .padding(30.dp)
-
-                    ) {
-
+                    Column {
                         Text(
-                            text = habitDetails.details,
+                            text = "Tags:",
                             color = Color.White,
-                            fontSize = 15.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(20.dp)
-
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(horizontal = 40.dp)
+                        )
+                        Text(
+                            text = habitDetails.tags.component1(),
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 70.dp)
+                        )
+                        Text(
+                            text = habitDetails.tags.component2(),
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 70.dp)
                         )
                     }
                 }
             }
+
+            Text(
+                text = "Habit Details:",
+                color = Color.Black,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 20.dp)
+                    .fillMaxWidth()
+            )
+            Column(Modifier.padding(20.dp)) {
+
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = colorLightOrange2,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(30.dp)
+
+                ) {
+
+                    Text(
+                        text = habitDetails.details,
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(20.dp)
+
+                    )
+                }
+            }
         }
     }
+}
 
 @Preview
 @Composable
