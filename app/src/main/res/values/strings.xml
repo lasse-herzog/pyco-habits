@@ -3,4 +3,5 @@
     <string name="habits">Habits</string>
     <string name="home">Home</string>
     <string name="calendar">Calendar</string>
+    <string name="habitDetails">Habit Details</string>
 </resources>

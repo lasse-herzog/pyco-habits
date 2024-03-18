@@ -53,6 +53,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.data.HabitSampleData
+import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
 
@@ -118,7 +119,7 @@ fun HabitsOverviewScreen(habits: List<Habit>, navController: NavHostController){
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = { /* TODO: open detail screen for habit creation */ }) {
+                FloatingActionButton(onClick = { navController.navigate(Screen.HabitDetails.route) }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
             }

@@ -78,9 +78,25 @@ fun PycoNavigationBar() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Calendar.route) { Calendar() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(habits = HabitSampleData.habitSample, navController) }
+            composable(Screen.Habits.route) {
+                HabitsOverviewScreen(
+                    habits = HabitSampleData.habitSample,
+                    navController
+                )
+            }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
-
+            composable(Screen.HabitDetails.route) {
+                HabitDetailsView(
+                    habitDetails = HabitDetails(
+                        "Gesundes Essen kochen",
+                        "TestIcon",
+                        "2 Tage",
+                        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
+                        listOf("Leben", "Ernärung"),
+                        3
+                    )
+                )
+            }
         }
     }
 }
