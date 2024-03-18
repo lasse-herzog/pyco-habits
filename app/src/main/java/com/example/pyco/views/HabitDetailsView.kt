@@ -44,7 +44,8 @@ data class HabitDetails(
     val tagCount: Int
 )
 
-val colorLightOrange = Color(0xFFFFE0B2)
+val colorLightOrange = Color(0xFFFFE0B9)
+val colorLightOrange2 = Color(0xFFFFA0B1)
 
 @Composable
 fun HabitDetailsView(habitDetails: HabitDetails) {
@@ -88,9 +89,9 @@ fun HabitDetailsView(habitDetails: HabitDetails) {
                 Box(
                     modifier = Modifier
                         .background(
-                            brush = Brush.horizontalGradient(listOf(Color.Red, Color.Blue)),
+                            color = colorLightOrange2,
                             shape = RoundedCornerShape(30.dp)
-                        ),
+                        )
                 ) {
 
                     Column {
@@ -126,7 +127,7 @@ fun HabitDetailsView(habitDetails: HabitDetails) {
             Box(
                 modifier = Modifier
                     .background(
-                        brush = Brush.horizontalGradient(listOf(Color.Red, Color.Blue)),
+                        color = colorLightOrange2,
                         shape = RoundedCornerShape(30.dp)
                     ),
             ) {
