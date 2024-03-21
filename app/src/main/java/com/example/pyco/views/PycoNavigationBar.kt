@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.pyco.viewmodels.CreateHabitViewModel
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.ui.theme.PycoTheme
 
@@ -79,7 +80,7 @@ fun PycoNavigationBar() {
             composable(Screen.Calendar.route) { Calendar() }
             composable(Screen.Habits.route) { HabitsOverviewScreen(navController) }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
-            composable(Screen.CreateHabit.route) {CreateHabit(navController)}
+            composable(Screen.CreateHabit.route) {CreateHabit(navController, CreateHabitViewModel())}
             composable(Screen.HabitDetails.route) {
                 HabitDetailsView(
                     habitDetails = HabitDetails(

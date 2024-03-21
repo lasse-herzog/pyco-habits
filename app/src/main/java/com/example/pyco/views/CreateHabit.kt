@@ -54,11 +54,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
+import com.example.pyco.viewmodels.CreateHabitViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateHabit(navController: NavHostController) {
+fun CreateHabit(navController: NavHostController, viewModel: CreateHabitViewModel) {
     // State variables for text fields and dropdown
     var titleText by remember { mutableStateOf("Hier den Habit Namen eingeben") }
     var descriptionText by remember {
@@ -230,7 +231,7 @@ fun CreateHabit(navController: NavHostController) {
             Button(
                 onClick = {
                     // Call the ViewModel's submit function with the current state values
-                    //viewModel.submitData(titleText, items[selectedIndex], descriptionText)
+                    viewModel.submitData(titleText, items[selectedIndex], descriptionText)
                 },
                 modifier = Modifier
                     .padding(vertical = 2.dp, horizontal = 25.dp)
@@ -253,7 +254,8 @@ fun CreateHabitPreview() {
     PycoTheme {
         Surface {
             CreateHabit(
-                navController = rememberNavController()
+                navController = rememberNavController(),
+                viewModel = CreateHabitViewModel()
             )
         }
     }
