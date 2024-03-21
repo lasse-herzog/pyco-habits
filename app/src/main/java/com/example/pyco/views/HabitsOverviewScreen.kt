@@ -70,6 +70,7 @@ import java.time.LocalDate
 fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
     val habits = viewModel.uiState.collectAsState().value.habits
     var sortAscending by remember{mutableStateOf(true)};
+    var sortNewest by remember {mutableStateOf(true)}
     //TODO: implement route for detail view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
@@ -98,7 +99,10 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
                                 contentDescription = "Sort in alphabetical order"
                             )
                         }
-                        IconButton(onClick = { /* sort habits with newest first */ }) {
+                        IconButton(onClick = {
+                            viewModel.sortHabitsNewest(sortNewest)
+                            sortNewest = !sortNewest
+                        }) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_new_releases_24),
                                 contentDescription = "Newest first"

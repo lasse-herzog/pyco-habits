@@ -58,4 +58,12 @@ class HabitsOverviewViewModel @Inject constructor(
 
     }
 
+    fun sortHabitsNewest(sortNewest: Boolean){
+        if(sortNewest){
+            _uiState.value.habits.sortedBy { it.habit.start }
+        }else{
+            _uiState.value.habits.sortedByDescending { it.habit.start }
+        }
+    }
+
 }
