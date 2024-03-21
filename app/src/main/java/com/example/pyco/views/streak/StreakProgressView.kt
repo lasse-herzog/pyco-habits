@@ -37,7 +37,7 @@ fun StreakProgress() {
         contentAlignment = Alignment.Center, // Center the content within the Box
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxHeight(.5f)
     ) {
         HalfCircle(progress = .75f)
         WoodComponent(.25f, -20f, offsetTop = 80f)
@@ -57,12 +57,12 @@ fun Flame(size: Float) {
     )
     FlameComponent(
         color = Color(255, 150, 0),
-        size = size / 1f,
+        size = size / 1.1f,
         delay = 10,
         rotation = 2f,
-        initialRotation = -25f,
-        offsetLeft = 50f,
-        offsetTop = -20f
+        initialRotation = -15f,
+        offsetLeft =10f,
+        offsetTop = 0f
     )
     FlameComponent(
         color = Color(255, 199, 0),
