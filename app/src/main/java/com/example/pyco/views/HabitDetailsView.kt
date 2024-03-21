@@ -180,7 +180,7 @@ fun HabitDetailsView(habitDetails: HabitDetails, navController: NavHostControlle
 
 @Preview
 @Composable
-fun DefaultPreview() {
+fun HabitDetailsViewPreview() {
     PycoTheme {
         Surface {
             HabitDetailsView(

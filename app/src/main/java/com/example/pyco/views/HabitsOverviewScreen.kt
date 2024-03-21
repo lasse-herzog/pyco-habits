@@ -121,7 +121,7 @@ fun HabitsOverviewScreen(navController: NavHostController) {
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = { navController.navigate(Screen.HabitDetails.route) }) {
+                FloatingActionButton(onClick = { navController.navigate(Screen.CreateHabit.route) }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
             }
