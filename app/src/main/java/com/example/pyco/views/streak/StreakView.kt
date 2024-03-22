@@ -3,6 +3,7 @@ package com.example.pyco.views.streak
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -11,15 +12,17 @@ import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.viewmodels.PycoHomeViewModel
+import com.example.pyco.viewmodels.StreakViewModel
 import com.example.pyco.views.HabitItem
 import java.time.LocalDate
 
 @Composable
 fun StreakView(
-    modifier: Modifier,
-    viewModel: PycoHomeViewModel = hiltViewModel()
+    viewModel: StreakViewModel = hiltViewModel()
 ) {
     Column {
+        Text("Score:")
+        Text(viewModel.score.toString())
         StreakProgress()
 //        Quote()
         HabitStreaks()

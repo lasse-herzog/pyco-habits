@@ -77,7 +77,7 @@ fun PycoNavigationBar() {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Streak.route) { StreakView(Modifier) }
+            composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Habits.route) { HabitsOverviewScreen(navController) }
             composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
 

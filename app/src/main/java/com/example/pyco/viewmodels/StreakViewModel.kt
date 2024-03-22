@@ -1,5 +1,9 @@
 package com.example.pyco.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.HabitsRepository
@@ -14,24 +18,26 @@ import javax.inject.Inject
 class StreakViewModel @Inject constructor(
     private val habitsRepository: HabitsRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUIState(isLoading = true))
-    val uiState: StateFlow<HomeUIState> = _uiState
+
+    var score: Int by mutableIntStateOf(0)
+        private set
 
     init {
         observeHabits()
     }
 
     private fun observeHabits() {
-        viewModelScope.launch {
-            habitsRepository.getHabitsStream()
-                .catch { ex ->
-                    _uiState.value = HomeUIState(error = ex.message)
-                }
-                .collect { habits ->
-                    _uiState.value = HomeUIState(
-                        habits = habits,
-                    )
-                }
-        }
+//        viewModelScope.launch {
+//        }
+
+//        habitsRepository.getHabitsStream()
+//            .catch { ex ->
+//                _uiState.value = HomeUIState(error = ex.message)
+//            }
+//            .collect { habits ->
+//                _uiState.value = HomeUIState(
+//                    habits = habits,
+//                )
+//            }
     }
 }
