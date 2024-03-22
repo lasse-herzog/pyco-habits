@@ -23,6 +23,7 @@ fun StreakView(
     Column {
         Text("Score:")
         Text(viewModel.score.toString())
+        Text(viewModel.someText)
         StreakProgress()
 //        Quote()
         HabitStreaks()

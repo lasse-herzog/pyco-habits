@@ -1,6 +1,7 @@
 package com.example.pyco.data
 
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
@@ -38,6 +39,10 @@ class HabitsRepositoryImpl @Inject constructor(
 
     override suspend fun getLastHabitDate(habit: Habit): LocalDate {
         return habitsDataSource.getByLastDate(habit.habitId).first()
+    }
+
+    override suspend fun getCompleteHabits(): List<CompleteHabit> {
+        return habitsDataSource.getAllComplete()
     }
 
     override suspend fun getAllHabitsWithBlueprint(): List<HabitAndHabitBlueprint> {

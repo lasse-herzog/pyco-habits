@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
@@ -43,6 +44,14 @@ interface HabitDao {
      */
     @Query("SELECT * FROM habit")
     suspend fun getAll(): List<Habit>
+
+    /**
+     * Select all habits, with all relations from the habits table.
+     *
+     * @return all habits.
+     */
+    @Query("SELECT * FROM habit")
+    suspend fun getAllComplete(): List<CompleteHabit>
 
     /**
      * Select all habits and blueprints from the db.

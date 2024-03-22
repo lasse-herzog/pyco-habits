@@ -21,12 +21,21 @@ class StreakViewModel @Inject constructor(
 
     var score: Int by mutableIntStateOf(0)
         private set
+    var someText: String by mutableStateOf("")
+        private set
 
     init {
         observeHabits()
     }
 
     private fun observeHabits() {
+
+        viewModelScope.launch {
+            val habits = habitsRepository.getCompleteHabits()
+            score = habits[1].dates.count()
+            someText = habits.first().habitBlueprint.name
+        }
+
 //        viewModelScope.launch {
 //        }
 
