@@ -57,7 +57,7 @@ object DatabaseModule {
             PycoDatabase::class.java,
             "PYCO.db"
         )
-            .createFromAsset("database/PYCO_DB_dev.db")
+            .createFromAsset("database/PYCO_db_dev.db")
             .build()
     }
 

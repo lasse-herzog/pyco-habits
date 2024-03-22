@@ -18,4 +18,13 @@ class CategoriesRepositoryImpl @Inject constructor(
     override suspend fun getCategoryByName(name: String): Category {
         return categoriesDataSource.getByName(name)
     }
+
+    override suspend fun getCategoriesForChips(): MutableList<CategoryChipAndState> {
+        val categoriesWithState: MutableList<CategoryChipAndState> = mutableListOf()
+        val categories: List<Category> = categoriesDataSource.getAll()
+        categories.forEach {
+            categoriesWithState.add(CategoryChipAndState(it, false))
+        }
+        return categoriesWithState
+    }
 }

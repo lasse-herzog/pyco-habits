@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
+import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
@@ -100,20 +101,23 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
-                CategoryFilterList(categories)
+                CategoryFilterList(categories, viewModel)
                 HabitsList(habits, viewModel)
             }
         }
 }
 
 @Composable
-fun CatFilterChip(categoryName: String){
-    var selected by remember { mutableStateOf(false) }
+fun CatFilterChip(category: CategoryChipAndState, viewModel: HabitsOverviewViewModel){
+    var selected by remember { mutableStateOf(category.selected) }
 
     FilterChip(
         selected = selected,
-        onClick = { selected = !selected /*TODO sort function*/ },
-        label = {Text(categoryName)},
+        onClick = {
+            selected = !selected
+            viewModel.filterWithCategory(category, selected)
+        },
+        label = {Text(category.category.name)},
         modifier = Modifier.padding(horizontal = 5.dp),
         leadingIcon = if (selected) {
             {
@@ -138,12 +142,12 @@ fun HabitsList(habits: List<HabitAndHabitBlueprintWithCategories>, viewModel: Ha
 }
 
 @Composable
-fun CategoryFilterList(categories: List<Category>){
+fun CategoryFilterList(categories: List<CategoryChipAndState>, viewModel: HabitsOverviewViewModel){
     LazyRow (
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ){
         items(categories){cat ->
-            CatFilterChip(categoryName = cat.name)
+            CatFilterChip(cat, viewModel)
         }
     }
 }
