@@ -1,4 +1,4 @@
-package com.example.pyco.data
+package com.example.pyco.data.repositories
 
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.Habit

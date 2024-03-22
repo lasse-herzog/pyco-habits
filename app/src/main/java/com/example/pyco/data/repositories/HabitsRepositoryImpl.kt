@@ -1,8 +1,10 @@
-package com.example.pyco.data
+package com.example.pyco.data.repositories
 
 import com.example.pyco.data.daos.HabitDao
 import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
+import com.example.pyco.data.entities.Date
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
@@ -15,9 +17,9 @@ import javax.inject.Inject
 class HabitsRepositoryImpl @Inject constructor(
     private val habitsDataSource: HabitDao,
 ) : HabitsRepository {
-    override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval : Int) {
+    override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval: Int) {
         val habit = Habit(
-            blueprintId = habitBlueprint.habitBlueprintId,
+            habitBlueprintId = habitBlueprint.habitBlueprintId,
             start = LocalDate.now(),
             end = null,
             interval = interval
@@ -34,11 +36,27 @@ class HabitsRepositoryImpl @Inject constructor(
         return habitsDataSource.observeAll()
     }
 
+    override fun observePendingHabits(): Flow<List<HabitAndHabitBlueprint>> {
+        return
+    }
+
     override suspend fun getLastHabitDate(habit: Habit): LocalDate {
         return habitsDataSource.getByLastDate(habit.habitId).first()
     }
 
-    override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
-        TODO("Not yet implemented")
+    override suspend fun setHabitPracticed(habit: Habit, date: LocalDate) {
+        habitsDataSource.upsertHabitDate(
+            Date(
+                habitId = habit.habitId, date = date, habitPracticed = true
+            )
+        )
+    }
+
+    override suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate) {
+        habitsDataSource.upsertHabitDate(
+            Date(
+                habitId = habit.habitId, date = date, habitPracticed = false
+            )
+        )
     }
 }
