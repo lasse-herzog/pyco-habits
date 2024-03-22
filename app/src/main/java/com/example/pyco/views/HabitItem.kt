@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -28,12 +33,14 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuItemColors
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,22 +55,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pyco.R
+import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.views.ui.theme.PycoTheme
 import java.time.LocalDate
 
 @Composable
-fun HabitItem(habit: HabitAndHabitBlueprint) {
+fun HabitItem(habit: HabitAndHabitBlueprintWithCategories) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
-    var isExpanded by remember {
-        mutableStateOf(false)
-    }
+    var isBadHabit = habit.habitAndHabitBlueprint.habitBlueprint.badHabit
 
     val detailsColor by animateColorAsState(
-        if (isExpanded) MaterialTheme.colorScheme.inverseOnSurface else MaterialTheme.colorScheme.surface,
+        if (isBadHabit) MaterialTheme.colorScheme.inverseOnSurface  else MaterialTheme.colorScheme.surfaceContainerLow,
     )
 
     Surface(
@@ -72,13 +79,12 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
         color = detailsColor,
         modifier = Modifier
             .animateContentSize()
-            .padding(4.dp)
-            .clickable { isExpanded = !isExpanded }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(all = 8.dp)
-        ) {
+            .padding(5.dp)
+            .clickable { /* TODO: open the details view */ }
+    ){
+        Row(modifier = Modifier
+            .padding(all = 9.dp)
+        ){
             Image(
                 painter = painterResource(R.mipmap.ic_habit_icon),
                 contentDescription = "Placeholder icon",
@@ -99,7 +105,7 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
                     .width(190.dp)
             ) {
                 Text(
-                    text = habit.habitBlueprint.name,
+                    text = habit.habitAndHabitBlueprint.habitBlueprint.name,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleSmall
@@ -107,11 +113,11 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = habit.habit.interval.toString(),
+                    text = habit.habitAndHabitBlueprint.habitBlueprint.description,
                     modifier = Modifier.padding(vertical = 3.dp),
+                    maxLines = 1,
                     style = MaterialTheme.typography.bodyMedium
                 )
-
             }
 
             Text(
@@ -120,7 +126,7 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
                     .weight(1f)
                     .padding(vertical = 12.dp)
                     .weight(1f),
-                text = "4 Tage"
+                text = habit.habitAndHabitBlueprint.habit.interval.toString() + " Tage"
             )
             Box(
                 modifier = Modifier
@@ -180,9 +186,12 @@ fun PreviewHabitsItem() {
     PycoTheme {
         Surface {
             HabitItem(
-                habit = HabitAndHabitBlueprint(
-                    Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 1),
-                    HabitBlueprint(0, "Müll rausbringen", "bitte ich will nicht mehr")
+                habit = HabitAndHabitBlueprintWithCategories(
+                    HabitAndHabitBlueprint(
+                        Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 1),
+                        HabitBlueprint(0, "Müll rausbringen", "bitte ich will nicht mehr")
+                    ),
+                    mutableListOf(Category(0, "Saufen"), Category(1, "Achtarmig reinorgeln"))
                 )
             )
         }
