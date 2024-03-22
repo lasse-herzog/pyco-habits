@@ -56,7 +56,9 @@ object DatabaseModule {
             context.applicationContext,
             PycoDatabase::class.java,
             "PYCO.db"
-        ).build()
+        )
+            .createFromAsset("database/PYCO_db.db")
+            .build()
     }
 
     @Provides
