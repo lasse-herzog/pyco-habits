@@ -60,6 +60,7 @@ import com.example.pyco.data.CategorySampleData
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.views.ui.theme.PycoTheme
 import kotlinx.coroutines.launch
@@ -137,7 +138,7 @@ fun CatFilterChip(categoryName: String){
         selected = selected,
         onClick = { selected = !selected /*TODO sort function*/ },
         label = {Text(categoryName)},
-        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+        modifier = Modifier.padding(horizontal = 5.dp),
         leadingIcon = if (selected) {
             {
                 Icon(
@@ -152,7 +153,7 @@ fun CatFilterChip(categoryName: String){
         )
 }
 @Composable
-fun HabitsList(habits: List<HabitAndHabitBlueprint>) {
+fun HabitsList(habits: List<HabitAndHabitBlueprintWithCategories>) {
     LazyColumn {
         items(habits) { habit ->
             HabitItem(habit = habit)

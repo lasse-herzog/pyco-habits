@@ -6,6 +6,7 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -51,6 +52,15 @@ interface HabitDao {
     @Transaction
     @Query("SELECT * FROM habit")
     suspend fun getAllHabitsAndBlueprints(): List<HabitAndHabitBlueprint>
+
+    /**
+     * Select all habits and blueprints with categories from the db.
+     *
+     * @return a list of habitanhabitblueprintwithcategories objects.
+     */
+    @Transaction
+    @Query("SELECT * FROM habit")
+    suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories>
 
     /**
      * Select a habit by id.

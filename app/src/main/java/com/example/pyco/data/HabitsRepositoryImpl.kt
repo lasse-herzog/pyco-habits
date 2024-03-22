@@ -3,6 +3,7 @@ package com.example.pyco.data
 import com.example.pyco.data.daos.HabitDao
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
+import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -18,7 +19,7 @@ class HabitsRepositoryImpl @Inject constructor(
 ) : HabitsRepository {
     override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval : Int) {
         val habit = Habit(
-            blueprintId = habitBlueprint.habitBlueprintId,
+            habitBlueprintId = habitBlueprint.habitBlueprintId,
             start = LocalDate.now(),
             end = null,
             interval = interval
@@ -41,6 +42,10 @@ class HabitsRepositoryImpl @Inject constructor(
 
     override suspend fun getAllHabitsWithBlueprint(): List<HabitAndHabitBlueprint> {
         return habitsDataSource.getAllHabitsAndBlueprints()
+    }
+
+    override suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories> {
+        return habitsDataSource.getAllHabitsWithAllInfo()
     }
     override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
         TODO("Not yet implemented")
