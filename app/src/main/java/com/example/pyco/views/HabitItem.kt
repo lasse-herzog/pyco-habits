@@ -5,42 +5,29 @@ import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuItemColors
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
-import com.example.pyco.data.HabitsRepository
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
@@ -66,6 +52,20 @@ import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 import java.time.LocalDate
 
+object CategoryIcons{
+    val iconDictionary = hashMapOf(
+        1 to R.mipmap.ic_cat_sport_icon,
+        2 to R.mipmap.ic_cat_persdev_icon,
+        3 to R.mipmap.ic_cat_social_icon,
+        4 to R.mipmap.ic_cat_finance_icon,
+        5 to R.mipmap.ic_cat_career_icon,
+        6 to R.mipmap.ic_cat_job_icon,
+        7 to R.mipmap.ic_cat_freetime_icon,
+        8 to R.mipmap.ic_cat_habit_icon,
+        9 to R.mipmap.ic_cat_env_icon,
+        10 to R.mipmap.ic_cat_love_icon
+    )
+}
 @Composable
 fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOverviewViewModel) {
     val context = LocalContext.current
@@ -89,7 +89,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
             .padding(all = 9.dp)
         ){
             Image(
-                painter = painterResource(R.mipmap.ic_habit_icon),
+                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.first().categoryId, R.mipmap.ic_habit_icon)),
                 contentDescription = "Placeholder icon",
                 modifier = Modifier
                     .size(50.dp)
