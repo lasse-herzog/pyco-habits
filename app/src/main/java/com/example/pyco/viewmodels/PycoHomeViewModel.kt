@@ -36,11 +36,13 @@ class PycoHomeViewModel @Inject constructor(
     private fun testHabitBLueprints() {
         viewModelScope.launch {
             habitBlueprintsRepository.getHabitBlueprints()
+            /*
             habitBlueprintsRepository.createHabitBlueprint(
                 "test", "a test habit blueprint", listOf(
                     Category(name = "test1"), Category(name = "test2")
                 ), false
             )
+             */
         }
     }
 

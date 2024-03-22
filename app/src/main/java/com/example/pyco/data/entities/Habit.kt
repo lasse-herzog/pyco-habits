@@ -2,6 +2,7 @@ package com.example.pyco.data.entities
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.time.LocalDate
@@ -21,7 +22,7 @@ import java.time.LocalDate
 @Entity(tableName = "habit")
 data class Habit(
     @PrimaryKey(autoGenerate = true) val habitId: Int = 0,
-    val blueprintId: Int,
+    val habitBlueprintId: Int,
     val start: LocalDate,
     val end : LocalDate?,
     val interval: Int
@@ -34,4 +35,14 @@ data class HabitAndHabitBlueprint(
         entityColumn = "habitBlueprintId"
     )
     val habitBlueprint: HabitBlueprint
+)
+
+data class HabitAndHabitBlueprintWithCategories(
+    @Embedded val habitAndHabitBlueprint: HabitAndHabitBlueprint,
+    @Relation(
+        parentColumn = "habitBlueprintId",
+        entityColumn = "categoryId",
+        associateBy = Junction(HabitBlueprintCategoryCrossRef::class)
+    )
+    val categories: List<Category>
 )
