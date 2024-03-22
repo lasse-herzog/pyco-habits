@@ -58,12 +58,10 @@ import java.time.LocalDate
 fun HabitItem(habit: HabitAndHabitBlueprint) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
-    var isExpanded by remember {
-        mutableStateOf(false)
-    }
+    var isBadHabit = habit.habitBlueprint.badHabit
 
     val detailsColor by animateColorAsState(
-        if (isExpanded) MaterialTheme.colorScheme.inverseOnSurface else MaterialTheme.colorScheme.surface,
+        if (isBadHabit) MaterialTheme.colorScheme.inverseOnSurface  else MaterialTheme.colorScheme.surfaceContainerLow,
     )
 
     Surface(
@@ -72,13 +70,12 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
         color = detailsColor,
         modifier = Modifier
             .animateContentSize()
-            .padding(4.dp)
-            .clickable { isExpanded = !isExpanded }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(all = 8.dp)
-        ) {
+            .padding(5.dp)
+            .clickable { /* TODO: open the details view */ }
+    ){
+        Row(modifier = Modifier
+            .padding(all = 9.dp)
+        ){
             Image(
                 painter = painterResource(R.mipmap.ic_habit_icon),
                 contentDescription = "Placeholder icon",
@@ -107,7 +104,7 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = habit.habit.interval.toString(),
+                    text = habit.habitBlueprint.description,
                     modifier = Modifier.padding(vertical = 3.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -120,7 +117,7 @@ fun HabitItem(habit: HabitAndHabitBlueprint) {
                     .weight(1f)
                     .padding(vertical = 12.dp)
                     .weight(1f),
-                text = "4 Tage"
+                text = habit.habit.interval.toString() + " Tage"
             )
             Box(
                 modifier = Modifier

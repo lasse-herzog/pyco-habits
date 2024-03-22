@@ -35,3 +35,12 @@ data class HabitAndHabitBlueprint(
     )
     val habitBlueprint: HabitBlueprint
 )
+
+data class HabitAndHabitBlueprintWithCategories(
+    @Embedded val habitAndHabitBlueprint: HabitAndHabitBlueprint,
+    @Relation(
+        parentColumn = "habitBlueprintId",
+        entityColumn = "habitBlueprintId"
+    )
+    val categories: List<Category>
+)
