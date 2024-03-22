@@ -3,17 +3,14 @@ package com.example.pyco.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.CategoriesRepository
-import com.example.pyco.data.entities.Category
 import com.example.pyco.data.HabitBlueprintsRepository
 import com.example.pyco.data.HabitsRepository
-import com.example.pyco.data.entities.Habit
+import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,9 +40,11 @@ class HabitsOverviewViewModel @Inject constructor(
     private fun getAllHabits() {
         viewModelScope.launch {
             habitsRepository.getAllHabitsWithAllInfoStream().collect { habits ->
-                _uiState.value =
-                    OverviewUIState(habits = habits.filter { it.habitAndHabitBlueprint.habitBlueprint.isActive },
-                        categories = categoriesRepository.getCategories())
+                _uiState.update{ currentState ->
+                    currentState.copy(
+                        habits = habits.filter { it.habitAndHabitBlueprint.habitBlueprint.isActive }
+                    )
+                }
             }
         }
     }
@@ -72,22 +71,34 @@ fun remove(habitBlueprint: HabitBlueprint) {
 
 fun sortHabitsAlphabetical(sortAscending: Boolean) {
     if (sortAscending) {
-        _uiState.value =
-            OverviewUIState(habits = habits.sortedBy { it.habitAndHabitBlueprint.habitBlueprint.name })
+        _uiState.update {currentState ->
+            currentState.copy(
+                habits = habits.sortedBy { it.habitAndHabitBlueprint.habitBlueprint.name }
+            )
+        }
     } else {
-        _uiState.value =
-            OverviewUIState(habits = habits.sortedByDescending { it.habitAndHabitBlueprint.habitBlueprint.name })
+        _uiState.update {currentState ->
+            currentState.copy(
+                habits = habits.sortedByDescending { it.habitAndHabitBlueprint.habitBlueprint.name }
+            )
+        }
     }
 
 }
 
 fun sortHabitsNewest(sortNewest: Boolean) {
     if (sortNewest) {
-        _uiState.value =
-            OverviewUIState(habits = habits.sortedBy { it.habitAndHabitBlueprint.habit.start })
+        _uiState.update {currentState ->
+            currentState.copy(
+                habits = habits.sortedBy { it.habitAndHabitBlueprint.habit.start }
+            )
+        }
     } else {
-        _uiState.value =
-            OverviewUIState(habits = habits.sortedByDescending { it.habitAndHabitBlueprint.habit.start })
+        _uiState.update {currentState ->
+            currentState.copy(
+                habits = habits.sortedByDescending { it.habitAndHabitBlueprint.habit.start }
+            )
+        }
     }
 }
 
