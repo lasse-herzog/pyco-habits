@@ -50,8 +50,4 @@ class HabitsRepositoryImpl @Inject constructor(
     override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
         TODO("Not yet implemented")
     }
-
-    override suspend fun createHabitAndHabitBlueprint(title: String, tag: String, details: String) {
-        TODO("Not yet implemented")
-    }
 }

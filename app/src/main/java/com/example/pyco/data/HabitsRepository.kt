@@ -18,5 +18,4 @@ interface HabitsRepository {
     fun getHabitsStream(): Flow<List<Habit>>
     suspend fun getLastHabitDate(habit: Habit): LocalDate
     suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?)
-    suspend fun createHabitAndHabitBlueprint(title: String, tag: String, details: String)
 }

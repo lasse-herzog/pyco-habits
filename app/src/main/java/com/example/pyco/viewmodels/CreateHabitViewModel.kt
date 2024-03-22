@@ -18,7 +18,5 @@ class CreateHabitViewModel @Inject constructor (
         println("Title: $title")
         println("Tag: $tag")
         println("Details: $details")
-
-        habitsRepository.createHabitAndHabitBlueprint(title, tag, details)
     }
 }
