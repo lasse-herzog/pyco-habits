@@ -14,6 +14,10 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
         habitBlueprintDataSource.updateActive(habit.habitBlueprintId, true)
     }
 
+    override suspend fun deactivateHabitBlueprint(habit: HabitBlueprint) {
+        habitBlueprintDataSource.updateActive(habit.habitBlueprintId, false)
+    }
+
     override suspend fun createHabitBlueprint(
         name: String,
         description: String,
@@ -36,7 +40,6 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
             )
         }
     }
-
     override suspend fun getHabitBlueprints(): List<HabitBlueprintWithCategories> {
         return habitBlueprintDataSource.getHabitBlueprintWithCategories()
     }

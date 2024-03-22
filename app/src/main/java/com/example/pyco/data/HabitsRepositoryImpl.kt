@@ -47,6 +47,9 @@ class HabitsRepositoryImpl @Inject constructor(
     override suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories> {
         return habitsDataSource.getAllHabitsWithAllInfo()
     }
+    override fun getAllHabitsWithAllInfoStream(): Flow<List<HabitAndHabitBlueprintWithCategories>> {
+        return habitsDataSource.getAllHabitsWithAllInfoStream()
+    }
     override suspend fun setHabitFailed(habit: Habit, newHabitDate: LocalDate?) {
         TODO("Not yet implemented")
     }

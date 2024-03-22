@@ -54,17 +54,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
+import com.example.pyco.data.HabitsRepository
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
+import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 import java.time.LocalDate
 
 @Composable
-fun HabitItem(habit: HabitAndHabitBlueprintWithCategories) {
+fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOverviewViewModel) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
     var isBadHabit = habit.habitAndHabitBlueprint.habitBlueprint.badHabit
@@ -163,10 +166,13 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories) {
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
-                                contentDescription = "Localized description"
+                                contentDescription = "Delete Habit"
                             )
                         },
-                        onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
+                        onClick = {
+                            viewModel.remove(habit.habitAndHabitBlueprint.habitBlueprint)
+                            Toast.makeText(context, "Habit \"" + habit.habitAndHabitBlueprint.habitBlueprint.name + "\"  deleted", Toast.LENGTH_SHORT).show()
+                        }
                     )
                 }
             }
@@ -183,6 +189,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories) {
 )
 @Composable
 fun PreviewHabitsItem() {
+    val viewModel = hiltViewModel<HabitsOverviewViewModel>()
     PycoTheme {
         Surface {
             HabitItem(
@@ -192,7 +199,7 @@ fun PreviewHabitsItem() {
                         HabitBlueprint(0, "Müll rausbringen", "bitte ich will nicht mehr")
                     ),
                     mutableListOf(Category(0, "Saufen"), Category(1, "Achtarmig reinorgeln"))
-                )
+                ), viewModel
             )
         }
     }
