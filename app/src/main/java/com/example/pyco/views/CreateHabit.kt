@@ -51,15 +51,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
 import com.example.pyco.viewmodels.CreateHabitViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 
+@Composable
+fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel()){
+    CreateHabit(navController = rememberNavController())
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateHabit(navController: NavHostController, viewModel: CreateHabitViewModel) {
+fun CreateHabit(navController: NavHostController) {
     // State variables for text fields and dropdown
     var titleText by remember { mutableStateOf("Hier den Habit Namen eingeben") }
     var descriptionText by remember {
@@ -231,7 +237,7 @@ fun CreateHabit(navController: NavHostController, viewModel: CreateHabitViewMode
             Button(
                 onClick = {
                     // Call the ViewModel's submit function with the current state values
-                    viewModel.submitData(titleText, items[selectedIndex], descriptionText)
+                    //viewModel.submitData(titleText, items[selectedIndex], descriptionText)
                 },
                 modifier = Modifier
                     .padding(vertical = 2.dp, horizontal = 25.dp)
@@ -254,8 +260,7 @@ fun CreateHabitPreview() {
     PycoTheme {
         Surface {
             CreateHabit(
-                navController = rememberNavController(),
-                viewModel = CreateHabitViewModel()
+                navController = rememberNavController()
             )
         }
     }
