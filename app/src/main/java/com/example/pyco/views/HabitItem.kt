@@ -73,7 +73,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
     var isBadHabit = habit.habitAndHabitBlueprint.habitBlueprint.badHabit
 
     val detailsColor by animateColorAsState(
-        if (isBadHabit) MaterialTheme.colorScheme.inverseOnSurface  else MaterialTheme.colorScheme.surfaceContainerLow,
+        if (isBadHabit) MaterialTheme.colorScheme.primaryContainer  else MaterialTheme.colorScheme.surfaceContainer,
     )
 
     Surface(
@@ -109,7 +109,6 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
             ) {
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
-                    color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleSmall
                 )
