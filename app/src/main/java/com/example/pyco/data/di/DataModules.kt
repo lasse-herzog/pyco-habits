@@ -53,9 +53,12 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): PycoDatabase {
-        return Room
-            .databaseBuilder(context.applicationContext, PycoDatabase::class.java, "PYCO.db")
-            .createFromAsset("PYCO_db.db")
+        return Room.databaseBuilder(
+            context.applicationContext,
+            PycoDatabase::class.java,
+            "PYCO.db"
+        )
+            .createFromAsset("database/PYCO_db_dev.db")
             .build()
     }
 

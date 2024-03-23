@@ -47,6 +47,14 @@ class HabitsRepositoryImpl @Inject constructor(
         return habitDataSource.getAll()
     }
 
+    override suspend fun getLastHabitDate(habit: Habit): LocalDate {
+        return habitDateDataSource.getLastHabitDateByHabitId(habit.habitId).date
+    }
+
+    override fun observeAllHabitsWithAllInfo(): Flow<List<HabitAndHabitBlueprintWithCategories>> {
+        return habitDataSource.getAllHabitsWithAllInfoStream()
+    }
+
     override fun observeHabits(): Flow<List<Habit>> {
         return habitDataSource.observeAll()
     }
@@ -60,10 +68,6 @@ class HabitsRepositoryImpl @Inject constructor(
                     )
                 }
             }
-    }
-
-    override suspend fun getLastHabitDate(habit: Habit): LocalDate {
-        return habitDateDataSource.getLastHabitDateByHabitId(habit.habitId).date
     }
 
     override suspend fun setHabitPracticed(habit: Habit, date: LocalDate) {

@@ -54,6 +54,10 @@ interface HabitDao {
     @Query("SELECT * FROM habit")
     suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories>
 
+    @Transaction
+    @Query("SELECT * FROM habit")
+    fun getAllHabitsWithAllInfoStream(): Flow<List<HabitAndHabitBlueprintWithCategories>>
+
     /**
      * Select a habit by id.
      *

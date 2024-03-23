@@ -17,6 +17,7 @@ interface HabitsRepository {
     suspend fun getAllHabitsWithBlueprint() : List<HabitAndHabitBlueprint>
     suspend fun getHabits(): List<Habit>
     suspend fun getLastHabitDate(habit: Habit): LocalDate
+    fun observeAllHabitsWithAllInfo(): Flow<List<HabitAndHabitBlueprintWithCategories>>
     fun observeHabits(): Flow<List<Habit>>
     fun observePendingHabits(): Flow<List<Habit>>
     suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate = LocalDate.now())
