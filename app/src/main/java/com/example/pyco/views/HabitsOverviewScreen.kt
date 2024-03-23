@@ -108,7 +108,7 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
             ){
                 CategoryFilterList(categories, viewModel)
                 if (habits.isEmpty()){
-                    emptyHabitsText(isFilterSelected = true)
+                    EmptyHabitsText(categories)
                 }else{
                     HabitsList(habits, viewModel)
                 }
@@ -163,7 +163,8 @@ fun CategoryFilterList(categories: List<CategoryChipAndState>, viewModel: Habits
 }
 
 @Composable
-fun emptyHabitsText(isFilterSelected: Boolean){
+fun EmptyHabitsText(categories: List<CategoryChipAndState>){
+    val isFilterSelected = categories.filter { it.selected }.isNotEmpty()
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
