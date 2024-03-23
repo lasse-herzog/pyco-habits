@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -167,7 +169,8 @@ fun EmptyHabitsText(categories: List<CategoryChipAndState>){
     val isFilterSelected = categories.filter { it.selected }.isNotEmpty()
     Surface {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -180,9 +183,11 @@ fun EmptyHabitsText(categories: List<CategoryChipAndState>){
             )
             Text(
                 text = if(isFilterSelected) "There are no habits for the selected filters!"
-                    else "No habits created yet. Start your PYCO journey now by creating a new habit!",
+                    else "No habits created yet. \nStart your PYCO journey now by creating a new habit!",
                 color = Color.Gray,
-                style = MaterialTheme.typography.bodyMedium
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.width(250.dp)
             )
         }
     }
