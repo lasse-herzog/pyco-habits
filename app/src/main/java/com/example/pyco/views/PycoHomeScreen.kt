@@ -151,7 +151,7 @@ fun PendingHabitsListItem(
 
     SwipeToDismissBox(
         state = dismissState,
-        modifier = Modifier.padding(top = 4.dp),
+        modifier = Modifier.padding(top = 8.dp),
         backgroundContent = {
             val direction = dismissState.dismissDirection
             val color by animateColorAsState(
@@ -159,10 +159,11 @@ fun PendingHabitsListItem(
                     SwipeToDismissBoxValue.Settled -> MaterialTheme.colorScheme.onBackground
                     SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primary
                     SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
-                }, label = "dismiss habit"
+                }, label = "swipeToDismiss"
             )
             val scale by animateFloatAsState(
-                if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 1.5f else 1.75f
+                if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 1.5f else 1.75f,
+                label = "swipeToDismiss"
             )
 
             val alignment = when (direction) {
@@ -176,7 +177,6 @@ fun PendingHabitsListItem(
                 SwipeToDismissBoxValue.EndToStart -> Icons.Filled.Clear
                 SwipeToDismissBoxValue.Settled -> null
             }
-
 
             Box(
                 modifier = Modifier
@@ -226,22 +226,22 @@ fun PycoHomeScreenPreview() {
         PycoHomeContent(pycoHomeUIState = HomeUIState(
             pendingHabits = listOf(
                 Habit(
-                    blueprintId = 0, start = LocalDate.now(), interval = 1, end = null
+                    habitBlueprintId = 0, start = LocalDate.now(), interval = 1, end = null
                 ), Habit(
                     habitId = 1,
-                    blueprintId = 0,
+                    habitBlueprintId = 0,
                     start = LocalDate.now(),
                     interval = 1,
                     end = null
                 ), Habit(
                     habitId = 2,
-                    blueprintId = 0,
+                    habitBlueprintId = 0,
                     start = LocalDate.now(),
                     interval = 1,
                     end = null
                 ), Habit(
                     habitId = 3,
-                    blueprintId = 0,
+                    habitBlueprintId = 0,
                     start = LocalDate.now(),
                     interval = 1,
                     end = null
