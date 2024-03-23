@@ -1,4 +1,4 @@
-package com.example.pyco.data
+package com.example.pyco.data.repositories
 
 import com.example.pyco.data.daos.QuoteDao
 import com.example.pyco.data.entities.Category
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class QuotesRepositoryImpl @Inject constructor(
     private val quotesDataSource: QuoteDao
-) :QuotesRepository{
+) : QuotesRepository {
     override suspend fun getQuote(habit: Habit): Quote {
         TODO("Not yet implemented")
     }

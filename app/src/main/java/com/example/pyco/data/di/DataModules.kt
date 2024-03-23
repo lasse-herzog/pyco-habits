@@ -1,19 +1,20 @@
-package com.example.pyco.data.dependency_injection
+package com.example.pyco.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.pyco.data.CategoriesRepository
-import com.example.pyco.data.CategoriesRepositoryImpl
-import com.example.pyco.data.HabitBlueprintsRepository
-import com.example.pyco.data.HabitBlueprintsRepositoryImpl
-import com.example.pyco.data.HabitsRepository
-import com.example.pyco.data.HabitsRepositoryImpl
+import com.example.pyco.data.repositories.CategoriesRepository
+import com.example.pyco.data.repositories.CategoriesRepositoryImpl
+import com.example.pyco.data.repositories.HabitBlueprintsRepository
+import com.example.pyco.data.repositories.HabitBlueprintsRepositoryImpl
+import com.example.pyco.data.repositories.HabitsRepository
+import com.example.pyco.data.repositories.HabitsRepositoryImpl
 import com.example.pyco.data.PycoDatabase
-import com.example.pyco.data.QuotesRepository
-import com.example.pyco.data.QuotesRepositoryImpl
+import com.example.pyco.data.repositories.QuotesRepository
+import com.example.pyco.data.repositories.QuotesRepositoryImpl
 import com.example.pyco.data.daos.CategoryDao
 import com.example.pyco.data.daos.HabitBlueprintDao
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.daos.HabitDateDao
 import com.example.pyco.data.daos.QuoteDao
 import dagger.Binds
 import dagger.Module
@@ -35,11 +36,11 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun binHabitBlueprintsRepository(repository: HabitBlueprintsRepositoryImpl): HabitBlueprintsRepository
+    abstract fun bindHabitsRepository(repository: HabitsRepositoryImpl): HabitsRepository
 
     @Singleton
     @Binds
-    abstract fun bindHabitsRepository(repository: HabitsRepositoryImpl): HabitsRepository
+    abstract fun binHabitBlueprintsRepository(repository: HabitBlueprintsRepositoryImpl): HabitBlueprintsRepository
 
     @Singleton
     @Binds
@@ -62,11 +63,14 @@ object DatabaseModule {
     fun provideCategoryDao(database: PycoDatabase): CategoryDao = database.categoryDao()
 
     @Provides
+    fun provideHabitDao(database: PycoDatabase): HabitDao = database.habitDao()
+
+    @Provides
     fun provideHabitBlueprintDao(database: PycoDatabase): HabitBlueprintDao =
         database.habitBlueprintDao()
 
     @Provides
-    fun provideHabitDao(database: PycoDatabase): HabitDao = database.habitDao()
+    fun provideHabitDateDao(database: PycoDatabase): HabitDateDao = database.habitDateDao()
 
     @Provides
     fun provideQuoteDao(database: PycoDatabase): QuoteDao = database.quoteDao()
