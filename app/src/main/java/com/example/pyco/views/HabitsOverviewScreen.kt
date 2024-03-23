@@ -103,7 +103,8 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
             Column(
                 modifier = Modifier
                     .padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ){
                 CategoryFilterList(categories, viewModel)
                 if (habits.isEmpty()){

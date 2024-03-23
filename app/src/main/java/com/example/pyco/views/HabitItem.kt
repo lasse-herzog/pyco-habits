@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +41,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
 import com.example.pyco.data.entities.Category
@@ -86,7 +89,8 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
             .clickable { /* TODO: open the details view */ }
     ){
         Row(modifier = Modifier
-            .padding(all = 9.dp)
+            .padding(all = 9.dp),
+            verticalAlignment = Alignment.CenterVertically
         ){
             Image(
                 painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.first().categoryId, R.mipmap.ic_habit_icon)),
@@ -105,23 +109,17 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
 
             Column(
                 modifier = Modifier
-                    .width(190.dp)
+                    .width(245.dp)
             ) {
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
                     maxLines = 1,
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = habit.habitAndHabitBlueprint.habitBlueprint.description,
-                    modifier = Modifier.padding(vertical = 3.dp),
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodyMedium
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal=5.dp)
                 )
             }
-
+            /*
             Text(
                 textAlign = TextAlign.Right,
                 modifier = Modifier
@@ -130,6 +128,8 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
                     .weight(1f),
                 text = habit.habitAndHabitBlueprint.habit.interval.toString() + " Tage"
             )
+            */
+
             Box(
                 modifier = Modifier
                     .wrapContentSize(Alignment.TopEnd)
