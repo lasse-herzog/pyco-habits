@@ -42,12 +42,29 @@ class HabitsOverviewViewModel @Inject constructor(
     }
 
     private fun getAllHabits() {
-        viewModelScope.launch {
-            habitsRepository.getAllHabitsWithAllInfoStream().collect { habits ->
-                _uiState.update{ currentState ->
-                    currentState.copy(
-                        habits = habits.filter { it.habitAndHabitBlueprint.habitBlueprint.isActive }
-                    )
+        //check if there are category filters selected
+        val filterCategories: MutableList<Category> = mutableListOf()
+        categories.forEach {
+            if(it.selected){ filterCategories.add(it.category)}
+        }
+        if(filterCategories.isNotEmpty()){
+            viewModelScope.launch {
+                habitsRepository.getAllHabitsWithAllInfoStream().collect { habits ->
+                    _uiState.update{ currentState ->
+                        currentState.copy(
+                            habits = habits.filter { it.habitAndHabitBlueprint.habitBlueprint.isActive && it.categories.containsAll(filterCategories)}
+                        )
+                    }
+                }
+            }
+        }else{
+            viewModelScope.launch {
+                habitsRepository.getAllHabitsWithAllInfoStream().collect { habits ->
+                    _uiState.update{ currentState ->
+                        currentState.copy(
+                            habits = habits.filter { it.habitAndHabitBlueprint.habitBlueprint.isActive }
+                        )
+                    }
                 }
             }
         }
@@ -78,25 +95,7 @@ fun remove(habitBlueprint: HabitBlueprint) {
 
 fun filterWithCategory(category: CategoryChipAndState, selected: Boolean){
     categories.find { it.category == category.category }?.selected = selected
-
-    //get all active filter chips
-    val filterCategories: MutableList<Category> = mutableListOf()
-    categories.forEach {
-        if(it.selected){ filterCategories.add(it.category)}
-    }
-    //TODO:get all habits before filtering
-
-    if(filterCategories.isNotEmpty()){
-        _uiState.update {currentState ->
-            currentState.copy(
-                categories = categories,
-                habits = habits.filter { it.categories.containsAll(filterCategories) }
-            )
-        }
-    }else{
-        getAllHabits()
-    }
-
+    getAllHabits()
 }
 
 fun sortHabitsAlphabetical(sortAscending: Boolean) {
