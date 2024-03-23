@@ -7,16 +7,46 @@ import androidx.room.Upsert
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 /**
  * Data Access Object for the habit table.
  */
 @Dao
 interface HabitDao {
+    /**
+     * Delete all habits.
+     */
+    @Query("DELETE FROM habit")
+    suspend fun deleteAll()
+
+    /**
+     * Delete a habit by id.
+     *
+     * @return the number of habits deleted. This should always be 1.
+     */
+    @Query("DELETE FROM habit WHERE habitId = :habitId")
+    suspend fun deleteById(habitId: String): Int
+
+    /**
+     * Select all habits from the habits table.
+     *
+     * @return all habits.
+     */
+    @Query("SELECT * FROM habit")
+    suspend fun getAll(): List<Habit>
+
+    /**
+     * Select a habit by id.
+     *
+     * @param habitId the habit id.
+     * @return the habit with habitId.
+     */
+    @Query("SELECT * FROM habit WHERE habitId = :habitId")
+    suspend fun getById(habitId: Int): Habit
+
     @Transaction
     @Query("SELECT *  FROM habit WHERE habitId = :habitId")
-    suspend fun getHabitAndHabitBlueprint(habitId: Int): HabitAndHabitBlueprint
+    suspend fun getHabitAndHabitBlueprintById(habitId: Int): HabitAndHabitBlueprint
 
     /**
      * Observes list of habits.
@@ -35,22 +65,9 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE habitId = :habitId")
     fun observeById(habitId: Int): Flow<Habit>
 
-    /**
-     * Select all habits from the habits table.
-     *
-     * @return all habits.
-     */
-    @Query("SELECT * FROM habit")
-    suspend fun getAll(): List<Habit>
-
-    /**
-     * Select a habit by id.
-     *
-     * @param habitId the habit id.
-     * @return the habit with habitId.
-     */
-    @Query("SELECT * FROM habit WHERE habitId = :habitId")
-    suspend fun getById(habitId: String): Habit?
+    @Transaction
+    @Query("SELECT *  FROM habit WHERE habitId = :habitId")
+    fun observeHabitAndHabitBlueprintById(habitId: Int): Flow<HabitAndHabitBlueprint>
 
     /**
      * Insert or update a habit in the database. If a habit already exists, replace it.
@@ -58,7 +75,7 @@ interface HabitDao {
      * @param habit the habit to be inserted or updated.
      */
     @Upsert
-    suspend fun upsert(habit: Habit)
+    suspend fun upsert(habit: Habit): Long
 
     /**
      * Insert or update habits in the database. If a habit already exists, replace it.
@@ -67,21 +84,4 @@ interface HabitDao {
      */
     @Upsert
     suspend fun upsertAll(habits: List<Habit>)
-
-    /**
-     * Delete a habit by id.
-     *
-     * @return the number of habits deleted. This should always be 1.
-     */
-    @Query("DELETE FROM habit WHERE habitId = :habitId")
-    suspend fun deleteById(habitId: String): Int
-
-    /**
-     * Delete all habits.
-     */
-    @Query("DELETE FROM habit")
-    suspend fun deleteAll()
-
-    @Query("SELECT date FROM habitDate WHERE habitId = :habitId ORDER BY date DESC")
-    suspend fun getByLastDate(habitId: Int): List<LocalDate>
 }

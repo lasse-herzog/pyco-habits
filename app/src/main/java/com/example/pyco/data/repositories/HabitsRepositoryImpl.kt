@@ -1,23 +1,24 @@
 package com.example.pyco.data.repositories
 
 import com.example.pyco.data.daos.HabitDao
+import com.example.pyco.data.daos.HabitDateDao
 import com.example.pyco.data.entities.Habit
-import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
-import com.example.pyco.data.entities.Date
+import com.example.pyco.data.entities.HabitDate
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
 
 /**
  * Default implementation of [HabitsRepository]. Single entry point for managing habits' data.
  *
- * @param habitsDataSource - The local data source
+ * @param habitDataSource - The local data source
  */
 class HabitsRepositoryImpl @Inject constructor(
-    private val habitsDataSource: HabitDao,
+    private val habitDataSource: HabitDao, private val habitDateDataSource: HabitDateDao
 ) : HabitsRepository {
-    override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval: Int) {
+    override suspend fun createHabit(habitBlueprint: HabitBlueprint, interval: Int): Int {
         val habit = Habit(
             habitBlueprintId = habitBlueprint.habitBlueprintId,
             start = LocalDate.now(),
@@ -25,36 +26,47 @@ class HabitsRepositoryImpl @Inject constructor(
             interval = interval
         )
 
-        habitsDataSource.upsert(habit)
+        return habitDataSource.upsert(habit).toInt()
+    }
+
+    override suspend fun createHabitDate(habitId: Int, date: LocalDate) {
+        habitDateDataSource.upsert(HabitDate(habitId = habitId, date = date))
     }
 
     override suspend fun getHabits(): List<Habit> {
-        return habitsDataSource.getAll()
+        return habitDataSource.getAll()
     }
 
-    override fun getHabitsStream(): Flow<List<Habit>> {
-        return habitsDataSource.observeAll()
+    override fun observeHabits(): Flow<List<Habit>> {
+        return habitDataSource.observeAll()
     }
 
-    override fun observePendingHabits(): Flow<List<HabitAndHabitBlueprint>> {
-        return
+    override fun observePendingHabits(): Flow<List<Habit>> {
+        return habitDateDataSource.observeHabitDatesByDate(date = LocalDate.now())
+            .map { habitDates ->
+                habitDates.filter { it.habitPracticed == null }.map {
+                    habitDataSource.getById(
+                        it.habitId
+                    )
+                }
+            }
     }
 
     override suspend fun getLastHabitDate(habit: Habit): LocalDate {
-        return habitsDataSource.getByLastDate(habit.habitId).first()
+        return habitDateDataSource.getLastHabitDateByHabitId(habit.habitId).date
     }
 
     override suspend fun setHabitPracticed(habit: Habit, date: LocalDate) {
-        habitsDataSource.upsertHabitDate(
-            Date(
+        habitDateDataSource.upsert(
+            HabitDate(
                 habitId = habit.habitId, date = date, habitPracticed = true
             )
         )
     }
 
     override suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate) {
-        habitsDataSource.upsertHabitDate(
-            Date(
+        habitDateDataSource.upsert(
+            HabitDate(
                 habitId = habit.habitId, date = date, habitPracticed = false
             )
         )
