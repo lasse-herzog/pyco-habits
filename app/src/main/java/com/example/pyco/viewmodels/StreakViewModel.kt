@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pyco.data.HabitsRepository
 import com.example.pyco.data.entities.CompleteHabit
+import com.example.pyco.data.repositories.HabitsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -36,7 +36,8 @@ class StreakViewModel @Inject constructor(
         viewModelScope.launch {
             val habits: List<CompleteHabit> = habitsRepository.getCompleteHabits()
             score = LocalDate.now().toEpochDay()
-            activeHabits = habits.filter { x -> x.habit.end == null || x.habit.end >= LocalDate.now() }
+            activeHabits =
+                habits.filter { x -> x.habitBlueprint.isActive && (x.habit.end == null || x.habit.end >= LocalDate.now()) }
         }
 
 //        viewModelScope.launch {

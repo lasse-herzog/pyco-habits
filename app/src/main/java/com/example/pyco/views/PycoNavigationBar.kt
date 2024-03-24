@@ -1,7 +1,7 @@
 package com.example.pyco.views
 
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
@@ -75,12 +75,13 @@ fun PycoNavigationBar() {
         NavHost(
             navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
         ) {
             composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Habits.route) { HabitsOverviewScreen() }
-            composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
-
+            composable(Screen.Home.route) { PycoHomeScreen() }
         }
     }
 }

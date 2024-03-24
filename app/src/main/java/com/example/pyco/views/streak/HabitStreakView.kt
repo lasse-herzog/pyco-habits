@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -37,7 +36,6 @@ import com.example.pyco.R
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
-import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.HabitDate
 import com.example.pyco.helper.StreakHelper
@@ -45,6 +43,8 @@ import java.time.LocalDate
 
 @Composable
 fun HabitStreakView(habit: CompleteHabit) {
+    val streakInfo = StreakHelper.CalculateCurrentStreak(habit)
+
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 5.dp)
@@ -70,23 +70,22 @@ fun HabitStreakView(habit: CompleteHabit) {
         ) {
             Column {
                 Text(text = habit.habitBlueprint.name)
-                HabitStreakProgress(habit)
+                HabitStreakProgress(streakInfo.second, streakInfo.third)
             }
             Box(modifier = Modifier.weight(1f)) {}
-            HabitStreakMultiplier(habit)
+            HabitStreakMultiplier(streakInfo.first)
         }
     }
 }
 
 @Composable
-fun HabitStreakMultiplier(habit: CompleteHabit) {
+fun HabitStreakMultiplier(multiplier: Int) {
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val multiplier = StreakHelper.CalculateStreakMultiplier(habit)
-        Text(String.format("%.2f", multiplier))
+        Text(multiplier.toString())
         Text(text = "x")
 
         Box {
@@ -128,15 +127,16 @@ fun HabitStreakMultiplier(habit: CompleteHabit) {
 }
 
 @Composable
-fun HabitStreakProgress(habit: CompleteHabit) {
+fun HabitStreakProgress(daysIntoLevel: Int, daysOfLevel: Int) {
     Row(
         Modifier
             .height(IntrinsicSize.Min)
             .padding(top = 5.dp)
     ) {
-        CustomProgressBar(progress = .5f)
-        Text("3", modifier = Modifier.padding(start = 5.dp))
-        Text("/3")
+        CustomProgressBar(progress = (daysIntoLevel.toFloat() / daysOfLevel.toFloat()))
+        Text(daysIntoLevel.toString(), modifier = Modifier.padding(start = 5.dp))
+        Text("/")
+        Text(daysOfLevel.toString())
     }
 }
 

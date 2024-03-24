@@ -6,14 +6,14 @@ import kotlin.math.ln
 
 class StreakHelper {
     companion object {
-        fun CalculateStreakMultiplier(habit: CompleteHabit): Float {
+        fun CalculateCurrentStreak(habit: CompleteHabit): Triple<Int, Int, Int> {
             val dates = habit.dates
             val sortedDates = dates.sortedByDescending { it.date }
             var streak = 0
             var previousDate = LocalDate.now()
 
             for (habitDate in sortedDates) {
-                if (habitDate.habitDone) {
+                if (habitDate.habitPracticed == true) {
                     if (habitDate.date == previousDate || habitDate.date.plusDays(1) == previousDate) {
                         streak++
                         previousDate = habitDate.date
@@ -26,7 +26,7 @@ class StreakHelper {
                 }
             }
 
-            return calculateMultiplier(streak)
+            return CalculateMultiplier(streak)
         }
 
         fun CalculateStreak(habit: CompleteHabit): Float {
@@ -46,11 +46,11 @@ class StreakHelper {
                 }
 
                 // Calculate the multiplier for the current streak
-                val dailyMultiplier = calculateMultiplier(currentStreak)
+                val dailyMultiplier = CalculateMultiplier(currentStreak)
 
                 // If the habit was done, add points based on the current multiplier
-                if (habitDate.habitDone) {
-                    totalPoints += 1 * dailyMultiplier
+                if (habitDate.habitPracticed == true) {
+                    totalPoints += 1 * dailyMultiplier.first
                 }
 
                 lastDate = habitDate.date
@@ -59,13 +59,28 @@ class StreakHelper {
             return totalPoints
         }
 
-        private fun calculateMultiplier(streak: Int): Float {
-            if (streak <= 1) return 1f
+        fun CalculateMultiplier(streak: Int): Triple<Int, Int, Int> {
+            val daysPerLevel = listOf(1, 3, 7, 14, 21, 30, 42, 56, 72, 90)
+            // Calculate cumulative thresholds for easier comparison.
+            val thresholds = daysPerLevel.scan(0) { acc, i -> acc + i }
 
-            val baseMultiplier = 1.0f // This is the minimum multiplier
-            val growthFactor = 1.5f // This controls the rate of growth of the multiplier
+            var currentLevel = 0
+            var daysIntoLevel = streak
+            var totalDays = 0
 
-            return baseMultiplier + (ln(streak.toDouble()) * growthFactor).toFloat()
+            for ((index, threshold) in thresholds.withIndex()) {
+                if (streak < threshold) {
+                    break
+                }
+                currentLevel = index
+                daysIntoLevel = streak - totalDays
+                if(index < thresholds.size - 1) {
+                    totalDays = threshold
+                }
+            }
+
+            val multiplier = currentLevel + 1
+            return Triple(multiplier, daysIntoLevel, daysPerLevel[currentLevel])
         }
     }
 }
