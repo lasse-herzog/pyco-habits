@@ -7,6 +7,7 @@ import com.example.pyco.data.entities.Quote
 
 
 interface QuotesRepository {
+    suspend fun createQuote(quote: Quote): Long
     suspend fun getQuote(habit: Habit): Quote
     suspend fun getQuoteByCategory(category: Category): Quote?
     suspend fun getQuotesByCategory(category: Category): List<Quote>

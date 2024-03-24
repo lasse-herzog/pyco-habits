@@ -30,4 +30,8 @@ class QuotesRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun createQuote(quote: Quote): Long {
+        return quotesDataSource.upsert(quote)
+    }
+
 }
