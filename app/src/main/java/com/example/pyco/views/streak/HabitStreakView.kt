@@ -34,13 +34,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pyco.R
+import com.example.pyco.data.entities.Category
+import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
+import com.example.pyco.data.entities.HabitDate
+import com.example.pyco.helper.StreakHelper
 import java.time.LocalDate
 
 @Composable
-fun HabitStreakView(habit: HabitAndHabitBlueprint) {
+fun HabitStreakView(habit: CompleteHabit) {
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 5.dp)
@@ -75,13 +79,14 @@ fun HabitStreakView(habit: HabitAndHabitBlueprint) {
 }
 
 @Composable
-fun HabitStreakMultiplier(habit: HabitAndHabitBlueprint) {
+fun HabitStreakMultiplier(habit: CompleteHabit) {
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "1")
+        val multiplier = StreakHelper.CalculateStreakMultiplier(habit)
+        Text(String.format("%.2f", multiplier))
         Text(text = "x")
 
         Box {
@@ -123,7 +128,7 @@ fun HabitStreakMultiplier(habit: HabitAndHabitBlueprint) {
 }
 
 @Composable
-fun HabitStreakProgress(habit: HabitAndHabitBlueprint) {
+fun HabitStreakProgress(habit: CompleteHabit) {
     Row(
         Modifier
             .height(IntrinsicSize.Min)
@@ -164,18 +169,24 @@ fun CustomProgressBar(progress: Float, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun HabitStreakViewPreview() {
-    val habits: List<HabitAndHabitBlueprint> = mutableListOf(
-        HabitAndHabitBlueprint(
+    val habits: List<CompleteHabit> = mutableListOf(
+        CompleteHabit(
             Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
         ),
-        HabitAndHabitBlueprint(
+        CompleteHabit(
             Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
         ),
-        HabitAndHabitBlueprint(
+        CompleteHabit(
             Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
         )
     )
 

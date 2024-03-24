@@ -2,26 +2,29 @@ package com.example.pyco.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.HabitsRepository
+import com.example.pyco.data.entities.CompleteHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.Date
 import javax.inject.Inject
+import kotlin.reflect.typeOf
 
 @HiltViewModel
 class StreakViewModel @Inject constructor(
     private val habitsRepository: HabitsRepository
 ) : ViewModel() {
 
-    var score: Int by mutableIntStateOf(0)
+    var score: Long by mutableLongStateOf(0)
         private set
-    var someText: String by mutableStateOf("")
+    var activeHabits by mutableStateOf<List<CompleteHabit>>(emptyList())
         private set
 
     init {
@@ -31,9 +34,9 @@ class StreakViewModel @Inject constructor(
     private fun observeHabits() {
 
         viewModelScope.launch {
-            val habits = habitsRepository.getCompleteHabits()
-            score = habits[1].dates.count()
-            someText = habits.first().habitBlueprint.name
+            val habits: List<CompleteHabit> = habitsRepository.getCompleteHabits()
+            score = LocalDate.now().toEpochDay()
+            activeHabits = habits.filter { x -> x.habit.end == null || x.habit.end >= LocalDate.now() }
         }
 
 //        viewModelScope.launch {

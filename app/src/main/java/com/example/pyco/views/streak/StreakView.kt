@@ -8,9 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.pyco.data.entities.Category
+import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprint
+import com.example.pyco.data.entities.HabitDate
 import com.example.pyco.viewmodels.PycoHomeViewModel
 import com.example.pyco.viewmodels.StreakViewModel
 import com.example.pyco.views.HabitItem
@@ -23,30 +26,14 @@ fun StreakView(
     Column {
         Text("Score:")
         Text(viewModel.score.toString())
-        Text(viewModel.someText)
         StreakProgress()
 //        Quote()
-        HabitStreaks()
+        HabitStreaks(viewModel.activeHabits)
     }
 }
 
 @Composable
-fun HabitStreaks() {
-    val habits: List<HabitAndHabitBlueprint> = mutableListOf(
-        HabitAndHabitBlueprint(
-            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
-        ),
-        HabitAndHabitBlueprint(
-            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
-        ),
-        HabitAndHabitBlueprint(
-            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
-            HabitBlueprint(0, "What a nice Habit!", "It is really nice!")
-        )
-    )
-
+fun HabitStreaks(habits: List<CompleteHabit>) {
     LazyColumn {
         items(habits) { habit ->
             HabitStreakView(habit = habit)
@@ -62,5 +49,26 @@ fun Quote() {
 @Preview
 @Composable
 fun HabitStreaksPreview() {
-    HabitStreaks()
+    val habits: List<CompleteHabit> = mutableListOf(
+        CompleteHabit(
+            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
+        ),
+        CompleteHabit(
+            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
+        ),
+        CompleteHabit(
+            Habit(0, 0, LocalDate.now(), LocalDate.now().plusDays(5), 5),
+            HabitBlueprint(0, "What a nice Habit!", "It is really nice!"),
+            listOf(Category(0, "Testcategory")),
+            listOf(HabitDate(0, LocalDate.now(), true))
+        )
+    )
+
+    HabitStreaks(habits)
 }
