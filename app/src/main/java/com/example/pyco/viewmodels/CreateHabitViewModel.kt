@@ -1,11 +1,10 @@
 package com.example.pyco.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.pyco.data.HabitBlueprintsRepository
-import com.example.pyco.data.HabitsRepository
+import com.example.pyco.data.repositories.HabitBlueprintsRepository
+import com.example.pyco.data.repositories.HabitsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-
 
 
 @HiltViewModel

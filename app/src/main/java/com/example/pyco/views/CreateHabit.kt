@@ -77,9 +77,11 @@ fun CreateHabit(onNavigateUp: () -> Unit) {
         )
     }
     var expanded by remember { mutableStateOf(false) }
+    var expandIntervall by remember { mutableStateOf(false) }
     val items = listOf("Leben", "Ernährung", "Test1", "Test2") // Add your tags here
     val intervals = listOf("1 Tag", "alle 2 Tage", "Alle 3 Tage", "Test2") // Add your tags here
     var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedIndexIntervall by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
     var datum by remember { mutableStateOf("") }
@@ -210,37 +212,37 @@ fun CreateHabit(onNavigateUp: () -> Unit) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     ExposedDropdownMenuBox(
-                        expanded = expanded,
+                        expanded = expandIntervall,
                         onExpandedChange = {
-                            expanded = !expanded
+                            expandIntervall = !expandIntervall
                         },
                         modifier = Modifier.padding(horizontal = 20.dp)
                     ) {
                         TextField(
                             readOnly = true,
-                            value = intervals[selectedIndex],
+                            value = intervals[selectedIndexIntervall],
                             onValueChange = {},
                             label = { Text("Intervall") },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(
-                                    expanded = expanded
+                                    expanded = expandIntervall
                                 )
                             },
                             colors = ExposedDropdownMenuDefaults.textFieldColors(),
                             modifier = Modifier.menuAnchor()
                         )
                         ExposedDropdownMenu(
-                            expanded = expanded,
+                            expanded = expandIntervall,
                             onDismissRequest = {
-                                expanded = false
+                                expandIntervall = false
                             }
                         ) {
-                            items.forEachIndexed { index, selectionOption ->
+                            intervals.forEachIndexed { index, selectionOption ->
                                 DropdownMenuItem(
                                     text = { Text(selectionOption) },
                                     onClick = {
-                                        selectedIndex = index
-                                        expanded = false
+                                        selectedIndexIntervall = index
+                                        expandIntervall = false
                                     }
                                 )
                             }

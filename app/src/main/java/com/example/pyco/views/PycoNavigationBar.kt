@@ -79,10 +79,8 @@ fun PycoNavigationBar() {
                 .consumeWindowInsets(innerPadding)
         ) {
             composable(Screen.Calendar.route) { Calendar() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen() }
             composable(Screen.Home.route) { PycoHomeScreen() }
             composable(Screen.Habits.route) { HabitsOverviewScreen(onNavigateToCreateHabit = {navController.navigate(Screen.CreateHabit.route)}) }
-            composable(Screen.Home.route) { PycoHome(rememberLazyListState(), Modifier) }
             composable(Screen.CreateHabit.route) {CreateHabit(onNavigateUp = {navController.navigateUp()})}
             composable(Screen.HabitDetails.route) {
                 HabitDetailsView(
