@@ -2,8 +2,8 @@ package com.example.pyco.data.entities
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["habitBlueprintId","categoryId"] )
+@Entity(primaryKeys = ["habitBlueprintId", "categoryId"])
 data class HabitBlueprintCategoryCrossRef(
-    val habitBlueprintId : Int,
-    val categoryId : Int
+    val habitBlueprintId: Int,
+    val categoryId: Int
 )
