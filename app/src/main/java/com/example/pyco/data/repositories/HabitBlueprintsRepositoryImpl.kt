@@ -23,7 +23,7 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
         description: String,
         categories: List<Category>,
         isBadHabit: Boolean
-    ) {
+    ) : HabitBlueprint {
         val habitBlueprint = HabitBlueprint(
             name = name,
             description = description,
@@ -39,6 +39,8 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
                 )
             )
         }
+
+        return habitBlueprint
     }
     override suspend fun getHabitBlueprints(): List<HabitBlueprintWithCategories> {
         return habitBlueprintDataSource.getHabitBlueprintWithCategories()

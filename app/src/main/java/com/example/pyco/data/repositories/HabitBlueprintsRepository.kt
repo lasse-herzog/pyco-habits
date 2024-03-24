@@ -14,7 +14,7 @@ interface HabitBlueprintsRepository {
         description: String,
         categories: List<Category>,
         isBadHabit: Boolean
-    )
+    ) : HabitBlueprint
 
     suspend fun getHabitBlueprints() : List<HabitBlueprintWithCategories>
 }

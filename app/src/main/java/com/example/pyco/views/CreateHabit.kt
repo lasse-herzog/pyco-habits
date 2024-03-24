@@ -68,9 +68,9 @@ fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel(), onNavig
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateHabit(onNavigateUp: () -> Unit) {
+fun CreateHabit(/*viewModel: CreateHabitViewModel = hiltViewModel(), */onNavigateUp: () -> Unit) {
     // State variables for text fields and dropdown
-    var titleText by remember { mutableStateOf("Hier den Habit Namen eingeben") }
+    var name by remember { mutableStateOf("Hier den Habit Namen eingeben") }
     var descriptionText by remember {
         mutableStateOf(
             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
@@ -129,12 +129,12 @@ fun CreateHabit(onNavigateUp: () -> Unit) {
 
                 ) {
                     BasicTextField(
-                        value = titleText,
+                        value = name,
                         textStyle = TextStyle.Default.copy(
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center
                         ),
-                        onValueChange = { titleText = it },
+                        onValueChange = { name = it },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp)
@@ -339,7 +339,7 @@ fun CreateHabit(onNavigateUp: () -> Unit) {
             Button(
                 onClick = {
                     // Call the ViewModel's submit function with the current state values
-                    //viewModel.submitData(titleText, items[selectedIndex], descriptionText)
+                    //viewModel.submitData(name, items[selectedIndex], descriptionText)
                 },
                 modifier = Modifier
                     .padding(vertical = 2.dp, horizontal = 25.dp)
