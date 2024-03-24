@@ -44,7 +44,10 @@ import com.example.pyco.views.ui.theme.PycoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
+fun HabitsOverviewScreen(
+    viewModel: HabitsOverviewViewModel = hiltViewModel(),
+    onNavigateToCreateHabit: () -> Unit
+){
     val habits = viewModel.uiState.collectAsState().value.habits
     var sortAscending by remember{mutableStateOf(true)};
     var sortNewest by remember {mutableStateOf(true)}
@@ -90,7 +93,7 @@ fun HabitsOverviewScreen(viewModel: HabitsOverviewViewModel = hiltViewModel()){
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = { /* TODO: open detail screen for habit creation */ }) {
+                FloatingActionButton(onClick = onNavigateToCreateHabit) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
             }
@@ -152,6 +155,6 @@ fun CategoryFilterList(categories: List<Category>){
 @Composable
 fun PreviewHabitsOverviewScreen() {
     PycoTheme {
-        HabitsOverviewScreen()
+        //HabitsOverviewScreen()
     }
 }
