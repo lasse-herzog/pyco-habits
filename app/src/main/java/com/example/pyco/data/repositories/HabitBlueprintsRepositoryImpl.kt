@@ -29,18 +29,18 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
             description = description,
             badHabit = isBadHabit
         )
-        val habitBlueprintId = habitBlueprintDataSource.upsert(habitBlueprint)
+        val habitBlueprintId = habitBlueprintDataSource.upsert(habitBlueprint).toInt()
 
         for (id in categories.map { it.categoryId }) {
             habitBlueprintDataSource.upsert(
                 HabitBlueprintCategoryCrossRef(
-                    habitBlueprintId.toInt(),
+                    habitBlueprintId,
                     id
                 )
             )
         }
 
-        return habitBlueprint
+        return habitBlueprint.copy(habitBlueprintId = habitBlueprintId)
     }
     override suspend fun getHabitBlueprints(): List<HabitBlueprintWithCategories> {
         return habitBlueprintDataSource.getHabitBlueprintWithCategories()

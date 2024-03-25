@@ -45,15 +45,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
 import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
-import com.example.pyco.views.navigation.Screen
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
 import java.time.LocalDate
@@ -92,7 +89,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
             verticalAlignment = Alignment.CenterVertically
         ){
             Image(
-                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.first().categoryId, R.mipmap.ic_habit_icon)),
+                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.firstOrNull()?.categoryId, R.mipmap.ic_habit_icon)),
                 contentDescription = "Placeholder icon",
                 modifier = Modifier
                     .size(50.dp)
