@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.repositories.HabitsRepository
+import com.example.pyco.data.repositories.QuotesRepository
 import com.example.pyco.helper.StreakHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
+import kotlin.random.Random
 import kotlin.reflect.typeOf
 
 data class StreakUiState(
@@ -29,7 +31,8 @@ data class StreakUiState(
 
 @HiltViewModel
 class StreakViewModel @Inject constructor(
-    private val habitsRepository: HabitsRepository
+    private val habitsRepository: HabitsRepository,
+    private val quoteRepository: QuotesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StreakUiState())
@@ -54,8 +57,13 @@ class StreakViewModel @Inject constructor(
                         score += StreakHelper.CalculateStreak(habit)
                     }
 
-                    _uiState.value = StreakUiState(activeHabits, score)
+                    _uiState.value = StreakUiState(activeHabits, score, loadQuote(activeHabits) ?: "")
                 }
         }
+    }
+
+    private suspend fun loadQuote(activeHabits: List<CompleteHabit>): String? {
+        val randomCategory = activeHabits.randomOrNull()?.categories?.randomOrNull() ?: return null
+        return quoteRepository.getQuotesByCategory(randomCategory).randomOrNull()?.text
     }
 }
