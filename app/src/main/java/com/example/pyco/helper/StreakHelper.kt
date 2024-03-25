@@ -29,8 +29,8 @@ class StreakHelper {
             return CalculateMultiplier(streak)
         }
 
-        fun CalculateStreak(habit: CompleteHabit): Float {
-            var totalPoints = 0f
+        fun CalculateStreak(habit: CompleteHabit): Int {
+            var totalPoints = 0
             var currentStreak = 0
             var lastDate: LocalDate? = null
 
@@ -60,27 +60,25 @@ class StreakHelper {
         }
 
         fun CalculateMultiplier(streak: Int): Triple<Int, Int, Int> {
+            if (streak == 0) return Triple(1, 0, 1) // Handle the zero case explicitly
+
             val daysPerLevel = listOf(1, 3, 7, 14, 21, 30, 42, 56, 72, 90)
-            // Calculate cumulative thresholds for easier comparison.
-            val thresholds = daysPerLevel.scan(0) { acc, i -> acc + i }
+            var cumulativeDays = 0
+            var level = 1
+            var daysIntoLevel = 0
+            var nextLevelDays = daysPerLevel.first()
 
-            var currentLevel = 0
-            var daysIntoLevel = streak
-            var totalDays = 0
-
-            for ((index, threshold) in thresholds.withIndex()) {
-                if (streak < threshold) {
+            for (daysRequired in daysPerLevel) {
+                if (streak <= cumulativeDays + daysRequired) {
+                    daysIntoLevel = streak - cumulativeDays
+                    nextLevelDays = daysRequired
                     break
                 }
-                currentLevel = index
-                daysIntoLevel = streak - totalDays
-                if(index < thresholds.size - 1) {
-                    totalDays = threshold
-                }
+                cumulativeDays += daysRequired
+                level++
             }
 
-            val multiplier = currentLevel + 1
-            return Triple(multiplier, daysIntoLevel, daysPerLevel[currentLevel])
+            return Triple(level, daysIntoLevel, nextLevelDays)
         }
     }
 }

@@ -43,7 +43,7 @@ interface HabitDao {
      * @return all habits.
      */
     @Query("SELECT * FROM habit")
-    suspend fun getAllComplete(): List<CompleteHabit>
+    fun getAllComplete(): Flow<List<CompleteHabit>>
 
     /**
      * Select all habits and blueprints from the db.

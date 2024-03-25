@@ -9,23 +9,30 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.entities.CompleteHabit
+import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.repositories.HabitsRepository
+import com.example.pyco.helper.StreakHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 
+data class StreakUiState(
+    val activeHabits: List<CompleteHabit> = emptyList(),
+    val score: Int = 0,
+)
+
 @HiltViewModel
 class StreakViewModel @Inject constructor(
     private val habitsRepository: HabitsRepository
 ) : ViewModel() {
 
-    var score: Long by mutableLongStateOf(0)
-        private set
-    var activeHabits by mutableStateOf<List<CompleteHabit>>(emptyList())
-        private set
+    private val _uiState = MutableStateFlow(StreakUiState())
+    val uiState: StateFlow<StreakUiState> = _uiState
 
     init {
         observeHabits()
@@ -34,23 +41,20 @@ class StreakViewModel @Inject constructor(
     private fun observeHabits() {
 
         viewModelScope.launch {
-            val habits: List<CompleteHabit> = habitsRepository.getCompleteHabits()
-            score = LocalDate.now().toEpochDay()
-            activeHabits =
-                habits.filter { x -> x.habitBlueprint.isActive && (x.habit.end == null || x.habit.end >= LocalDate.now()) }
+            val habits: List<CompleteHabit> = emptyList()
+            habitsRepository
+                .getCompleteHabits()
+                .collect { habits ->
+                    var score = 0
+                    val activeHabits =
+                        habits.filter { x -> x.habitBlueprint.isActive && (x.habit.end == null || x.habit.end >= LocalDate.now()) }
+
+                    for (habit in habits) {
+                        score += StreakHelper.CalculateStreak(habit)
+                    }
+
+                    _uiState.value = StreakUiState(activeHabits, score)
+                }
         }
-
-//        viewModelScope.launch {
-//        }
-
-//        habitsRepository.getHabitsStream()
-//            .catch { ex ->
-//                _uiState.value = HomeUIState(error = ex.message)
-//            }
-//            .collect { habits ->
-//                _uiState.value = HomeUIState(
-//                    habits = habits,
-//                )
-//            }
     }
 }
