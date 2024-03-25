@@ -2,7 +2,6 @@ package com.example.pyco.helper
 
 import com.example.pyco.data.entities.CompleteHabit
 import java.time.LocalDate
-import kotlin.math.ln
 
 class StreakHelper {
     companion object {
@@ -60,7 +59,7 @@ class StreakHelper {
         }
 
         fun CalculateMultiplier(streak: Int): Triple<Int, Int, Int> {
-            if (streak == 0) return Triple(1, 0, 1) // Handle the zero case explicitly
+            if (streak <= 0) return Triple(1, 0, 1) // Handle the zero case explicitly
 
             val daysPerLevel = listOf(1, 3, 7, 14, 21, 30, 42, 56, 72, 90)
             var cumulativeDays = 0
@@ -79,6 +78,28 @@ class StreakHelper {
             }
 
             return Triple(level, daysIntoLevel, nextLevelDays)
+        }
+
+        fun CalculateLevel(score: Int): Triple<Int, Int, Int> {
+            if (score <= 0) return Triple(1, 0, 10) // Handle the zero case explicitly
+
+            val pointsPerLevel = listOf(10, 20, 40, 80, 160)
+            var cumulativeScore = 0
+            var level = 1
+            var pointsIntoLevel = 0
+            var nextLevelPoints = pointsPerLevel.first()
+
+            for (daysRequired in pointsPerLevel) {
+                if (score <= cumulativeScore + daysRequired) {
+                    pointsIntoLevel = score - cumulativeScore
+                    nextLevelPoints = daysRequired
+                    break
+                }
+                cumulativeScore += daysRequired
+                level++
+            }
+
+            return Triple(level, pointsIntoLevel, nextLevelPoints)
         }
     }
 }

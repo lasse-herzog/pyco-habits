@@ -88,41 +88,46 @@ fun HabitStreakMultiplier(multiplier: Int) {
         Text(multiplier.toString())
         Text(text = "x")
 
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.streak_flame),
-                contentDescription = "Flame",
-                colorFilter = ColorFilter.tint(Color(255, 150, 0)),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(2f),
-                contentScale = ContentScale.Fit
-            )
-            Image(
-                painter = painterResource(id = R.drawable.streak_flame),
-                contentDescription = "Flame",
-                colorFilter = ColorFilter.tint(Color(255, 150, 0)),
-                modifier = Modifier
-                    .fillMaxHeight(.8f)
-                    .aspectRatio(2f)
-                    .align(Alignment.Center)
-                    .graphicsLayer(
-                        rotationZ = -30f,
-                        transformOrigin = TransformOrigin(0.5f, .8f)
-                    ),
-                contentScale = ContentScale.Fit
-            )
-            Image(
-                painter = painterResource(id = R.drawable.streak_flame_inner),
-                contentDescription = "Flame",
-                colorFilter = ColorFilter.tint(Color(255, 199, 0)),
-                modifier = Modifier
-                    .fillMaxHeight(.6f)
-                    .aspectRatio(2f)
-                    .align(Alignment.Center),
-                contentScale = ContentScale.Fit
-            )
-        }
+        StaticFlame()
+    }
+}
+
+@Composable
+fun StaticFlame(){
+    Box {
+        Image(
+            painter = painterResource(id = R.drawable.streak_flame),
+            contentDescription = "Flame",
+            colorFilter = ColorFilter.tint(Color(255, 150, 0)),
+            modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(2f),
+            contentScale = ContentScale.Fit
+        )
+        Image(
+            painter = painterResource(id = R.drawable.streak_flame),
+            contentDescription = "Flame",
+            colorFilter = ColorFilter.tint(Color(255, 150, 0)),
+            modifier = Modifier
+                .fillMaxHeight(.8f)
+                .aspectRatio(2f)
+                .align(Alignment.Center)
+                .graphicsLayer(
+                    rotationZ = -30f,
+                    transformOrigin = TransformOrigin(0.5f, .8f)
+                ),
+            contentScale = ContentScale.Fit
+        )
+        Image(
+            painter = painterResource(id = R.drawable.streak_flame_inner),
+            contentDescription = "Flame",
+            colorFilter = ColorFilter.tint(Color(255, 199, 0)),
+            modifier = Modifier
+                .fillMaxHeight(.6f)
+                .aspectRatio(2f)
+                .align(Alignment.Center),
+            contentScale = ContentScale.Fit
+        )
     }
 }
 

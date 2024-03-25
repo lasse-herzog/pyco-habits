@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,14 +33,15 @@ import androidx.compose.ui.unit.dp
 import com.example.pyco.R
 
 @Composable
-fun StreakProgress() {
+fun StreakProgress(levelInfo: Triple<Int, Int, Int>) {
     Box(
         contentAlignment = Alignment.Center, // Center the content within the Box
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(.5f)
+            .fillMaxHeight(1f)
     ) {
-        HalfCircle(progress = .75f)
+        val progress = levelInfo.second.toFloat() / levelInfo.third.toFloat()
+        HalfCircle(progress = progress)
         WoodComponent(.25f, -20f, offsetTop = 80f)
         WoodComponent(.25f, 210f, offsetTop = 80f)
         Flame(.15f)
@@ -192,10 +194,4 @@ fun lerpColor(startColor: Color, endColor: Color, fraction: Float): Color {
 
 fun lerp(start: Float, end: Float, fraction: Float): Float {
     return start + (end - start) * fraction
-}
-
-@Preview
-@Composable
-fun StreakCirclePreview() {
-    StreakProgress()
 }

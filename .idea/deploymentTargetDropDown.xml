@@ -2,12 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="HabitStreakViewPreview">
-        <State />
-      </entry>
-      <entry key="StreakCirclePreview">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>

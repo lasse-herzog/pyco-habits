@@ -24,6 +24,7 @@ import kotlin.reflect.typeOf
 data class StreakUiState(
     val activeHabits: List<CompleteHabit> = emptyList(),
     val score: Int = 0,
+    val quote: String = ""
 )
 
 @HiltViewModel
