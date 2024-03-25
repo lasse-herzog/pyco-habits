@@ -66,7 +66,8 @@ object CategoryIcons{
         7 to R.mipmap.ic_cat_freetime_icon,
         8 to R.mipmap.ic_cat_habit_icon,
         9 to R.mipmap.ic_cat_env_icon,
-        10 to R.mipmap.ic_cat_love_icon
+        10 to R.mipmap.ic_cat_love_icon,
+        11 to R.mipmap.ic_cat_food_icon
     )
 }
 @Composable
@@ -110,8 +111,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
                     maxLines = 1,
-                    fontSize = 20.sp,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal=5.dp)
                 )
             }
