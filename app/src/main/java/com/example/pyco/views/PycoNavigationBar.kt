@@ -78,16 +78,11 @@ fun PycoNavigationBar() {
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
         ) {
-            composable(Screen.Calendar.route) { Calendar() }
+            composable(Screen.Calendar.route) { PycoCalendarScreen() }
             composable(Screen.Habits.route) { HabitsOverviewScreen() }
             composable(Screen.Home.route) { PycoHomeScreen() }
         }
     }
-}
-
-@Composable
-fun Calendar() {
-    Text(text = "Calendar")
 }
 
 @Preview(showBackground = true)
