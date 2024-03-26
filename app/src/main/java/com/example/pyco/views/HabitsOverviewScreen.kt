@@ -171,7 +171,7 @@ fun CategoryFilterList(categories: List<CategoryChipAndState>, viewModel: Habits
 
 @Composable
 fun EmptyHabitsText(categories: List<CategoryChipAndState>) {
-    val isFilterSelected = categories.filter { it.selected }.isNotEmpty()
+    val isFilterSelected = categories.any { it.selected }
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),

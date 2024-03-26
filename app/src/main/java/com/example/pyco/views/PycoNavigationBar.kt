@@ -1,5 +1,7 @@
 package com.example.pyco.views
 
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
@@ -11,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -78,12 +81,21 @@ fun PycoNavigationBar() {
         NavHost(
             navController,
             startDestination = Screen.Home.route,
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
         ) {
             composable(Screen.Calendar.route) { PycoCalendarScreen() }
             composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Home.route) { PycoHomeScreen() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(onNavigateToCreateHabit = {navController.navigate(Screen.CreateHabit.route)}) }
-            composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = {navController.navigateUp()}) }
+            composable(Screen.Habits.route) {
+                HabitsOverviewScreen(onNavigateToCreateHabit = {
+                    navController.navigate(
+                        Screen.CreateHabit.route
+                    )
+                })
+            }
+            composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = { navController.navigateUp() }) }
         }
     }
 }
