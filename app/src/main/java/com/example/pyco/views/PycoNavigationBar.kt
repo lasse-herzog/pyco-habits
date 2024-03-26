@@ -18,10 +18,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.streak.StreakView
 
@@ -81,9 +83,21 @@ fun PycoNavigationBar() {
         ) {
             composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Home.route) { PycoHomeScreen() }
-            composable(Screen.Habits.route) { HabitsOverviewScreen(onNavigateToHabitDetailsView = {navController.navigate(Screen.HabitDetailsView.route)}, onNavigateToCreateHabit = {navController.navigate(Screen.CreateHabit.route)}) }
-            composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = {navController.navigateUp()}) }
-            composable(Screen.HabitDetailsView.route + "/{habitId}") { HabitDetailsView(onNavigateUp = {navController.navigateUp()}) }
+            composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = { navController.navigateUp() }) }
+            composable(Screen.Habits.route) {
+                HabitsOverviewScreen(onNavigateToHabitDetailsView = {
+                    navController.navigate(
+                        Screen.HabitDetailsView.route + "/$it"
+                    )
+                }, onNavigateToCreateHabit = { navController.navigate(Screen.CreateHabit.route) })
+            }
+            composable(
+                route = Screen.HabitDetailsView.route + "/{habitId}",
+                arguments = listOf(navArgument("habitId") {type = NavType.IntType})
+            ) { backStackEntry ->
+                val habitId: Int = backStackEntry.arguments?.getInt("habitId") ?: 0
+                HabitDetailsView(onNavigateUp = { navController.navigateUp() }, habitId = habitId)
+            }
         }
     }
 }

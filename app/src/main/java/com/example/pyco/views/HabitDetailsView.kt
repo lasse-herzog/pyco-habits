@@ -61,7 +61,11 @@ private var selectedCategories: List<Category> = listOf()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitDetailsView(viewModel: HabitDetailsViewViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
+fun HabitDetailsView(
+    viewModel: HabitDetailsViewViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit,
+    habitId: Int
+) {
 
     var name by remember { mutableStateOf("") }
     var datum by remember { mutableStateOf("") }
@@ -73,6 +77,7 @@ fun HabitDetailsView(viewModel: HabitDetailsViewViewModel = hiltViewModel(), onN
     val pattern = remember { Regex("^[1-9][0-9]{0,2}\$") }
     val context = LocalContext.current
     val categories = viewModel.uiState.collectAsState().value.categories
+    val test : String = habitId.toString()
 
     Scaffold(
         topBar = {
@@ -83,7 +88,7 @@ fun HabitDetailsView(viewModel: HabitDetailsViewViewModel = hiltViewModel(), onN
                 ),
                 title = {
                     Text(
-                        "Habit ansehen und bearbeiten",
+                        "Habit ansehen und bearbeiten $test",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -375,7 +380,10 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
 }
 
 @Composable
-fun CategoryListDetails(categories: List<CategoryChipAndState>, viewModel: HabitDetailsViewViewModel) {
+fun CategoryListDetails(
+    categories: List<CategoryChipAndState>,
+    viewModel: HabitDetailsViewViewModel
+) {
     LazyRow(
         modifier = Modifier.padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)

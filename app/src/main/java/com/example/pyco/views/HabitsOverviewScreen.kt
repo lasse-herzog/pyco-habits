@@ -54,7 +54,7 @@ import com.example.pyco.viewmodels.HabitsOverviewViewModel
 @Composable
 fun HabitsOverviewScreen(
     viewModel: HabitsOverviewViewModel = hiltViewModel(),
-    onNavigateToHabitDetailsView: () -> Unit,
+    onNavigateToHabitDetailsView: (Int) -> Unit,
     onNavigateToCreateHabit: () -> Unit
 ) {
     val habits = viewModel.uiState.collectAsState().value.habits
@@ -154,7 +154,7 @@ fun CatFilterChip(category: CategoryChipAndState, viewModel: HabitsOverviewViewM
 fun HabitsList(
     habits: List<HabitAndHabitBlueprintWithCategories>,
     viewModel: HabitsOverviewViewModel,
-    onNavigateToHabitDetailsView : () -> Unit
+    onNavigateToHabitDetailsView : (Int) -> Unit
 ) {
     LazyColumn {
         items(habits) { habit ->
