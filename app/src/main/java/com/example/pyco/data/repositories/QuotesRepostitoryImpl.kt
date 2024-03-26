@@ -15,19 +15,19 @@ class QuotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getQuoteByCategory(category: Category): Quote? {
-        return quotesDataSource.getQuoteByCategory(category.categoryId)
+        return quotesDataSource.getQuoteByCategoryId(category.categoryId)
     }
 
     override suspend fun getQuotesByCategory(category: Category): List<Quote> {
-        TODO("Not yet implemented")
+        return quotesDataSource.getQuotesByCategoryId(category.categoryId)
     }
 
-    override suspend fun getQuotesByCategory(habitBlueprint: HabitBlueprint): Quote? {
-        return quotesDataSource.getQuoteByHabitBlueprint(habitBlueprint.habitBlueprintId)
+    override suspend fun getQuoteByHabitBlueprint(habitBlueprint: HabitBlueprint): Quote? {
+        return quotesDataSource.getQuoteByHabitBlueprintId(habitBlueprint.habitBlueprintId)
     }
 
     override suspend fun getQuotesByHabitBlueprint(habitBlueprint: HabitBlueprint): List<Quote> {
-        TODO("Not yet implemented")
+        return quotesDataSource.getQuotesByHabitBlueprintId(habitBlueprint.habitBlueprintId)
     }
 
 }
