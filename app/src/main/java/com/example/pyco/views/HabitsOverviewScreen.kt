@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,8 +49,6 @@ import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
 
-//import com.example.pyco.views.ui.theme.PycoTheme
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitsOverviewScreen(
@@ -64,53 +63,48 @@ fun HabitsOverviewScreen(
     //TODO: implement route for detail view
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                ),
-                title = {
-                    Text(
-                        "My Habits",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
+            title = {
+                Text(
+                    "My Habits", maxLines = 1, overflow = TextOverflow.Ellipsis
+                )
+            },
+            actions = {
+                IconButton(onClick = {
+                    viewModel.sortHabitsAlphabetical(sortAscending)
+                    sortAscending = !sortAscending
+                }) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_sort_by_alpha_24),
+                        contentDescription = "Sort in alphabetical order"
                     )
-                },
-                actions = {
-                    IconButton(onClick = {
-                        viewModel.sortHabitsAlphabetical(sortAscending)
-                        sortAscending = !sortAscending
-                    }) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_sort_by_alpha_24),
-                            contentDescription = "Sort in alphabetical order"
-                        )
-                    }
-                    IconButton(onClick = {
-                        viewModel.sortHabitsNewest(sortNewest)
-                        sortNewest = !sortNewest
-                    }) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_new_releases_24),
-                            contentDescription = "Newest first"
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onNavigateToCreateHabit) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
+                }
+                IconButton(onClick = {
+                    viewModel.sortHabitsNewest(sortNewest)
+                    sortNewest = !sortNewest
+                }) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_new_releases_24),
+                        contentDescription = "Newest first"
+                    )
+                }
+            },
+            scrollBehavior = scrollBehavior,
+        )
+    }, floatingActionButton = {
+        FloatingActionButton(onClick = onNavigateToCreateHabit) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
         }
-    ) { innerPadding ->
+    }) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -169,8 +163,7 @@ fun HabitsList(
 @Composable
 fun CategoryFilterList(categories: List<CategoryChipAndState>, viewModel: HabitsOverviewViewModel) {
     LazyRow(
-        modifier = Modifier.padding(top = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        modifier = Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(categories) { cat ->
             CatFilterChip(cat, viewModel)
@@ -180,11 +173,10 @@ fun CategoryFilterList(categories: List<CategoryChipAndState>, viewModel: Habits
 
 @Composable
 fun EmptyHabitsText(categories: List<CategoryChipAndState>) {
-    val isFilterSelected = categories.filter { it.selected }.isNotEmpty()
+    val isFilterSelected = categories.any { it.selected }
     Surface {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -192,8 +184,7 @@ fun EmptyHabitsText(categories: List<CategoryChipAndState>) {
                 painter = if (isFilterSelected) painterResource(R.mipmap.ic_notfound_icon)
                 else painterResource(R.mipmap.ic_no_habits_icon),
                 contentDescription = "Info icon",
-                modifier = Modifier
-                    .size(50.dp)
+                modifier = Modifier.size(50.dp)
             )
             Text(
                 text = if (isFilterSelected) "There are no habits for the selected filters!"
