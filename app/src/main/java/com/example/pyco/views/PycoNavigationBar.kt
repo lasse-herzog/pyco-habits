@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -25,7 +24,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.streak.StreakView
-import com.example.pyco.views.ui.theme.PycoTheme
+
+//import com.example.pyco.views.ui.theme.PycoTheme
 
 data class NavBarItem(val screen: Screen, val icon: ImageVector)
 
@@ -82,27 +82,15 @@ fun PycoNavigationBar() {
             composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Home.route) { PycoHomeScreen() }
             composable(Screen.Habits.route) { HabitsOverviewScreen(onNavigateToCreateHabit = {navController.navigate(Screen.CreateHabit.route)}) }
-            composable(Screen.CreateHabit.route) {CreateHabit(onNavigateUp = {navController.navigateUp()})}
-            composable(Screen.HabitDetails.route) {
-                HabitDetailsView(
-                    habitDetails = HabitDetails(
-                        "Gesundes Essen kochen",
-                        "TestIcon",
-                        "2 Tage",
-                        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
-                        listOf("Leben", "Ernärung"),
-                        3
-                    ), navController
-                )
-            }
+            composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = {navController.navigateUp()}) }
         }
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 private fun NavigationBarPreview() {
     PycoTheme {
         PycoNavigationBar()
     }
-}
+}*/
