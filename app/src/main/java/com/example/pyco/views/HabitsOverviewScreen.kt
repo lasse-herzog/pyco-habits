@@ -5,13 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -57,6 +54,7 @@ import com.example.pyco.viewmodels.HabitsOverviewViewModel
 @Composable
 fun HabitsOverviewScreen(
     viewModel: HabitsOverviewViewModel = hiltViewModel(),
+    onNavigateToHabitDetailsView: () -> Unit,
     onNavigateToCreateHabit: () -> Unit
 ) {
     val habits = viewModel.uiState.collectAsState().value.habits
@@ -120,7 +118,7 @@ fun HabitsOverviewScreen(
             if (habits.isEmpty()) {
                 EmptyHabitsText(categories)
             } else {
-                HabitsList(habits, viewModel, onNavigateToCreateHabit)
+                HabitsList(habits, viewModel, onNavigateToHabitDetailsView)
             }
         }
     }
@@ -156,11 +154,11 @@ fun CatFilterChip(category: CategoryChipAndState, viewModel: HabitsOverviewViewM
 fun HabitsList(
     habits: List<HabitAndHabitBlueprintWithCategories>,
     viewModel: HabitsOverviewViewModel,
-    onNavigateToCreateHabit : () -> Unit
+    onNavigateToHabitDetailsView : () -> Unit
 ) {
     LazyColumn {
         items(habits) { habit ->
-            HabitItem(habit = habit, viewModel, onNavigateToCreateHabit)
+            HabitItem(habit = habit, viewModel, onNavigateToHabitDetailsView)
         }
         item {
             Spacer(modifier = Modifier.height(80.dp))

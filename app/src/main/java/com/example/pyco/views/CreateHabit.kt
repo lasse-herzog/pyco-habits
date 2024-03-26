@@ -53,7 +53,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.R
 import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.Category
 import com.example.pyco.viewmodels.CreateHabitViewModel
@@ -61,26 +60,12 @@ import java.util.Calendar
 
 private var selectedCategories: List<Category> = listOf()
 
-private object CHCategoryIcons {
-    val iconDictionary = hashMapOf(
-        1 to R.mipmap.ic_cat_sport_icon,
-        2 to R.mipmap.ic_cat_persdev_icon,
-        3 to R.mipmap.ic_cat_social_icon,
-        4 to R.mipmap.ic_cat_finance_icon,
-        5 to R.mipmap.ic_cat_career_icon,
-        6 to R.mipmap.ic_cat_job_icon,
-        7 to R.mipmap.ic_cat_freetime_icon,
-        8 to R.mipmap.ic_cat_habit_icon,
-        9 to R.mipmap.ic_cat_env_icon,
-        10 to R.mipmap.ic_cat_love_icon
-    )
-}
-
 @Composable
 fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
     CreateHabit(onNavigateUp = onNavigateUp)
 }
 
+@Suppress("NAME_SHADOWING")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
@@ -438,15 +423,17 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             color = MaterialTheme.colorScheme.errorContainer,
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .padding(10.dp)
+                        .padding(vertical = 10.dp, horizontal = 20.dp)
                         .fillMaxWidth()
 
                 ) {
                     Text(
-                        text = "Bitte gib einen Namen ein.",
+                        text = "Bitte Namen eingeben.",
                         color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(2.dp)
-                    )
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .align(alignment = Alignment.Center),
+                        )
                 }
             }
         }

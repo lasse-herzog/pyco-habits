@@ -37,12 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.pyco.R
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
@@ -66,7 +64,7 @@ object CategoryIcons{
 fun HabitItem(
     habit: HabitAndHabitBlueprintWithCategories,
     viewModel: HabitsOverviewViewModel,
-    onNavigateToCreateHabit: () -> Unit
+    onNavigateToHabitDetailsView: () -> Unit
 ) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
@@ -80,7 +78,7 @@ fun HabitItem(
             .animateContentSize()
             .padding(5.dp)
             .fillMaxWidth()
-            .clickable(onClick = onNavigateToCreateHabit)
+            .clickable(onClick = onNavigateToHabitDetailsView)
     ){
         Row(modifier = Modifier
             .padding(all = 9.dp),
