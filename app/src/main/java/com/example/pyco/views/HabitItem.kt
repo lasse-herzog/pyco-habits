@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -57,7 +58,8 @@ object CategoryIcons{
         7 to R.mipmap.ic_cat_freetime_icon,
         8 to R.mipmap.ic_cat_habit_icon,
         9 to R.mipmap.ic_cat_env_icon,
-        10 to R.mipmap.ic_cat_love_icon
+        10 to R.mipmap.ic_cat_love_icon,
+        11 to R.mipmap.ic_cat_food_icon
     )
 }
 @Composable
@@ -77,6 +79,7 @@ fun HabitItem(
         modifier = Modifier
             .animateContentSize()
             .padding(5.dp)
+            .fillMaxWidth()
             .clickable(onClick = onNavigateToCreateHabit)
     ){
         Row(modifier = Modifier
@@ -89,24 +92,20 @@ fun HabitItem(
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .shadow(
-                        elevation = 1.dp,
-                        shape = CircleShape,
-                        ambientColor = MaterialTheme.colorScheme.surface
-                    )
+                    .weight(1f)
+
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Column(
                 modifier = Modifier
-                    .width(245.dp)
+                    .weight(5f)
             ) {
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
                     maxLines = 1,
-                    fontSize = 20.sp,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal=5.dp)
                 )
             }
@@ -123,6 +122,7 @@ fun HabitItem(
 
             Box(
                 modifier = Modifier
+                    .weight(1f)
                     .wrapContentSize(Alignment.TopEnd)
 
             ) {

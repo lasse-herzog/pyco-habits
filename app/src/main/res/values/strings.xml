@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">pyco</string>
+    <string name="app_name">PYCO</string>
     <string name="habits">Habits</string>
     <string name="home">Home</string>
-    <string name="calendar">Calendar</string>
-    <string name="habitDetails">Habit Details</string>
+    <string name="streak">Streak</string>
     <string name="createHabit">Create Habit</string>
 </resources>
