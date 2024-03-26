@@ -11,6 +11,7 @@ import com.example.pyco.data.entities.HabitDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 /**
@@ -78,7 +79,7 @@ class HabitsRepositoryImpl @Inject constructor(
     override suspend fun setHabitPracticed(habit: Habit, date: LocalDate) {
         habitDateDataSource.upsert(
             HabitDate(
-                habitId = habit.habitId, date = date, habitPracticed = true
+                habitId = habit.habitId, date = date, habitPracticed = true, timestamp = LocalDateTime.now()
             )
         )
     }
