@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.InputChip
@@ -21,6 +25,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -51,7 +56,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun PycoCalendarScreen(pycoCalendarViewModel: PycoCalendarViewModel = hiltViewModel()) {
-    PycoCalendarContent(pycoCalendarViewModel.sampleData)
+    PycoCalendarContent(pycoCalendarViewModel.uiState.collectAsState().value.habitWeekData)
 }
 
 class HabitTimeStampParentData(
@@ -204,7 +209,13 @@ fun PycoCalendarContent(sampleData: HabitWeekData) {
         sampleData.habitDays.flatMap { it.habitTimeStamps }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        WeekRow(sampleData.firstDayOfWeek.dayOfMonth)
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsTopHeight(WindowInsets.systemBars)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+        )
+        WeekRow(sampleData.firstDayOfWeek.dayOfMonth, modifier = Modifier)
         Calendar(
             modifier = Modifier
                 .verticalScroll(scrollState)
@@ -401,9 +412,9 @@ items(itemsList) {
 }*/
 
 @Composable
-private fun WeekRow(firstDateOfWeek: Int) {
+private fun WeekRow(firstDateOfWeek: Int, modifier: Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
     ) {
         Spacer(modifier = Modifier.weight(1F))
@@ -415,9 +426,11 @@ private fun WeekRow(firstDateOfWeek: Int) {
                 thickness = Dp.Hairline,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Column(modifier = Modifier
-                .weight(1F)
-                .padding(vertical = 8.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1F)
+                    .padding(vertical = 8.dp)
+            ) {
                 Text(
                     text = it.name.first().toString(),
                     modifier = Modifier.fillMaxWidth(),

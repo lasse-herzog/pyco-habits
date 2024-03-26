@@ -81,9 +81,6 @@ fun PycoNavigationBar() {
         NavHost(
             navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier
-                .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
         ) {
             composable(Screen.Calendar.route) { PycoCalendarScreen() }
             composable(Screen.Streak.route) { StreakView() }
