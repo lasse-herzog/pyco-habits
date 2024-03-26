@@ -39,14 +39,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
 import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
-import com.example.pyco.views.ui.theme.PycoTheme
+
+//import com.example.pyco.views.ui.theme.PycoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,7 +115,7 @@ fun HabitsOverviewScreen(
             if (habits.isEmpty()) {
                 EmptyHabitsText(categories)
             } else {
-                HabitsList(habits, viewModel)
+                HabitsList(habits, viewModel, onNavigateToCreateHabit)
             }
         }
     }
@@ -150,11 +150,12 @@ fun CatFilterChip(category: CategoryChipAndState, viewModel: HabitsOverviewViewM
 @Composable
 fun HabitsList(
     habits: List<HabitAndHabitBlueprintWithCategories>,
-    viewModel: HabitsOverviewViewModel
+    viewModel: HabitsOverviewViewModel,
+    onNavigateToCreateHabit : () -> Unit
 ) {
     LazyColumn {
         items(habits) { habit ->
-            HabitItem(habit = habit, viewModel)
+            HabitItem(habit = habit, viewModel, onNavigateToCreateHabit)
         }
     }
 }
@@ -201,11 +202,11 @@ fun EmptyHabitsText(categories: List<CategoryChipAndState>) {
 
 }
 
-@Preview
+/*@Preview
 @Composable
 fun PreviewHabitsOverviewScreen() {
     val viewModel = hiltViewModel<HabitsOverviewViewModel>()
     PycoTheme {
         HabitsOverviewScreen(viewModel, onNavigateToCreateHabit = {})
     }
-}
+}*/
