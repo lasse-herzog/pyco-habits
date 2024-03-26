@@ -36,7 +36,7 @@ class CreateHabitViewModel @Inject constructor (
         getCategories()
     }
 
-    fun submitData(name: String, categories: List<Category>, description: String, isBadHabit: Boolean, interval: Int /*TODO: Bad habit mit übergeben und Intervall übergeben*/) {
+    fun submitData(name: String, categories: List<Category>, description: String, isBadHabit: Boolean, interval: Int, endDate: String) {
         viewModelScope.launch {
             val habitBlueprint = habitsBlueprintsRepository.createHabitBlueprint(name, description, categories, isBadHabit)
             val habitId = habitsRepository.createHabit(habitBlueprint, interval)

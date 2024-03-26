@@ -39,12 +39,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -79,18 +78,17 @@ fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel(), onNavig
 fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
     // State variables for text fields and dropdown
     var name by remember { mutableStateOf("") }
+    var datum by remember { mutableStateOf("") }
     var interval by remember { mutableStateOf("") }
     var descriptionText by remember { mutableStateOf("") }
-    var expandIntervall by remember { mutableStateOf(false) }
-    val categories = viewModel.uiState.collectAsState().value.categories
-    val intervals = listOf("1 Tag", "alle 2 Tage", "Alle 3 Tage", "Test2") // Add your tags here
-    var selectedIndexIntervall by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
-    var datum by remember { mutableStateOf("") }
-    var checkBoxStatus by remember { mutableStateOf(false) }
     var isBadHabit by remember { mutableStateOf(false) }
-    val pattern = remember { Regex("^(?:[1-9]|[12]\\d|30)\$\n") }
+    var showTooltip by remember { mutableStateOf(true) }
+    var checkBoxStatus by remember { mutableStateOf(false) }
+    var isTextFieldFocused by remember { mutableStateOf(false) }
+    val pattern = remember { Regex("^[1-9][0-9]{0,2}\$") }
+    val context = LocalContext.current
+    val categories = viewModel.uiState.collectAsState().value.categories
 
     Scaffold(
         topBar = {
@@ -145,15 +143,24 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             .background(
                                 MaterialTheme.colorScheme.primaryContainer,
                                 shape = RoundedCornerShape(20.dp)
-                            ),
+                            )
+                            .onFocusChanged { focusState ->
+                                isTextFieldFocused = focusState.isFocused
+                                if (isTextFieldFocused) {
+                                    showTooltip =
+                                        false // Tooltip ausblenden, wenn das TextField fokussiert wird
+                                }
+                            },
                         maxLines = 1,
                         decorationBox = { innerTextField ->
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
 
                                 ) {
-                                Text(text = "Habit Bezeichnung:",
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Text(
+                                    text = "Habit Bezeichnung:",
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
                                 innerTextField()
                             }
                         }
@@ -191,18 +198,57 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row {
-                        TextField(
-                            value = interval,
-                            onValueChange = {
-                                if (!it.matches(pattern)){
-                                    Toast.makeText(context, "Es dürfen nur ganze Zahlen von 1 bis 365 eingegeben werden!", Toast.LENGTH_SHORT).show()
-                                }
-                                if (it.isEmpty() || it.matches(pattern)) {
-                                    interval = it
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                        )
+                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primaryContainer,
+                                        shape = RoundedCornerShape(20.dp)
+                                    )
+                                    .padding(10.dp)
+
+                            ) {
+                                BasicTextField(
+                                    value = interval,
+                                    onValueChange = { newValue ->
+                                        if (newValue.isEmpty() || newValue.matches(pattern)) {
+                                            interval = newValue
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Es dürfen nur ganze Zahlen von 1 bis 999 eingegeben werden!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    },
+                                    textStyle = TextStyle.Default.copy(
+                                        fontSize = 20.sp,
+                                        textAlign = TextAlign.Center,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                        .background(
+                                            MaterialTheme.colorScheme.primaryContainer,
+                                            shape = RoundedCornerShape(20.dp)
+                                        ),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    decorationBox = { innerTextField ->
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+
+                                            ) {
+                                            Text(
+                                                text = "Intevall:",
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                            )
+                                            innerTextField()
+                                        }
+                                    }
+                                )
+                            }
+                        }
                     }
                     /*Column {
                         ExposedDropdownMenuBox(
@@ -289,7 +335,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
-                        ){
+                        ) {
                             Checkbox(
                                 checked = isBadHabit,
                                 onCheckedChange = { isChecked ->
@@ -298,7 +344,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             )
                         }
                         Column {
-                            Text(text = "Ist es ein Bad-Habit?")
+                            Text(text = "Bad-Habit?")
                         }
                     }
                 }
@@ -349,7 +395,17 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
             // Button to submit the data
             Button(
                 onClick = {
-                    viewModel.submitData(name, selectedCategories, descriptionText, isBadHabit, interval.toInt())
+                    if (interval.isEmpty()) {
+                        interval = "1"
+                    }
+                    viewModel.submitData(
+                        name,
+                        selectedCategories,
+                        descriptionText,
+                        isBadHabit,
+                        interval.toInt(),
+                        datum
+                    )
                     onNavigateUp()
                 },
                 enabled = name.isNotEmpty(),
@@ -363,6 +419,24 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
             ) {
                 Text("Speichern")
             }
+            if (showTooltip && !isTextFieldFocused) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.errorContainer,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(10.dp)
+                        .fillMaxWidth()
+
+                ) {
+                    Text(
+                        text = "Bitte gib einen Namen ein.",
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -375,10 +449,10 @@ fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
         selected = selected,
         onClick = {
             selected = !selected
-            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected){
+            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected) {
                 selectedCategories = selectedCategories.plus(category.category)
             }
-            if (selectedCategories.contains(category.category) && !selected){
+            if (selectedCategories.contains(category.category) && !selected) {
                 selectedCategories = selectedCategories.minus(category.category)
             }
             viewModel.categoryClicked(category, selected)
