@@ -46,4 +46,7 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
         return habitBlueprintDataSource.getHabitBlueprintWithCategories()
     }
 
+    override suspend fun update(habitBlueprint: HabitBlueprint){
+        habitBlueprintDataSource.update(habitBlueprint)
+    }
 }

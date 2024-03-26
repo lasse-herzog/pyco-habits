@@ -1,7 +1,5 @@
 package com.example.pyco.views
 
-import android.app.DatePickerDialog
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -54,8 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.Category
+import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitDetailsViewViewModel
-import java.util.Calendar
 
 private var selectedCategories: List<Category> = listOf()
 
@@ -66,18 +63,22 @@ fun HabitDetailsView(
     onNavigateUp: () -> Unit,
     habitId: Int
 ) {
-
+    var habit: HabitAndHabitBlueprintWithCategories =
+        viewModel.uiState.collectAsState().value.habit
     var name by remember { mutableStateOf("") }
     var datum by remember { mutableStateOf("") }
     var interval by remember { mutableStateOf("") }
-    var descriptionText by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(false) }
+    var description by remember { mutableStateOf("") }
     var isBadHabit by remember { mutableStateOf(false) }
-    var checkBoxStatus by remember { mutableStateOf(false) }
-    val pattern = remember { Regex("^[1-9][0-9]{0,2}\$") }
-    val context = LocalContext.current
     val categories = viewModel.uiState.collectAsState().value.categories
-    val test : String = habitId.toString()
+
+    name = habit.habitAndHabitBlueprint.habitBlueprint.name
+    datum = habit.habitAndHabitBlueprint.habit.end.toString()
+    interval = habit.habitAndHabitBlueprint.habit.interval.toString()
+    description = habit.habitAndHabitBlueprint.habitBlueprint.description
+    isBadHabit = habit.habitAndHabitBlueprint.habitBlueprint.badHabit
+    var start = habit.habitAndHabitBlueprint.habit.start
+    var end = habit.habitAndHabitBlueprint.habit.end
 
     Scaffold(
         topBar = {
@@ -88,7 +89,7 @@ fun HabitDetailsView(
                 ),
                 title = {
                     Text(
-                        "Habit ansehen und bearbeiten $test",
+                        "Habit ansehen und bearbeiten",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -153,7 +154,7 @@ fun HabitDetailsView(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CategoryListDetails(categories, viewModel)
+                CategoryListDetails(categories, habit.categories, viewModel)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(
@@ -173,16 +174,8 @@ fun HabitDetailsView(
                             ) {
                                 BasicTextField(
                                     value = interval,
-                                    onValueChange = { newValue ->
-                                        if (newValue.isEmpty() || newValue.matches(pattern)) {
-                                            interval = newValue
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                                "Es dürfen nur ganze Zahlen von 1 bis 999 eingegeben werden!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
+                                    enabled = false,
+                                    onValueChange = {
                                     },
                                     textStyle = TextStyle.Default.copy(
                                         fontSize = 20.sp,
@@ -215,45 +208,47 @@ fun HabitDetailsView(
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Checkbox(
-                                checked = checkBoxStatus,
-                                onCheckedChange = { isChecked ->
-                                    checkBoxStatus = isChecked
-                                    showDialog = isChecked
-                                }
-                            )
-                        }
-                        Column {
+                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primaryContainer,
+                                        shape = RoundedCornerShape(20.dp)
+                                    )
+                                    .padding(10.dp)
 
-                            Text(text = "End-Datum setzen?")
+                            ) {
+                                BasicTextField(
+                                    value = datum,
+                                    enabled = false,
+                                    onValueChange = {
+                                    },
+                                    textStyle = TextStyle.Default.copy(
+                                        fontSize = 20.sp,
+                                        textAlign = TextAlign.Center,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                        .background(
+                                            MaterialTheme.colorScheme.primaryContainer,
+                                            shape = RoundedCornerShape(20.dp)
+                                        ),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    decorationBox = { innerTextField ->
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
 
-                            if (showDialog) {
-                                val calendar = Calendar.getInstance()
-                                val year = calendar.get(Calendar.YEAR)
-                                val month = calendar.get(Calendar.MONTH)
-                                val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-                                val datePickerDialog = DatePickerDialog(
-                                    context,
-                                    { _, year, monthOfYear, dayOfMonth ->
-                                        datum = "$dayOfMonth.${monthOfYear + 1}.$year"
-                                        showDialog = false
-                                    }, year, month, day
+                                            ) {
+                                            Text(
+                                                text = "End-Datum:",
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                            )
+                                            innerTextField()
+                                        }
+                                    }
                                 )
-
-                                datePickerDialog.setOnCancelListener {
-                                    showDialog = false
-                                    checkBoxStatus = false
-                                }
-
-                                datePickerDialog.show()
-                            }
-
-                            if (datum.isNotEmpty() && checkBoxStatus) {
-                                Text(text = "Ausgewähltes Datum: $datum")
                             }
                         }
                     }
@@ -300,17 +295,17 @@ fun HabitDetailsView(
                             color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                         BasicTextField(
-                            value = descriptionText,
+                            value = description,
                             textStyle = TextStyle.Default.copy(
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer
                             ),
-                            onValueChange = { descriptionText = it },
+                            onValueChange = { description = it },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .defaultMinSize(minHeight = 300.dp)
                                 .padding(30.dp)
+                                .defaultMinSize(minHeight = 300.dp)
                                 .wrapContentHeight(align = Alignment.CenterVertically)
                         )
                     }
@@ -323,12 +318,15 @@ fun HabitDetailsView(
                         interval = "1"
                     }
                     viewModel.submitData(
-                        name,
-                        selectedCategories,
-                        descriptionText,
-                        isBadHabit,
-                        interval.toInt(),
-                        datum
+                        habitId = habit.habitAndHabitBlueprint.habit.habitId,
+                        habitBlueprintId =  habit.habitAndHabitBlueprint.habit.habitBlueprintId,
+                        name = name,
+                        categories = selectedCategories,
+                        description = description,
+                        isBadHabit =  isBadHabit,
+                        interval = habit.habitAndHabitBlueprint.habit.interval,
+                        endDate = end,
+                        start = start
                     )
                     onNavigateUp()
                 },
@@ -341,7 +339,7 @@ fun HabitDetailsView(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text("Speichern")
+                Text("Änderungen speichern")
             }
         }
     }
@@ -382,8 +380,18 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
 @Composable
 fun CategoryListDetails(
     categories: List<CategoryChipAndState>,
+    clickedCategories: List<Category>,
     viewModel: HabitDetailsViewViewModel
 ) {
+    for (category in categories) {
+        for (clickedCategory in clickedCategories) {
+            if (category.category.categoryId == clickedCategory.categoryId) {
+                category.selected = true
+                viewModel.categoryClicked(category, true)
+            }
+        }
+    }
+
     LazyRow(
         modifier = Modifier.padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)

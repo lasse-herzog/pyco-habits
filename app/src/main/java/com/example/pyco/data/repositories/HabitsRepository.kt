@@ -19,10 +19,14 @@ interface HabitsRepository {
     suspend fun getCompleteHabits(): Flow<List<CompleteHabit>>
     suspend fun getHabits(): List<Habit>
     suspend fun getById(habitId: Int): Habit
+    suspend fun getHabitById(habitId: Int): Habit
+    suspend fun getHabitWithAllInfo(habitId: Int): HabitAndHabitBlueprintWithCategories
     suspend fun getLastHabitDate(habit: Habit): LocalDate
     fun observeAllHabitsWithAllInfo(): Flow<List<HabitAndHabitBlueprintWithCategories>>
     fun observeHabits(): Flow<List<Habit>>
     fun observePendingHabits(): Flow<List<Habit>>
     suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate = LocalDate.now())
     suspend fun setHabitPracticed(habit: Habit, date: LocalDate = LocalDate.now())
+
+    suspend fun update(habit: Habit)
 }

@@ -3,6 +3,7 @@ package com.example.pyco.data.daos
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import androidx.room.Upsert
 import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
@@ -64,6 +65,10 @@ interface HabitDao {
     suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories>
 
     @Transaction
+    @Query("SELECT * FROM habit WHERE habitId = :habitId")
+    suspend fun getHabitWithAllInfo(habitId: Int): HabitAndHabitBlueprintWithCategories
+
+    @Transaction
     @Query("SELECT * FROM habit")
     fun getAllHabitsWithAllInfoStream(): Flow<List<HabitAndHabitBlueprintWithCategories>>
 
@@ -75,6 +80,9 @@ interface HabitDao {
      */
     @Query("SELECT * FROM habit WHERE habitId = :habitId")
     suspend fun getById(habitId: Int): Habit
+
+    @Query("SELECT * FROM habit WHERE habitId = :habitId")
+    suspend fun getHabitById(habitId: Int): Habit
 
     @Transaction
     @Query("SELECT *  FROM habit WHERE habitId = :habitId")
@@ -116,4 +124,7 @@ interface HabitDao {
      */
     @Upsert
     suspend fun upsertAll(habits: List<Habit>)
+
+    @Update
+    suspend fun update(habit: Habit)
 }

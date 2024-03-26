@@ -17,4 +17,6 @@ interface HabitBlueprintsRepository {
     ) : HabitBlueprint
 
     suspend fun getHabitBlueprints() : List<HabitBlueprintWithCategories>
+
+    suspend fun update(habitBlueprint: HabitBlueprint)
 }

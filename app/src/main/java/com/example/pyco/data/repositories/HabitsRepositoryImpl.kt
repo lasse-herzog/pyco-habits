@@ -41,6 +41,14 @@ class HabitsRepositoryImpl @Inject constructor(
         return habitDataSource.getById(habitId)
     }
 
+    override suspend fun getHabitById(habitId: Int): Habit{
+        return habitDataSource.getHabitById(habitId)
+    }
+
+    override suspend fun getHabitWithAllInfo(habitId: Int): HabitAndHabitBlueprintWithCategories{
+        return habitDataSource.getHabitWithAllInfo(habitId)
+    }
+
     override suspend fun getCompleteHabits(): Flow<List<CompleteHabit>> {
         return habitDataSource.getAllComplete()
     }
@@ -94,5 +102,9 @@ class HabitsRepositoryImpl @Inject constructor(
                 habitId = habit.habitId, date = date, habitPracticed = false
             )
         )
+    }
+
+    override suspend fun update(habit: Habit) {
+        habitDataSource.update(habit)
     }
 }
