@@ -12,15 +12,20 @@ class StreakHelper {
             var previousDate = LocalDate.now()
 
             for (habitDate in sortedDates) {
+                // Check if habitPracticed is true or null
                 if (habitDate.habitPracticed == true) {
                     if (habitDate.date == previousDate || habitDate.date.plusDays(1) == previousDate) {
                         streak++
                         previousDate = habitDate.date
                     } else {
-                        break // End of continuous streak
+                        break // End of continuous streak due to a gap
                     }
+                } else if (habitDate.habitPracticed == null && habitDate.date == previousDate) {
+                    // If habitPracticed is null for the latest date, do not end or increase the streak
+                    // Adjust previousDate to allow checking the next item without breaking the streak
+                    previousDate = habitDate.date
                 } else {
-                    // If habit was due but not done, streak ends
+                    // End streak if habitPracticed is false or if there's a gap before a null
                     break
                 }
             }
