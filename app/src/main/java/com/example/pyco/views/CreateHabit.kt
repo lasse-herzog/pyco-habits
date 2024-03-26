@@ -3,6 +3,7 @@ package com.example.pyco.views
 import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -82,6 +85,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
     val pattern = remember { Regex("^[1-9][0-9]{0,2}\$") }
     val context = LocalContext.current
     val categories = viewModel.uiState.collectAsState().value.categories
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         topBar = {
@@ -247,45 +251,6 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             }
                         }
                     }
-                    /*Column {
-                        ExposedDropdownMenuBox(
-                            expanded = expanded,
-                            onExpandedChange = {
-                                expanded = !expanded
-                            },
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            TextField(
-                                readOnly = true,
-                                value = items[selectedIndex],
-                                onValueChange = {},
-                                label = { Text("Tag") },
-                                trailingIcon = {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(
-                                        expanded = expanded
-                                    )
-                                },
-                                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                                modifier = Modifier.menuAnchor()
-                            )
-                            ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = {
-                                    expanded = false
-                                }
-                            ) {
-                                items.forEachIndexed { index, selectionOption ->
-                                    DropdownMenuItem(
-                                        text = { Text(selectionOption) },
-                                        onClick = {
-                                            selectedIndex = index
-                                            expanded = false
-                                        }
-                                    )
-                                }
-                            }
-                        }*/
-
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -361,6 +326,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             )
                             .padding(10.dp)
                             .defaultMinSize(minHeight = 300.dp)
+                            .clickable { focusRequester.requestFocus() }
                     ) {
                         Text(
                             "Habit Details:",
@@ -384,6 +350,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                                 .defaultMinSize(minHeight = 300.dp)
                                 .padding(30.dp)
                                 .wrapContentHeight(align = Alignment.CenterVertically)
+                                .focusRequester(focusRequester)
                         )
                     }
                 }
@@ -433,7 +400,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                         modifier = Modifier
                             .padding(2.dp)
                             .align(alignment = Alignment.Center),
-                        )
+                    )
                 }
             }
         }
@@ -455,12 +422,6 @@ fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
             if (selectedCategories.contains(category.category) && !selected) {
                 selectedCategories = selectedCategories.minus(category.category)
             }
-            /*if (categoryImageId == 0 && selectedCategories.isNotEmpty()) {
-                categoryImageId = categoriesWithId.first { it.name == category.category.name }.categoryId
-            }
-            else if (categoryImageId != 0 && selectedCategories.isEmpty()){
-                categoryImageId = 0
-            }*/
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
@@ -490,15 +451,3 @@ fun CategoryList(categories: List<CategoryChipAndState>, viewModel: CreateHabitV
         }
     }
 }
-
-/*@Preview
-@Composable
-fun CreateHabitPreview() {
-    PycoTheme {
-        Surface {
-            CreateHabit(
-                onNavigateUp = {}
-            )
-        }
-    }
-}*/
