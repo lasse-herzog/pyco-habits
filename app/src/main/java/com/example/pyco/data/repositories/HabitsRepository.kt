@@ -5,6 +5,7 @@ import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.CompleteHabit
+import com.example.pyco.data.entities.HabitDate
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -13,12 +14,12 @@ import java.time.LocalDate
  */
 interface HabitsRepository {
     suspend fun createHabit(habitBlueprint: HabitBlueprint, interval: Int) : Int
-    suspend fun createHabitDate(habitId: Int, date: LocalDate = LocalDate.now())
+    suspend fun createHabitDate(habitId: Int, date: LocalDate = LocalDate.now(), practiced: Boolean? = null)
     suspend fun getAllHabitsWithAllInfo(): List<HabitAndHabitBlueprintWithCategories>
     suspend fun getAllHabitsWithBlueprint() : List<HabitAndHabitBlueprint>
     suspend fun getCompleteHabits(): Flow<List<CompleteHabit>>
     suspend fun getHabits(): List<Habit>
-    suspend fun getLastHabitDate(habit: Habit): LocalDate
+    suspend fun getLastHabitDate(habit: Habit): HabitDate?
     fun observeAllHabitsWithAllInfo(): Flow<List<HabitAndHabitBlueprintWithCategories>>
     fun observeHabits(): Flow<List<Habit>>
     fun observePendingHabits(): Flow<List<Habit>>
