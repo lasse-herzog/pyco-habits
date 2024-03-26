@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -146,16 +145,6 @@ fun HabitItem(
                 DropdownMenu(
                     expanded = showDropdown,
                     onDismissRequest = { showDropdown = !showDropdown }) {
-                    DropdownMenuItem(
-                        text = { Text("Edit") },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = "Localized description"
-                            )
-                        },
-                        onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
-                    )
                     DropdownMenuItem(
                         text = { Text("Delete") },
                         trailingIcon = {
