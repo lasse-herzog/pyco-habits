@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -83,6 +84,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
         modifier = Modifier
             .animateContentSize()
             .padding(5.dp)
+            .fillMaxWidth()
             .clickable { /* TODO: open the details view */ }
     ){
         Row(modifier = Modifier
@@ -95,18 +97,15 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .shadow(
-                        elevation = 1.dp,
-                        shape = CircleShape,
-                        ambientColor = MaterialTheme.colorScheme.surface
-                    )
+                    .weight(1f)
+
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Column(
                 modifier = Modifier
-                    .width(245.dp)
+                    .weight(5f)
             ) {
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
@@ -128,6 +127,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
 
             Box(
                 modifier = Modifier
+                    .weight(1f)
                     .wrapContentSize(Alignment.TopEnd)
 
             ) {
