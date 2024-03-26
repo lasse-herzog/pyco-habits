@@ -24,8 +24,28 @@ data class Habit(
     @PrimaryKey(autoGenerate = true) val habitId: Int = 0,
     val habitBlueprintId: Int,
     val start: LocalDate,
-    val end : LocalDate?,
+    val end: LocalDate?,
     val interval: Int
+)
+
+data class CompleteHabit(
+    @Embedded val habit: Habit,
+    @Relation(
+        parentColumn = "habitId",
+        entityColumn = "habitBlueprintId"
+    )
+    val habitBlueprint: HabitBlueprint,
+    @Relation(
+        parentColumn = "habitBlueprintId",
+        entityColumn = "categoryId",
+        associateBy = Junction(HabitBlueprintCategoryCrossRef::class)
+    )
+    val categories: List<Category>,
+    @Relation(
+        parentColumn = "habitId",
+        entityColumn = "habitId",
+    )
+    val dates: List<HabitDate>
 )
 
 data class HabitAndHabitBlueprint(

@@ -2,6 +2,7 @@ package com.example.pyco.data.repositories
 
 import com.example.pyco.data.daos.HabitDao
 import com.example.pyco.data.daos.HabitDateDao
+import com.example.pyco.data.entities.CompleteHabit
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
@@ -33,6 +34,10 @@ class HabitsRepositoryImpl @Inject constructor(
 
     override suspend fun createHabitDate(habitId: Int, date: LocalDate) {
         habitDateDataSource.upsert(HabitDate(habitId = habitId, date = date))
+    }
+
+    override suspend fun getCompleteHabits(): Flow<List<CompleteHabit>> {
+        return habitDataSource.getAllComplete()
     }
 
     override suspend fun getAllHabitsWithBlueprint(): List<HabitAndHabitBlueprint> {
