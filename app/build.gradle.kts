@@ -78,6 +78,7 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.51")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:$workVersion")

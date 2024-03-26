@@ -38,13 +38,12 @@ fun StreakProgress(levelInfo: Triple<Int, Int, Int>) {
         contentAlignment = Alignment.Center, // Center the content within the Box
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(1f)
     ) {
         val progress = levelInfo.second.toFloat() / levelInfo.third.toFloat()
         HalfCircle(progress = progress)
-        WoodComponent(.25f, -20f, offsetTop = 80f)
-        WoodComponent(.25f, 210f, offsetTop = 80f)
-        Flame(.15f)
+        WoodComponent(.7f)
+        WoodComponent(.7f, left = false)
+        Flame(.4f)
     }
 
 }
@@ -63,7 +62,7 @@ fun Flame(size: Float) {
         delay = 10,
         rotation = 2f,
         initialRotation = -15f,
-        offsetLeft =10f,
+        offsetLeft = 10f,
         offsetTop = 0f
     )
     FlameComponent(
@@ -71,7 +70,8 @@ fun Flame(size: Float) {
         size = size / 2.0f,
         delay = 0,
         rotation = 2f,
-        offsetTop = 20f
+        offsetTop = 20f,
+        drawable = R.drawable.streak_flame_inner
     )
 }
 
@@ -83,7 +83,8 @@ fun FlameComponent(
     rotation: Float = 0f,
     initialRotation: Float = 0f,
     offsetLeft: Float = 0f,
-    offsetTop: Float = 0f
+    offsetTop: Float = 0f,
+    drawable: Int = R.drawable.streak_flame
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "Flame movement")
     val rotation by infiniteTransition.animateFloat(
@@ -122,7 +123,9 @@ fun WoodComponent(
     size: Float,
     rotation: Float = 0f,
     offsetLeft: Float = 0f,
-    offsetTop: Float = 0f){
+    offsetTop: Float = 0f,
+    left: Boolean = true
+) {
 
     val start = if (offsetLeft > 0f) offsetLeft else 0f
     val end = if (offsetLeft < 0f) offsetLeft * -1f else 0f
@@ -130,7 +133,8 @@ fun WoodComponent(
     val bottom = if (offsetTop < 0f) offsetTop * -1f else 0f
 
     Image(
-        painter = painterResource(id = R.drawable.streak_wood),
+        painter = painterResource(
+            id = if (left) R.drawable.streak_wood_left else R.drawable.streak_wood_right),
         contentDescription = "Wood vector graphic",
         modifier = Modifier
             .padding(start.dp, top.dp, end.dp, bottom.dp)
@@ -145,7 +149,8 @@ fun WoodComponent(
 fun HalfCircle(progress: Float) {
     Canvas(
         modifier = Modifier
-            .fillMaxSize(fraction = 0.5f) // Make the canvas half the size of the screen
+            .fillMaxHeight(fraction = 1f)
+            .padding(all = 10.dp)
             .aspectRatio(1f) // Ensure the canvas is square
     ) {
         val strokeWidth = 20.dp.toPx()
