@@ -1,6 +1,5 @@
 package com.example.pyco.views
 
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,19 +41,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pyco.R
-import com.example.pyco.data.entities.Category
-import com.example.pyco.data.entities.Habit
-import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
-import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
-import com.example.pyco.views.ui.theme.PycoTheme
-import java.time.LocalDate
 
 object CategoryIcons{
     val iconDictionary = hashMapOf(
@@ -71,7 +63,11 @@ object CategoryIcons{
     )
 }
 @Composable
-fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOverviewViewModel) {
+fun HabitItem(
+    habit: HabitAndHabitBlueprintWithCategories,
+    viewModel: HabitsOverviewViewModel,
+    onNavigateToCreateHabit: () -> Unit
+) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
     val openDeleteDialog = remember { mutableStateOf(false) }
@@ -83,30 +79,28 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
         modifier = Modifier
             .animateContentSize()
             .padding(5.dp)
-            .clickable { /* TODO: open the details view */ }
+            .fillMaxWidth()
+            .clickable(onClick = onNavigateToCreateHabit)
     ){
         Row(modifier = Modifier
             .padding(all = 9.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
             Image(
-                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.first().categoryId, R.mipmap.ic_habit_icon)),
+                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.firstOrNull()?.categoryId, R.mipmap.ic_habit_icon)),
                 contentDescription = "Placeholder icon",
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .shadow(
-                        elevation = 1.dp,
-                        shape = CircleShape,
-                        ambientColor = MaterialTheme.colorScheme.surface
-                    )
+                    .weight(1f)
+
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Column(
                 modifier = Modifier
-                    .width(245.dp)
+                    .weight(5f)
             ) {
                 Text(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
@@ -128,6 +122,7 @@ fun HabitItem(habit: HabitAndHabitBlueprintWithCategories, viewModel: HabitsOver
 
             Box(
                 modifier = Modifier
+                    .weight(1f)
                     .wrapContentSize(Alignment.TopEnd)
 
             ) {
@@ -230,7 +225,7 @@ fun DeleteDialog(
     )
 }
 
-@Preview(name = "Light Mode")
+/*@Preview(name = "Light Mode")
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     showBackground = true,
@@ -248,8 +243,9 @@ fun PreviewHabitsItem() {
                         HabitBlueprint(0, "Müll rausbringen", "bitte ich will nicht mehr")
                     ),
                     mutableListOf(Category(0, "Saufen"), Category(1, "Achtarmig reinorgeln"))
-                ), viewModel
+                ),
+                viewModel,
             )
         }
     }
-}
+}*/
