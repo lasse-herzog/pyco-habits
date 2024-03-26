@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -54,7 +55,7 @@ fun StreakView(habits: List<CompleteHabit>, score: Int, quote: String) {
         }
 
         Quote(quote)
-        
+
         Box(modifier = Modifier.weight(1f)) {
             HabitStreaks(habits)
         }
@@ -72,10 +73,7 @@ fun LevelBanner(score: Int, levelInfo: Triple<Int, Int, Int>) {
             else -> R.drawable.streak_level_1
         }
 
-    Row(
-        Modifier.background(MaterialTheme.colorScheme.primary),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
             painter = painterResource(id = resourceId),
             contentDescription = "Colored vector graphic",
