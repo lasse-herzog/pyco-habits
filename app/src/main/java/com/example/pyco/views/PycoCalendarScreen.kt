@@ -215,7 +215,7 @@ fun PycoCalendarContent(sampleData: HabitWeekData) {
                 .windowInsetsTopHeight(WindowInsets.systemBars)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
         )
-        WeekRow(sampleData.firstDayOfWeek.dayOfMonth, modifier = Modifier)
+        WeekRow(sampleData.firstDayOfWeek.dayOfMonth - 1, modifier = Modifier)
         Calendar(
             modifier = Modifier
                 .verticalScroll(scrollState)

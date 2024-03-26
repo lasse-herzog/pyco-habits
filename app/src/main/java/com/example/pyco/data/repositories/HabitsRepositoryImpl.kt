@@ -98,7 +98,10 @@ class HabitsRepositoryImpl @Inject constructor(
     override suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate) {
         habitDateDataSource.upsert(
             HabitDate(
-                habitId = habit.habitId, date = date, habitPracticed = false
+                habitId = habit.habitId,
+                date = date,
+                habitPracticed = false,
+                timestamp = LocalDateTime.now()
             )
         )
     }
