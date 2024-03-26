@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -37,17 +36,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.pyco.R
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitsOverviewViewModel
 
-object CategoryIcons{
+object CategoryIcons {
     val iconDictionary = hashMapOf(
         1 to R.mipmap.ic_cat_sport_icon,
         2 to R.mipmap.ic_cat_persdev_icon,
@@ -62,11 +59,12 @@ object CategoryIcons{
         11 to R.mipmap.ic_cat_food_icon
     )
 }
+
 @Composable
 fun HabitItem(
     habit: HabitAndHabitBlueprintWithCategories,
     viewModel: HabitsOverviewViewModel,
-    onNavigateToCreateHabit: () -> Unit
+    onNavigateToHabitDetailsView: (Int) -> Unit
 ) {
     val context = LocalContext.current
     var showDropdown by rememberSaveable { mutableStateOf(false) }
@@ -75,19 +73,25 @@ fun HabitItem(
     Surface(
         shape = MaterialTheme.shapes.medium,
         shadowElevation = 1.dp,
-        color =  MaterialTheme.colorScheme.surfaceContainer,
+        color = MaterialTheme.colorScheme.surfaceContainer,
         modifier = Modifier
             .animateContentSize()
             .padding(5.dp)
             .fillMaxWidth()
-            .clickable(onClick = onNavigateToCreateHabit)
-    ){
-        Row(modifier = Modifier
-            .padding(all = 9.dp),
+            .clickable { onNavigateToHabitDetailsView(habit.habitAndHabitBlueprint.habit.habitId) }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(all = 9.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Image(
-                painter = painterResource(CategoryIcons.iconDictionary.getOrDefault(habit.categories.firstOrNull()?.categoryId, R.mipmap.ic_habit_icon)),
+                painter = painterResource(
+                    CategoryIcons.iconDictionary.getOrDefault(
+                        habit.categories.firstOrNull()?.categoryId,
+                        R.mipmap.ic_habit_icon
+                    )
+                ),
                 contentDescription = "Placeholder icon",
                 modifier = Modifier
                     .size(50.dp)
@@ -106,7 +110,7 @@ fun HabitItem(
                     text = habit.habitAndHabitBlueprint.habitBlueprint.name,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal=5.dp)
+                    modifier = Modifier.padding(horizontal = 5.dp)
                 )
             }
             /*
@@ -142,16 +146,6 @@ fun HabitItem(
                     expanded = showDropdown,
                     onDismissRequest = { showDropdown = !showDropdown }) {
                     DropdownMenuItem(
-                        text = { Text("Edit") },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = "Localized description"
-                            )
-                        },
-                        onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
-                    )
-                    DropdownMenuItem(
                         text = { Text("Delete") },
                         trailingIcon = {
                             Icon(
@@ -165,14 +159,18 @@ fun HabitItem(
                     )
                 }
             }
-            when{
-                openDeleteDialog.value ->{
+            when {
+                openDeleteDialog.value -> {
                     DeleteDialog(
                         onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             viewModel.remove(habit.habitAndHabitBlueprint.habitBlueprint)
                             openDeleteDialog.value = false
-                            Toast.makeText(context, "Habit \"" + habit.habitAndHabitBlueprint.habitBlueprint.name + "\"  deleted", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Habit \"" + habit.habitAndHabitBlueprint.habitBlueprint.name + "\"  deleted",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         },
                         dialogTitle = "Delete Habit",
                         dialogText = "Are you sure you want to delete the habit \"" + habit.habitAndHabitBlueprint.habitBlueprint.name + "\"?",
@@ -183,6 +181,7 @@ fun HabitItem(
         }
     }
 }
+
 @Composable
 fun DeleteDialog(
     onDismissRequest: () -> Unit,

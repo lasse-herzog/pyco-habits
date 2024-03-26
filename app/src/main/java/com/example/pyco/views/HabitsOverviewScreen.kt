@@ -52,7 +52,9 @@ import com.example.pyco.viewmodels.HabitsOverviewViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitsOverviewScreen(
-    viewModel: HabitsOverviewViewModel = hiltViewModel(), onNavigateToCreateHabit: () -> Unit
+    viewModel: HabitsOverviewViewModel = hiltViewModel(),
+    onNavigateToHabitDetailsView: (Int) -> Unit,
+    onNavigateToCreateHabit: () -> Unit
 ) {
     val habits = viewModel.uiState.collectAsState().value.habits
     val categories = viewModel.uiState.collectAsState().value.categories
@@ -110,7 +112,7 @@ fun HabitsOverviewScreen(
             if (habits.isEmpty()) {
                 EmptyHabitsText(categories)
             } else {
-                HabitsList(habits, viewModel, onNavigateToCreateHabit)
+                HabitsList(habits, viewModel, onNavigateToHabitDetailsView)
             }
         }
     }
@@ -146,11 +148,11 @@ fun CatFilterChip(category: CategoryChipAndState, viewModel: HabitsOverviewViewM
 fun HabitsList(
     habits: List<HabitAndHabitBlueprintWithCategories>,
     viewModel: HabitsOverviewViewModel,
-    onNavigateToCreateHabit: () -> Unit
+    onNavigateToHabitDetailsView : (Int) -> Unit
 ) {
     LazyColumn {
         items(habits) { habit ->
-            HabitItem(habit = habit, viewModel, onNavigateToCreateHabit)
+            HabitItem(habit = habit, viewModel, onNavigateToHabitDetailsView)
         }
         item {
             Spacer(modifier = Modifier.height(80.dp))

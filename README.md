@@ -24,3 +24,4 @@ Es wird nur eine lokale Room-Datenbank zur persistenten speicherung verwendet. D
 - Die Kalenderview umfasst bisher nur eine Woche und die Habits auf der View können nicht identifiziert werden. In Zukunft soll diese View noch erweitert werden, aufgrund von Zeitdruck konnte das Feature aber nicht vollständig in diesem Umfang implementiert werden
 - Die Streak-View ist nicht auf das Querformat angepasst
 - Keine Unit-Tests
+- Möchte man ein Habit bearbeiten, werden die vorher ausgewählten Kategorien nicht direkt angezeigt, sondern erst, wenn man die Cards vertical scrollt.

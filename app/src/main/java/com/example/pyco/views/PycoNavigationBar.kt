@@ -20,11 +20,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pyco.R
+import androidx.navigation.navArgument
 import com.example.pyco.views.navigation.Screen
 import com.example.pyco.views.streak.StreakView
 import com.example.pyco.views.ui.theme.PycoTheme
@@ -88,14 +90,21 @@ fun PycoNavigationBar() {
             composable(Screen.Calendar.route) { PycoCalendarScreen() }
             composable(Screen.Streak.route) { StreakView() }
             composable(Screen.Home.route) { PycoHomeScreen() }
-            composable(Screen.Habits.route) {
-                HabitsOverviewScreen(onNavigateToCreateHabit = {
-                    navController.navigate(
-                        Screen.CreateHabit.route
-                    )
-                })
-            }
             composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = { navController.navigateUp() }) }
+            composable(Screen.Habits.route) {
+                HabitsOverviewScreen(onNavigateToHabitDetailsView = {
+                    navController.navigate(
+                        Screen.HabitDetailsView.route + "/$it"
+                    )
+                }, onNavigateToCreateHabit = { navController.navigate(Screen.CreateHabit.route) })
+            }
+            composable(
+                route = Screen.HabitDetailsView.route + "/{habitId}",
+                arguments = listOf(navArgument("habitId") {type = NavType.IntType})
+            ) { backStackEntry ->
+                val habitId: Int = backStackEntry.arguments?.getInt("habitId") ?: 0
+                HabitDetailsView(onNavigateUp = { navController.navigateUp() }, habitId = habitId)
+            }
         }
     }
 }

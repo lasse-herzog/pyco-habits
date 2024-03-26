@@ -3,6 +3,7 @@ package com.example.pyco.views
 import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -53,7 +56,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.R
 import com.example.pyco.data.CategoryChipAndState
 import com.example.pyco.data.entities.Category
 import com.example.pyco.viewmodels.CreateHabitViewModel
@@ -61,26 +63,12 @@ import java.util.Calendar
 
 private var selectedCategories: List<Category> = listOf()
 
-private object CHCategoryIcons {
-    val iconDictionary = hashMapOf(
-        1 to R.mipmap.ic_cat_sport_icon,
-        2 to R.mipmap.ic_cat_persdev_icon,
-        3 to R.mipmap.ic_cat_social_icon,
-        4 to R.mipmap.ic_cat_finance_icon,
-        5 to R.mipmap.ic_cat_career_icon,
-        6 to R.mipmap.ic_cat_job_icon,
-        7 to R.mipmap.ic_cat_freetime_icon,
-        8 to R.mipmap.ic_cat_habit_icon,
-        9 to R.mipmap.ic_cat_env_icon,
-        10 to R.mipmap.ic_cat_love_icon
-    )
-}
-
 @Composable
 fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
     CreateHabit(onNavigateUp = onNavigateUp)
 }
 
+@Suppress("NAME_SHADOWING")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
@@ -97,6 +85,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
     val pattern = remember { Regex("^[1-9][0-9]{0,2}\$") }
     val context = LocalContext.current
     val categories = viewModel.uiState.collectAsState().value.categories
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         topBar = {
@@ -262,45 +251,6 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             }
                         }
                     }
-                    /*Column {
-                        ExposedDropdownMenuBox(
-                            expanded = expanded,
-                            onExpandedChange = {
-                                expanded = !expanded
-                            },
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            TextField(
-                                readOnly = true,
-                                value = items[selectedIndex],
-                                onValueChange = {},
-                                label = { Text("Tag") },
-                                trailingIcon = {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(
-                                        expanded = expanded
-                                    )
-                                },
-                                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                                modifier = Modifier.menuAnchor()
-                            )
-                            ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = {
-                                    expanded = false
-                                }
-                            ) {
-                                items.forEachIndexed { index, selectionOption ->
-                                    DropdownMenuItem(
-                                        text = { Text(selectionOption) },
-                                        onClick = {
-                                            selectedIndex = index
-                                            expanded = false
-                                        }
-                                    )
-                                }
-                            }
-                        }*/
-
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -376,6 +326,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             )
                             .padding(10.dp)
                             .defaultMinSize(minHeight = 300.dp)
+                            .clickable { focusRequester.requestFocus() }
                     ) {
                         Text(
                             "Habit Details:",
@@ -399,6 +350,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                                 .defaultMinSize(minHeight = 300.dp)
                                 .padding(30.dp)
                                 .wrapContentHeight(align = Alignment.CenterVertically)
+                                .focusRequester(focusRequester)
                         )
                     }
                 }
@@ -438,14 +390,16 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                             color = MaterialTheme.colorScheme.errorContainer,
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .padding(10.dp)
+                        .padding(vertical = 10.dp, horizontal = 20.dp)
                         .fillMaxWidth()
 
                 ) {
                     Text(
-                        text = "Bitte gib einen Namen ein.",
+                        text = "Bitte Namen eingeben.",
                         color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(2.dp)
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .align(alignment = Alignment.Center),
                     )
                 }
             }
@@ -468,12 +422,6 @@ fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
             if (selectedCategories.contains(category.category) && !selected) {
                 selectedCategories = selectedCategories.minus(category.category)
             }
-            /*if (categoryImageId == 0 && selectedCategories.isNotEmpty()) {
-                categoryImageId = categoriesWithId.first { it.name == category.category.name }.categoryId
-            }
-            else if (categoryImageId != 0 && selectedCategories.isEmpty()){
-                categoryImageId = 0
-            }*/
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
@@ -503,15 +451,3 @@ fun CategoryList(categories: List<CategoryChipAndState>, viewModel: CreateHabitV
         }
     }
 }
-
-/*@Preview
-@Composable
-fun CreateHabitPreview() {
-    PycoTheme {
-        Surface {
-            CreateHabit(
-                onNavigateUp = {}
-            )
-        }
-    }
-}*/
