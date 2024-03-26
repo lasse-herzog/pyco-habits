@@ -15,16 +15,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CreateHabitsUIState(
-    val categories: MutableList<CategoryChipAndState> =  mutableListOf(),
+    val categories: MutableList<CategoryChipAndState> = mutableListOf(),
+    val categoriesFull: MutableList<Category> = mutableListOf(),
     val isLoading: Boolean = false
 )
 
 @HiltViewModel
-class CreateHabitViewModel @Inject constructor (
+class CreateHabitViewModel @Inject constructor(
     private val habitsRepository: HabitsRepository,
     private val habitsBlueprintsRepository: HabitBlueprintsRepository,
     private val categoriesRepository: CategoriesRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateHabitsUIState(isLoading = true))
     val uiState: StateFlow<CreateHabitsUIState> = _uiState
@@ -32,19 +33,35 @@ class CreateHabitViewModel @Inject constructor (
     val categories: MutableList<CategoryChipAndState>
         get() = _uiState.value.categories
 
+    val categoriesFull: MutableList<Category>
+        get() = _uiState.value.categoriesFull
+
     init {
-        getCategories()
+        getCategoriesForChips()
+        getAllCategories()
     }
 
-    fun submitData(name: String, categories: List<Category>, description: String, isBadHabit: Boolean, interval: Int, endDate: String) {
+    fun submitData(
+        name: String,
+        categories: List<Category>,
+        description: String,
+        isBadHabit: Boolean,
+        interval: Int,
+        endDate: String
+    ) {
         viewModelScope.launch {
-            val habitBlueprint = habitsBlueprintsRepository.createHabitBlueprint(name, description, categories, isBadHabit)
+            val habitBlueprint = habitsBlueprintsRepository.createHabitBlueprint(
+                name,
+                description,
+                categories,
+                isBadHabit
+            )
             val habitId = habitsRepository.createHabit(habitBlueprint, interval)
             habitsRepository.createHabitDate(habitId)
         }
     }
 
-    private fun getCategories(){
+    private fun getCategoriesForChips() {
         viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
@@ -54,7 +71,17 @@ class CreateHabitViewModel @Inject constructor (
         }
     }
 
-    fun categoryClicked(category: CategoryChipAndState, selected: Boolean){
+    private fun getAllCategories() {
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    categoriesFull = categoriesRepository.getCategories().toMutableList()
+                )
+            }
+        }
+    }
+
+    fun categoryClicked(category: CategoryChipAndState, selected: Boolean) {
         categories.find { it.category == category.category }?.selected = selected
     }
 }

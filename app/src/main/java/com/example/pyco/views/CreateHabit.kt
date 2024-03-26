@@ -2,24 +2,20 @@ package com.example.pyco.views
 
 import android.app.DatePickerDialog
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -48,11 +44,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -67,6 +60,21 @@ import com.example.pyco.viewmodels.CreateHabitViewModel
 import java.util.Calendar
 
 private var selectedCategories: List<Category> = listOf()
+
+private object CHCategoryIcons {
+    val iconDictionary = hashMapOf(
+        1 to R.mipmap.ic_cat_sport_icon,
+        2 to R.mipmap.ic_cat_persdev_icon,
+        3 to R.mipmap.ic_cat_social_icon,
+        4 to R.mipmap.ic_cat_finance_icon,
+        5 to R.mipmap.ic_cat_career_icon,
+        6 to R.mipmap.ic_cat_job_icon,
+        7 to R.mipmap.ic_cat_freetime_icon,
+        8 to R.mipmap.ic_cat_habit_icon,
+        9 to R.mipmap.ic_cat_env_icon,
+        10 to R.mipmap.ic_cat_love_icon
+    )
+}
 
 @Composable
 fun CreateHabitScreen(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp: () -> Unit) {
@@ -174,11 +182,15 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                 CategoryList(categories, viewModel)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(
+                /*Column(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
                 ) {
                     Image(
-                        painter = painterResource(R.mipmap.ic_habit_icon),
+                        painter = painterResource(
+                            CategoryIcons.iconDictionary.getOrDefault(
+                                0, R.mipmap.ic_habit_icon
+                            )
+                        ),
                         contentDescription = "Placeholder icon",
                         modifier = Modifier
                             .size(70.dp)
@@ -191,7 +203,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                     )
                 }
 
-                Spacer(modifier = Modifier.width(25.dp))
+                Spacer(modifier = Modifier.width(25.dp))*/
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -444,6 +456,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
 @Composable
 fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
     var selected by remember { mutableStateOf(category.selected) }
+    val categoriesWithId = viewModel.uiState.collectAsState().value.categoriesFull
 
     FilterChip(
         selected = selected,
@@ -455,6 +468,12 @@ fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
             if (selectedCategories.contains(category.category) && !selected) {
                 selectedCategories = selectedCategories.minus(category.category)
             }
+            /*if (categoryImageId == 0 && selectedCategories.isNotEmpty()) {
+                categoryImageId = categoriesWithId.first { it.name == category.category.name }.categoryId
+            }
+            else if (categoryImageId != 0 && selectedCategories.isEmpty()){
+                categoryImageId = 0
+            }*/
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
