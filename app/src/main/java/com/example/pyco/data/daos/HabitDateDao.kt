@@ -15,6 +15,9 @@ interface HabitDateDao {
     @Query("SELECT * FROM habitDate WHERE habitId = :habitId ORDER BY date DESC LIMIT 1")
     suspend fun getLastHabitDateByHabitId(habitId: Int): HabitDate?
 
+    @Query("SELECT * FROM habitDate WHERE date=:date")
+    fun getHabitDatesByDate(date: LocalDate): List<HabitDate>
+
     @Upsert
     suspend fun upsert(habitDate: HabitDate)
 }
