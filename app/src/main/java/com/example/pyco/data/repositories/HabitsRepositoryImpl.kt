@@ -37,6 +37,10 @@ class HabitsRepositoryImpl @Inject constructor(
         habitDateDataSource.upsert(HabitDate(habitId = habitId, date = date))
     }
 
+    override suspend fun getById(habitId: Int): Habit {
+        return habitDataSource.getById(habitId)
+    }
+
     override suspend fun getCompleteHabits(): Flow<List<CompleteHabit>> {
         return habitDataSource.getAllComplete()
     }

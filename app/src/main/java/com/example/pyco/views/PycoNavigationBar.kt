@@ -83,7 +83,7 @@ fun PycoNavigationBar() {
             composable(Screen.Home.route) { PycoHomeScreen() }
             composable(Screen.Habits.route) { HabitsOverviewScreen(onNavigateToHabitDetailsView = {navController.navigate(Screen.HabitDetailsView.route)}, onNavigateToCreateHabit = {navController.navigate(Screen.CreateHabit.route)}) }
             composable(Screen.CreateHabit.route) { CreateHabit(onNavigateUp = {navController.navigateUp()}) }
-            composable(Screen.HabitDetailsView.route) { HabitDetailsView(onNavigateUp = {navController.navigateUp()}) }
+            composable(Screen.HabitDetailsView.route + "/{habitId}") { HabitDetailsView(onNavigateUp = {navController.navigateUp()}) }
         }
     }
 }
