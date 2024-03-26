@@ -13,7 +13,7 @@ data class HabitBlueprint(
     val description: String,
     val badHabit: Boolean = false,
     val customHabit: Boolean = true,
-    var isActive: Boolean = false
+    var isActive: Boolean = true
 )
 
 data class HabitBlueprintWithCategories(
