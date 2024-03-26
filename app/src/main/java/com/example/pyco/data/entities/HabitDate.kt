@@ -7,5 +7,6 @@ import java.time.LocalDate
 data class HabitDate(
     val habitId: Int,
     val date: LocalDate,
-    val habitPracticed: Boolean? = null
+    val habitPracticed: Boolean? = null,
+    val timestamp: LocalDate
 )
