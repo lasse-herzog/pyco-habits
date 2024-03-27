@@ -25,3 +25,4 @@ Es wird nur eine lokale Room-Datenbank zur persistenten speicherung verwendet. D
 - Die Streak-View ist nicht auf das Querformat angepasst
 - Keine Unit-Tests
 - Möchte man ein Habit bearbeiten, werden die vorher ausgewählten Kategorien nicht direkt angezeigt, sondern erst, wenn man die Cards vertical scrollt.
+- Legt man beim Erstellen einer Habit ein End-Datum an, wird mit diesem noch nichts gemacht. Hier muss noch Logik eingebaut werden.
