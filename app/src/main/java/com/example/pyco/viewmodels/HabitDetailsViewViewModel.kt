@@ -43,6 +43,7 @@ data class HabitDetailsViewUIState(
         ), categories = listOf()
     ),
     val categories: MutableList<CategoryChipAndState> = mutableListOf(),
+    val savedCategories: MutableList<CategoryChipAndState> = mutableListOf(),
     val categoriesFull: MutableList<Category> = mutableListOf(),
     val isLoading: Boolean = false
 )
@@ -62,6 +63,9 @@ class HabitDetailsViewViewModel @Inject constructor(
 
     val categories: MutableList<CategoryChipAndState>
         get() = _uiState.value.categories
+
+    val savedCategories: MutableList<CategoryChipAndState>
+        get() = _uiState.value.savedCategories
 
     val habit: HabitAndHabitBlueprintWithCategories
         get() = _uiState.value.habit
@@ -155,6 +159,21 @@ class HabitDetailsViewViewModel @Inject constructor(
 
             for (crossref in crossrefs) {
                 categories.find { it.category.categoryId == crossref.categoryId }?.selected = true
+            }
+            _uiState.update { currentState ->
+                currentState.copy(
+                    savedCategories = categories
+                )
+            }
+        }
+    }
+
+    fun saveState(){
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    categories = savedCategories
+                )
             }
         }
     }

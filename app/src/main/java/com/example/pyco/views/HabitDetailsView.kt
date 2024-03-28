@@ -98,7 +98,10 @@ fun HabitDetailsView(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateUp) {
+                    IconButton(onClick = {
+                        viewModel.saveState()
+                        onNavigateUp()
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
                     }
                 }
@@ -165,7 +168,7 @@ fun HabitDetailsView(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row {
-                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
+                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 15.dp)) {
                             Box(
                                 modifier = Modifier
                                     .background(
@@ -200,52 +203,6 @@ fun HabitDetailsView(
                                             ) {
                                             Text(
                                                 text = "Intevall:",
-                                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                                            )
-                                            innerTextField()
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                                    .padding(10.dp)
-
-                            ) {
-                                BasicTextField(
-                                    value = datum,
-                                    enabled = false,
-                                    onValueChange = {
-                                    },
-                                    textStyle = TextStyle.Default.copy(
-                                        fontSize = 20.sp,
-                                        textAlign = TextAlign.Center,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                                    ),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(5.dp)
-                                        .background(
-                                            MaterialTheme.colorScheme.primaryContainer,
-                                            shape = RoundedCornerShape(20.dp)
-                                        ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    decorationBox = { innerTextField ->
-                                        Column(
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-
-                                            ) {
-                                            Text(
-                                                text = "End-Datum:",
                                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                                             )
                                             innerTextField()
@@ -319,18 +276,18 @@ fun HabitDetailsView(
 
             Button(
                 onClick = {
-                    for (category in viewModel.categories){
-                        if (category.selected){
+                    for (category in viewModel.categories) {
+                        if (category.selected) {
                             selectedCategories = selectedCategories.plus(category.category)
                         }
                     }
                     viewModel.submitData(
                         habitId = habit.habitAndHabitBlueprint.habit.habitId,
-                        habitBlueprintId =  habit.habitAndHabitBlueprint.habit.habitBlueprintId,
+                        habitBlueprintId = habit.habitAndHabitBlueprint.habit.habitBlueprintId,
                         name = name,
                         categories = selectedCategories,
                         description = description,
-                        isBadHabit =  isBadHabit,
+                        isBadHabit = isBadHabit,
                         interval = habit.habitAndHabitBlueprint.habit.interval,
                         endDate = end,
                         start = start
