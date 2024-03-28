@@ -241,7 +241,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
 
                                             ) {
                                             Text(
-                                                text = "Intevall:",
+                                                text = "Intervall:",
                                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                                             )
                                             innerTextField()
