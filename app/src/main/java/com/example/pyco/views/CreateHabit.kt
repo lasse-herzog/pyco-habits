@@ -362,6 +362,11 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                     if (interval.isEmpty()) {
                         interval = "1"
                     }
+                    for (category in viewModel.categories){
+                        if (category.selected){
+                            selectedCategories = selectedCategories.plus(category.category)
+                        }
+                    }
                     viewModel.submitData(
                         name,
                         selectedCategories,
@@ -416,12 +421,6 @@ fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
         selected = selected,
         onClick = {
             selected = !selected
-            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected) {
-                selectedCategories = selectedCategories.plus(category.category)
-            }
-            if (selectedCategories.contains(category.category) && !selected) {
-                selectedCategories = selectedCategories.minus(category.category)
-            }
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
