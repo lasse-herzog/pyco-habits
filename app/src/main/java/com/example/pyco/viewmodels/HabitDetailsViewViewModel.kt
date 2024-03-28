@@ -10,7 +10,6 @@ import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
-import com.example.pyco.data.entities.HabitBlueprintCategoryCrossRef
 import com.example.pyco.data.repositories.CategoriesRepository
 import com.example.pyco.data.repositories.HabitBlueprintsRepository
 import com.example.pyco.data.repositories.HabitsRepository
@@ -72,16 +71,15 @@ class HabitDetailsViewViewModel @Inject constructor(
 
     init {
         getHabitById(habitId)
-        getCategoriesForChips()
-        getAllCategories()
-        autoSelectCategories(habitId)
+        //getCategoriesForChips()
+        //getAllCategories()
+        //autoSelectCategories(habitId)
     }
 
     fun submitData(
         habitId: Int,
         habitBlueprintId: Int,
         name: String,
-        categories: List<Category>,
         description: String,
         isBadHabit: Boolean,
         interval: Int,
@@ -106,7 +104,7 @@ class HabitDetailsViewViewModel @Inject constructor(
             )
             habitsRepository.update(habit)
 
-            habitBlueprintDataSource.deleteCrossrefs(habitBlueprintId)
+            /*habitBlueprintDataSource.deleteCrossrefs(habitBlueprintId)
 
             for (id in categories.map { it.categoryId }) {
                 habitBlueprintDataSource.upsert(
@@ -115,7 +113,7 @@ class HabitDetailsViewViewModel @Inject constructor(
                         id
                     )
                 )
-            }
+            }*/
         }
     }
 
@@ -128,7 +126,8 @@ class HabitDetailsViewViewModel @Inject constructor(
             }
         }
     }
-
+}
+/*
     private fun getCategoriesForChips() {
         viewModelScope.launch {
             _uiState.update { currentState ->
@@ -177,4 +176,4 @@ class HabitDetailsViewViewModel @Inject constructor(
             }
         }
     }
-}
+}*/

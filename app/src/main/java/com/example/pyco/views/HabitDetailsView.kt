@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -21,14 +18,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,12 +46,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.data.CategoryChipAndState
-import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitDetailsViewViewModel
 
-private var selectedCategories: List<Category> = listOf()
+//private var selectedCategories: List<Category> = listOf()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,7 +91,7 @@ fun HabitDetailsView(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        viewModel.saveState()
+                        //viewModel.saveState()
                         onNavigateUp()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
@@ -156,12 +148,13 @@ fun HabitDetailsView(
                     )
                 }
             }
-            Column(
+            // Category Column
+            /*Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CategoryListDetails(viewModel)
-            }
+            }*/
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -276,16 +269,10 @@ fun HabitDetailsView(
 
             Button(
                 onClick = {
-                    for (category in viewModel.categories) {
-                        if (category.selected) {
-                            selectedCategories = selectedCategories.plus(category.category)
-                        }
-                    }
                     viewModel.submitData(
                         habitId = habit.habitAndHabitBlueprint.habit.habitId,
                         habitBlueprintId = habit.habitAndHabitBlueprint.habit.habitBlueprintId,
                         name = name,
-                        categories = selectedCategories,
                         description = description,
                         isBadHabit = isBadHabit,
                         interval = habit.habitAndHabitBlueprint.habit.interval,
@@ -308,7 +295,7 @@ fun HabitDetailsView(
         }
     }
 }
-
+/*
 @Composable
 fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewViewModel) {
     var selected by remember { mutableStateOf(category.selected) }
@@ -349,4 +336,4 @@ fun CategoryListDetails(
             CatChipDetails(cat, viewModel)
         }
     }
-}
+}*/
