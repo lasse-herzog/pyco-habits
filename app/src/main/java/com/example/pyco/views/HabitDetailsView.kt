@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -21,14 +18,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,12 +46,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.data.CategoryChipAndState
-import com.example.pyco.data.entities.Category
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.viewmodels.HabitDetailsViewViewModel
 
-private var selectedCategories: List<Category> = listOf()
+//private var selectedCategories: List<Category> = listOf()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +66,6 @@ fun HabitDetailsView(
     var description by remember { mutableStateOf("") }
     var isBadHabit by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-    val categories = viewModel.uiState.collectAsState().value.categories
 
     name = habit.habitAndHabitBlueprint.habitBlueprint.name
     datum = habit.habitAndHabitBlueprint.habit.end.toString()
@@ -99,7 +90,10 @@ fun HabitDetailsView(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateUp) {
+                    IconButton(onClick = {
+                        //viewModel.saveState()
+                        onNavigateUp()
+                    }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
                     }
                 }
@@ -154,19 +148,20 @@ fun HabitDetailsView(
                     )
                 }
             }
-            Column(
+            // Category Column
+            /*Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CategoryListDetails(categories, habit.categories, viewModel)
-            }
+                CategoryListDetails(viewModel)
+            }*/
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row {
-                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
+                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 15.dp)) {
                             Box(
                                 modifier = Modifier
                                     .background(
@@ -201,52 +196,6 @@ fun HabitDetailsView(
                                             ) {
                                             Text(
                                                 text = "Intevall:",
-                                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                                            )
-                                            innerTextField()
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.padding(top = 15.dp, start = 20.dp, end = 20.dp)) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                                    .padding(10.dp)
-
-                            ) {
-                                BasicTextField(
-                                    value = datum,
-                                    enabled = false,
-                                    onValueChange = {
-                                    },
-                                    textStyle = TextStyle.Default.copy(
-                                        fontSize = 20.sp,
-                                        textAlign = TextAlign.Center,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                                    ),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(5.dp)
-                                        .background(
-                                            MaterialTheme.colorScheme.primaryContainer,
-                                            shape = RoundedCornerShape(20.dp)
-                                        ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    decorationBox = { innerTextField ->
-                                        Column(
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-
-                                            ) {
-                                            Text(
-                                                text = "End-Datum:",
                                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                                             )
                                             innerTextField()
@@ -320,16 +269,12 @@ fun HabitDetailsView(
 
             Button(
                 onClick = {
-                    if (interval.isEmpty()) {
-                        interval = "1"
-                    }
                     viewModel.submitData(
                         habitId = habit.habitAndHabitBlueprint.habit.habitId,
-                        habitBlueprintId =  habit.habitAndHabitBlueprint.habit.habitBlueprintId,
+                        habitBlueprintId = habit.habitAndHabitBlueprint.habit.habitBlueprintId,
                         name = name,
-                        categories = selectedCategories,
                         description = description,
-                        isBadHabit =  isBadHabit,
+                        isBadHabit = isBadHabit,
                         interval = habit.habitAndHabitBlueprint.habit.interval,
                         endDate = end,
                         start = start
@@ -350,7 +295,7 @@ fun HabitDetailsView(
         }
     }
 }
-
+/*
 @Composable
 fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewViewModel) {
     var selected by remember { mutableStateOf(category.selected) }
@@ -359,12 +304,6 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
         selected = selected,
         onClick = {
             selected = !selected
-            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected) {
-                selectedCategories = selectedCategories.plus(category.category)
-            }
-            if (selectedCategories.contains(category.category) && !selected) {
-                selectedCategories = selectedCategories.minus(category.category)
-            }
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
@@ -385,18 +324,9 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
 
 @Composable
 fun CategoryListDetails(
-    categories: List<CategoryChipAndState>,
-    clickedCategories: List<Category>,
     viewModel: HabitDetailsViewViewModel
 ) {
-    for (category in categories) {
-        for (clickedCategory in clickedCategories) {
-            if (category.category.categoryId == clickedCategory.categoryId) {
-                category.selected = true
-                viewModel.categoryClicked(category, true)
-            }
-        }
-    }
+    var categories = viewModel.uiState.collectAsState().value.categories
 
     LazyRow(
         modifier = Modifier.padding(vertical = 8.dp),
@@ -406,4 +336,4 @@ fun CategoryListDetails(
             CatChipDetails(cat, viewModel)
         }
     }
-}
+}*/
