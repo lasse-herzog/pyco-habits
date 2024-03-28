@@ -67,9 +67,10 @@ class HabitDetailsViewViewModel @Inject constructor(
         get() = _uiState.value.habit
 
     init {
+        getHabitById(habitId)
         getCategoriesForChips()
         getAllCategories()
-        getHabitById(habitId)
+        autoSelectCategories(habitId)
     }
 
     fun submitData(
@@ -146,5 +147,15 @@ class HabitDetailsViewViewModel @Inject constructor(
 
     fun categoryClicked(category: CategoryChipAndState, selected: Boolean) {
         categories.find { it.category == category.category }?.selected = selected
+    }
+
+    private fun autoSelectCategories(habitBlueprintId: Int) {
+        viewModelScope.launch {
+            val crossrefs = habitBlueprintDataSource.getCrossrefs(habitBlueprintId)
+
+            for (crossref in crossrefs) {
+                categories.find { it.category.categoryId == crossref.categoryId }?.selected = true
+            }
+        }
     }
 }

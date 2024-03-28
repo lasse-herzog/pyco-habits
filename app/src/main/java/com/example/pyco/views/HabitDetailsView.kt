@@ -74,7 +74,6 @@ fun HabitDetailsView(
     var description by remember { mutableStateOf("") }
     var isBadHabit by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-    val categories = viewModel.uiState.collectAsState().value.categories
 
     name = habit.habitAndHabitBlueprint.habitBlueprint.name
     datum = habit.habitAndHabitBlueprint.habit.end.toString()
@@ -158,7 +157,7 @@ fun HabitDetailsView(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CategoryListDetails(categories, habit.categories, viewModel)
+                CategoryListDetails(viewModel)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(
@@ -320,8 +319,10 @@ fun HabitDetailsView(
 
             Button(
                 onClick = {
-                    if (interval.isEmpty()) {
-                        interval = "1"
+                    for (category in viewModel.categories){
+                        if (category.selected){
+                            selectedCategories = selectedCategories.plus(category.category)
+                        }
                     }
                     viewModel.submitData(
                         habitId = habit.habitAndHabitBlueprint.habit.habitId,
@@ -359,12 +360,6 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
         selected = selected,
         onClick = {
             selected = !selected
-            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected) {
-                selectedCategories = selectedCategories.plus(category.category)
-            }
-            if (selectedCategories.contains(category.category) && !selected) {
-                selectedCategories = selectedCategories.minus(category.category)
-            }
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
@@ -385,18 +380,9 @@ fun CatChipDetails(category: CategoryChipAndState, viewModel: HabitDetailsViewVi
 
 @Composable
 fun CategoryListDetails(
-    categories: List<CategoryChipAndState>,
-    clickedCategories: List<Category>,
     viewModel: HabitDetailsViewViewModel
 ) {
-    for (category in categories) {
-        for (clickedCategory in clickedCategories) {
-            if (category.category.categoryId == clickedCategory.categoryId) {
-                category.selected = true
-                viewModel.categoryClicked(category, true)
-            }
-        }
-    }
+    var categories = viewModel.uiState.collectAsState().value.categories
 
     LazyRow(
         modifier = Modifier.padding(vertical = 8.dp),
