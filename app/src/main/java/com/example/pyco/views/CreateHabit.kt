@@ -375,6 +375,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                         interval.toInt(),
                         datum
                     )
+                    selectedCategories = listOf()
                     onNavigateUp()
                 },
                 enabled = name.isNotEmpty(),
@@ -415,7 +416,6 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
 @Composable
 fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
     var selected by remember { mutableStateOf(category.selected) }
-    val categoriesWithId = viewModel.uiState.collectAsState().value.categoriesFull
 
     FilterChip(
         selected = selected,
