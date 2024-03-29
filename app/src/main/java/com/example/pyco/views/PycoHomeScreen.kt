@@ -47,11 +47,10 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pyco.data.entities.Habit
+import com.example.pyco.viewmodels.HabitWithName
 import com.example.pyco.viewmodels.HomeUIState
 import com.example.pyco.viewmodels.PycoHomeViewModel
 import com.example.pyco.views.ui.theme.PycoTheme
-import java.time.LocalDate
 
 @Composable
 fun PycoHomeScreen(
@@ -70,15 +69,15 @@ fun PycoHomeScreen(
 private fun PycoHomeContent(
     pycoHomeUIState: HomeUIState,
     pendingHabitsListState: LazyListState,
-    onHabitAccepted: (Habit) -> Unit,
-    onHabitDismissed: (Habit) -> Unit
+    onHabitAccepted: (HabitWithName) -> Unit,
+    onHabitDismissed: (HabitWithName) -> Unit
 ) {
     Column(
         modifier = Modifier
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 8.dp)
     ) {
-        QuoteCard(modifier = Modifier.weight(19F))
+        QuoteCard(pycoHomeUIState.quote, modifier = Modifier.weight(19F))
 
         PendingHabitsList(
             habits = pycoHomeUIState.pendingHabits,
@@ -91,12 +90,12 @@ private fun PycoHomeContent(
 }
 
 @Composable
-fun QuoteCard(modifier: Modifier) {
+fun QuoteCard(quote: String, modifier: Modifier) {
     Box(
         modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "\u201CYour Mom is beautiful\u201D",
+            text = "\u201C$quote\u201D",
             fontFamily = FontFamily.Serif,
             fontStyle = FontStyle.Normal,
             fontWeight = FontWeight.SemiBold,
@@ -109,11 +108,11 @@ fun QuoteCard(modifier: Modifier) {
 
 @Composable
 fun PendingHabitsList(
-    habits: List<Habit>,
+    habits: List<HabitWithName>,
     pendingHabitsListState: LazyListState,
     modifier: Modifier,
-    onHabitAccepted: (Habit) -> Unit,
-    onHabitDismissed: (Habit) -> Unit
+    onHabitAccepted: (HabitWithName) -> Unit,
+    onHabitDismissed: (HabitWithName) -> Unit
 ) {
     LazyColumn(
         state = pendingHabitsListState, modifier = modifier
@@ -135,10 +134,10 @@ fun PendingHabitsList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PendingHabitsListItem(
-    habit: Habit,
+    habit: HabitWithName,
     isNext: Boolean,
-    onHabitAccepted: (Habit) -> Unit,
-    onHabitDismissed: (Habit) -> Unit
+    onHabitAccepted: (HabitWithName) -> Unit,
+    onHabitDismissed: (HabitWithName) -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(confirmValueChange = {
         when (it) {
@@ -195,10 +194,8 @@ fun PendingHabitsListItem(
                     MaterialTheme.colorScheme.surfaceContainer
                 }
             ), headlineContent = {
-                Text(habit.habitId.toString())
-            }, supportingContent = { Text("Swipe me left or right!") }
-
-            )
+                Text(habit.name)
+            })
         }
     }
 }
@@ -225,27 +222,10 @@ fun PycoHomeScreenPreview() {
     PycoTheme {
         PycoHomeContent(pycoHomeUIState = HomeUIState(
             pendingHabits = listOf(
-                Habit(
-                    habitBlueprintId = 0, start = LocalDate.now(), interval = 1, end = null
-                ), Habit(
-                    habitId = 1,
-                    habitBlueprintId = 0,
-                    start = LocalDate.now(),
-                    interval = 1,
-                    end = null
-                ), Habit(
-                    habitId = 2,
-                    habitBlueprintId = 0,
-                    start = LocalDate.now(),
-                    interval = 1,
-                    end = null
-                ), Habit(
-                    habitId = 3,
-                    habitBlueprintId = 0,
-                    start = LocalDate.now(),
-                    interval = 1,
-                    end = null
-                )
+                HabitWithName(habitId = 0, "Test"),
+                HabitWithName(habitId = 1, "Test"),
+                HabitWithName(habitId = 2, "Test"),
+                HabitWithName(habitId = 3, "Test"),
             )
         ),
             pendingHabitsListState = rememberLazyListState(),

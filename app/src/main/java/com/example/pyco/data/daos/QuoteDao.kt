@@ -6,8 +6,11 @@ import com.example.pyco.data.entities.Quote
 
 @Dao
 interface QuoteDao {
+    @Query("SELECT * FROM quote")
+    suspend fun getAllQuotes(): List<Quote>
+
     @Query("SELECT * FROM quote WHERE categoryId = :categoryId")
-    suspend fun getQuoteByCategoryId(categoryId: Int): Quote?
+    suspend fun getQuoteByCategoryId(categoryId: Int): Quote
 
     @Query("SELECT * FROM quote WHERE categoryId = :categoryId")
     suspend fun getQuotesByCategoryId(categoryId: Int): List<Quote>

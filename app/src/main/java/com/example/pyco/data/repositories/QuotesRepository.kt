@@ -7,10 +7,11 @@ import com.example.pyco.data.entities.Quote
 
 
 interface QuotesRepository {
+    suspend fun getRandomQuote(): Quote
     suspend fun getQuote(habit: Habit): Quote
-    suspend fun getQuoteByCategory(category: Category): Quote?
-    suspend fun getQuotesByCategory(category: Category): List<Quote>
+    suspend fun getQuoteByCategory(category: Category): Quote
     suspend fun getQuoteByHabitBlueprint(habitBlueprint: HabitBlueprint): Quote?
+    suspend fun getQuotes(): List<Quote>
+    suspend fun getQuotesByCategory(category: Category): List<Quote>
     suspend fun getQuotesByHabitBlueprint(habitBlueprint: HabitBlueprint): List<Quote>
-
 }

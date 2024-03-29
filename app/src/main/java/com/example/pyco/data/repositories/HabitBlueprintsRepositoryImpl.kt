@@ -2,6 +2,7 @@ package com.example.pyco.data.repositories
 
 import com.example.pyco.data.daos.HabitBlueprintDao
 import com.example.pyco.data.entities.Category
+import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitBlueprint
 import com.example.pyco.data.entities.HabitBlueprintCategoryCrossRef
 import com.example.pyco.data.entities.HabitBlueprintWithCategories
@@ -42,8 +43,17 @@ class HabitBlueprintsRepositoryImpl @Inject constructor(
 
         return habitBlueprint.copy(habitBlueprintId = habitBlueprintId)
     }
-    override suspend fun getHabitBlueprints(): List<HabitBlueprintWithCategories> {
-        return habitBlueprintDataSource.getHabitBlueprintWithCategories()
+
+    override suspend fun getHabitBlueprint(habit: Habit): HabitBlueprint {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getHabitBlueprintWithCategories(habitBlueprintId: Int): HabitBlueprintWithCategories {
+        return habitBlueprintDataSource.getHabitBlueprintsWithCategoriesById(habitBlueprintId)
+    }
+
+    override suspend fun getHabitBlueprintsWithCategories(): List<HabitBlueprintWithCategories> {
+        return habitBlueprintDataSource.getHabitBlueprintsWithCategories()
     }
 
     override suspend fun update(habitBlueprint: HabitBlueprint){

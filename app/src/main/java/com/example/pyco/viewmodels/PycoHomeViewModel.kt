@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.repositories.HabitsRepository
+import com.example.pyco.data.repositories.QuotesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,50 +13,73 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUIState(
-    val pendingHabits: List<Habit> = emptyList(),
-    val isLoading: Boolean = false,
-    val error: String? = null
+    val pendingHabits: List<HabitWithName> = emptyList(),
+    val quote: String = ""
 )
 
 @HiltViewModel
 class PycoHomeViewModel @Inject constructor(
     private val habitsRepository: HabitsRepository,
+    private val quotesRepository: QuotesRepository,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUIState(isLoading = true))
+    private val _uiState = MutableStateFlow(HomeUIState())
     val uiState: StateFlow<HomeUIState> = _uiState
 
     init {
-        observeHabits()
+        observePendingHabits()
     }
 
-    private fun observeHabits() {
+    private fun getQuote(habit: Habit?) {
         viewModelScope.launch {
-            habitsRepository.observePendingHabits()
+            val quote =
+                (if (habit != null) quotesRepository.getQuote(habit) else quotesRepository.getRandomQuote()).text
+            _uiState.update {
+                it.copy(
+                    quote = quote
+                )
+            }
+        }
+    }
+
+    private fun observePendingHabits() {
+        viewModelScope.launch {
+            habitsRepository.observePendingHabitAndHabitBlueprints()
                 .collect { habits ->
-                    _uiState.value = HomeUIState(
-                        pendingHabits = habits
-                    )
+                    if (_uiState.value.quote.isEmpty()) {
+                        getQuote(habits.firstOrNull()?.habit)
+                    }
+
+                    _uiState.update { homeUIState ->
+                        homeUIState.copy(
+                            pendingHabits = habits.map {
+                                HabitWithName(
+                                    habitId = it.habit.habitId,
+                                    name = it.habitBlueprint.name
+                                )
+                            }
+                        )
+                    }
                 }
         }
     }
 
-    fun setHabitPracticed(habit: Habit) {
+    fun setHabitPracticed(habit: HabitWithName) {
         viewModelScope.launch {
-            habitsRepository.setHabitPracticed(habit)
+            habitsRepository.setHabitPracticed(habit.habitId)
 
             removeFromPendingHabits(habit)
         }
     }
 
-    fun setHabitNotPracticed(habit: Habit) {
+    fun setHabitNotPracticed(habit: HabitWithName) {
         viewModelScope.launch {
-            habitsRepository.setHabitNotPracticed(habit)
+            habitsRepository.setHabitNotPracticed(habit.habitId)
 
             removeFromPendingHabits(habit)
         }
     }
 
-    private fun removeFromPendingHabits(habit: Habit) {
+    private fun removeFromPendingHabits(habit: HabitWithName) {
         _uiState.update { homeUIState ->
             homeUIState.copy(
                 pendingHabits = homeUIState.pendingHabits.minus(
@@ -65,3 +89,5 @@ class PycoHomeViewModel @Inject constructor(
         }
     }
 }
+
+data class HabitWithName(val habitId: Int, val name: String)

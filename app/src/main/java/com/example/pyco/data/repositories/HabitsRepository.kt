@@ -28,8 +28,10 @@ interface HabitsRepository {
     fun observeHabits(): Flow<List<Habit>>
     fun observeHabitDatesByDate(date: LocalDate): Flow<List<HabitDate>>
     fun observePendingHabits(): Flow<List<Habit>>
+    fun observePendingHabitAndHabitBlueprints(): Flow<List<HabitAndHabitBlueprint>>
     suspend fun setHabitNotPracticed(habit: Habit, date: LocalDate = LocalDate.now())
+    suspend fun setHabitNotPracticed(habitId: Int, date: LocalDate = LocalDate.now())
     suspend fun setHabitPracticed(habit: Habit, date: LocalDate = LocalDate.now())
-
+    suspend fun setHabitPracticed(habitId: Int, date: LocalDate = LocalDate.now())
     suspend fun update(habit: Habit)
 }

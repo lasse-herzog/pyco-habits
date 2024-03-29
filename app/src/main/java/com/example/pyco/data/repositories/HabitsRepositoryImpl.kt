@@ -86,13 +86,18 @@ class HabitsRepositoryImpl @Inject constructor(
     }
 
     override fun observePendingHabits(): Flow<List<Habit>> {
-        return habitDateDataSource.observeHabitDatesByDate(date = LocalDate.now())
+        return habitDateDataSource.observePendingHabitDates(date = LocalDate.now())
             .map { habitDates ->
-                habitDates.filter { it.habitPracticed == null }.map {
-                    habitDataSource.getById(
-                        it.habitId
-                    )
-                }
+                habitDates.map { habitDataSource.getById(it.habitId) }
+            }
+    }
+
+    override fun observePendingHabitAndHabitBlueprints(): Flow<List<HabitAndHabitBlueprint>> {
+        return habitDateDataSource.observePendingHabitDates(date = LocalDate.now())
+            .map { habitDates ->
+                habitDates
+                    .map { habitDataSource.getHabitAndHabitBlueprintById(it.habitId) }
+                    .filter { it.habitBlueprint.isActive }
             }
     }
 
@@ -100,6 +105,17 @@ class HabitsRepositoryImpl @Inject constructor(
         habitDateDataSource.upsert(
             HabitDate(
                 habitId = habit.habitId,
+                date = date,
+                habitPracticed = true,
+                timestamp = LocalDateTime.now()
+            )
+        )
+    }
+
+    override suspend fun setHabitPracticed(habitId: Int, date: LocalDate) {
+        habitDateDataSource.upsert(
+            HabitDate(
+                habitId = habitId,
                 date = date,
                 habitPracticed = true,
                 timestamp = LocalDateTime.now()
@@ -120,5 +136,16 @@ class HabitsRepositoryImpl @Inject constructor(
 
     override suspend fun update(habit: Habit) {
         habitDataSource.update(habit)
+    }
+
+    override suspend fun setHabitNotPracticed(habitId: Int, date: LocalDate) {
+        habitDateDataSource.upsert(
+            HabitDate(
+                habitId = habitId,
+                date = date,
+                habitPracticed = false,
+                timestamp = LocalDateTime.now()
+            )
+        )
     }
 }

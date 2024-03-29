@@ -14,7 +14,12 @@ import com.example.pyco.data.entities.HabitBlueprintWithQuotes
 interface HabitBlueprintDao {
     @Transaction
     @Query("SELECT * FROM habitBlueprint")
-    suspend fun getHabitBlueprintWithCategories(): List<HabitBlueprintWithCategories>
+    suspend fun getHabitBlueprintsWithCategories(): List<HabitBlueprintWithCategories>
+
+    @Transaction
+    @Query("SELECT * FROM habitBlueprint WHERE habitBlueprintId = :habitBlueprintId")
+    suspend fun getHabitBlueprintsWithCategoriesById(habitBlueprintId:Int): HabitBlueprintWithCategories
+
     @Transaction
     @Query("SELECT * FROM habitBlueprint")
     suspend fun getHabitBlueprintWithQuotes(): List<HabitBlueprintWithQuotes>

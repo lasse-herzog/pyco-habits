@@ -12,6 +12,9 @@ interface HabitDateDao {
     @Query("SELECT * FROM habitDate WHERE date=:date")
     fun observeHabitDatesByDate(date: LocalDate): Flow<List<HabitDate>>
 
+    @Query("SELECT * FROM habitDate WHERE date=:date AND habitPracticed IS NULL ")
+    fun observePendingHabitDates(date: LocalDate): Flow<List<HabitDate>>
+
     @Query("SELECT * FROM habitDate WHERE habitId = :habitId ORDER BY date DESC LIMIT 1")
     suspend fun getLastHabitDateByHabitId(habitId: Int): HabitDate?
 

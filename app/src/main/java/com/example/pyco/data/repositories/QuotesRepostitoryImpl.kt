@@ -8,13 +8,31 @@ import com.example.pyco.data.entities.Quote
 import javax.inject.Inject
 
 class QuotesRepositoryImpl @Inject constructor(
-    private val quotesDataSource: QuoteDao
+    private val quotesDataSource: QuoteDao,
+    private val habitBlueprintsRepository: HabitBlueprintsRepository
 ) : QuotesRepository {
-    override suspend fun getQuote(habit: Habit): Quote {
-        TODO("Not yet implemented")
+    override suspend fun getRandomQuote(): Quote {
+        return getQuotes().random()
     }
 
-    override suspend fun getQuoteByCategory(category: Category): Quote? {
+    override suspend fun getQuote(habit: Habit): Quote {
+        val blueprintQuote = quotesDataSource.getQuoteByHabitBlueprintId(habit.habitId)
+
+        if (blueprintQuote != null) return blueprintQuote
+
+        val categories =
+            habitBlueprintsRepository.getHabitBlueprintWithCategories(habit.habitBlueprintId).categories
+
+        if (categories.isNotEmpty()) return getQuoteByCategory(categories.first())
+
+        return getRandomQuote()
+    }
+
+    override suspend fun getQuotes(): List<Quote> {
+        return quotesDataSource.getAllQuotes()
+    }
+
+    override suspend fun getQuoteByCategory(category: Category): Quote {
         return quotesDataSource.getQuoteByCategoryId(category.categoryId)
     }
 
