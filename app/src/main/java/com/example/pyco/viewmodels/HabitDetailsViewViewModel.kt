@@ -10,7 +10,6 @@ import com.example.pyco.data.entities.Habit
 import com.example.pyco.data.entities.HabitAndHabitBlueprint
 import com.example.pyco.data.entities.HabitAndHabitBlueprintWithCategories
 import com.example.pyco.data.entities.HabitBlueprint
-import com.example.pyco.data.entities.HabitBlueprintCategoryCrossRef
 import com.example.pyco.data.repositories.CategoriesRepository
 import com.example.pyco.data.repositories.HabitBlueprintsRepository
 import com.example.pyco.data.repositories.HabitsRepository
@@ -43,6 +42,7 @@ data class HabitDetailsViewUIState(
         ), categories = listOf()
     ),
     val categories: MutableList<CategoryChipAndState> = mutableListOf(),
+    val savedCategories: MutableList<CategoryChipAndState> = mutableListOf(),
     val categoriesFull: MutableList<Category> = mutableListOf(),
     val isLoading: Boolean = false
 )
@@ -63,20 +63,23 @@ class HabitDetailsViewViewModel @Inject constructor(
     val categories: MutableList<CategoryChipAndState>
         get() = _uiState.value.categories
 
+    val savedCategories: MutableList<CategoryChipAndState>
+        get() = _uiState.value.savedCategories
+
     val habit: HabitAndHabitBlueprintWithCategories
         get() = _uiState.value.habit
 
     init {
-        getCategoriesForChips()
-        getAllCategories()
         getHabitById(habitId)
+        //getCategoriesForChips()
+        //getAllCategories()
+        //autoSelectCategories(habitId)
     }
 
     fun submitData(
         habitId: Int,
         habitBlueprintId: Int,
         name: String,
-        categories: List<Category>,
         description: String,
         isBadHabit: Boolean,
         interval: Int,
@@ -101,7 +104,7 @@ class HabitDetailsViewViewModel @Inject constructor(
             )
             habitsRepository.update(habit)
 
-            habitBlueprintDataSource.deleteCrossrefs(habitBlueprintId)
+            /*habitBlueprintDataSource.deleteCrossrefs(habitBlueprintId)
 
             for (id in categories.map { it.categoryId }) {
                 habitBlueprintDataSource.upsert(
@@ -110,7 +113,7 @@ class HabitDetailsViewViewModel @Inject constructor(
                         id
                     )
                 )
-            }
+            }*/
         }
     }
 
@@ -123,7 +126,8 @@ class HabitDetailsViewViewModel @Inject constructor(
             }
         }
     }
-
+}
+/*
     private fun getCategoriesForChips() {
         viewModelScope.launch {
             _uiState.update { currentState ->
@@ -147,4 +151,29 @@ class HabitDetailsViewViewModel @Inject constructor(
     fun categoryClicked(category: CategoryChipAndState, selected: Boolean) {
         categories.find { it.category == category.category }?.selected = selected
     }
-}
+
+    private fun autoSelectCategories(habitBlueprintId: Int) {
+        viewModelScope.launch {
+            val crossrefs = habitBlueprintDataSource.getCrossrefs(habitBlueprintId)
+
+            for (crossref in crossrefs) {
+                categories.find { it.category.categoryId == crossref.categoryId }?.selected = true
+            }
+            _uiState.update { currentState ->
+                currentState.copy(
+                    savedCategories = categories
+                )
+            }
+        }
+    }
+
+    fun saveState(){
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    categories = savedCategories
+                )
+            }
+        }
+    }
+}*/

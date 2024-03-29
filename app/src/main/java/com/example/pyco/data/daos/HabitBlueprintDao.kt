@@ -27,6 +27,9 @@ interface HabitBlueprintDao {
     @Query("UPDATE habitBlueprint SET isActive = :active WHERE habitBlueprintId = :habitBlueprintId")
     suspend fun updateActive(habitBlueprintId: Int, active: Boolean)
 
+    @Query("SELECT * FROM HabitBlueprintCategoryCrossRef WHERE habitBlueprintId = :habitBlueprintId")
+    suspend fun getCrossrefs(habitBlueprintId: Int): List<HabitBlueprintCategoryCrossRef>
+
     @Query("DELETE FROM HabitBlueprintCategoryCrossRef WHERE habitBlueprintId = :habitBlueprintId")
     suspend fun deleteCrossrefs(habitBlueprintId: Int)
 

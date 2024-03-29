@@ -26,3 +26,4 @@ Es wird nur eine lokale Room-Datenbank zur persistenten speicherung verwendet. D
 - Keine Unit-Tests
 - Möchte man ein Habit bearbeiten, werden die vorher ausgewählten Kategorien nicht direkt angezeigt, sondern erst, wenn man die Cards vertical scrollt.
 - Legt man beim Erstellen einer Habit ein End-Datum an, wird mit diesem noch nichts gemacht. Hier muss noch Logik eingebaut werden.
+- Das Editieren der Kategorien hat zu sehr vielen Fehlern geführt. Die Option, dia Kategorien eines angelegten Habits zu ändern wurde entfernt.

@@ -241,7 +241,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
 
                                             ) {
                                             Text(
-                                                text = "Intevall:",
+                                                text = "Intervall:",
                                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                                             )
                                             innerTextField()
@@ -362,6 +362,11 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                     if (interval.isEmpty()) {
                         interval = "1"
                     }
+                    for (category in viewModel.categories){
+                        if (category.selected){
+                            selectedCategories = selectedCategories.plus(category.category)
+                        }
+                    }
                     viewModel.submitData(
                         name,
                         selectedCategories,
@@ -370,6 +375,7 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
                         interval.toInt(),
                         datum
                     )
+                    selectedCategories = listOf()
                     onNavigateUp()
                 },
                 enabled = name.isNotEmpty(),
@@ -410,18 +416,11 @@ fun CreateHabit(viewModel: CreateHabitViewModel = hiltViewModel(), onNavigateUp:
 @Composable
 fun CatChip(category: CategoryChipAndState, viewModel: CreateHabitViewModel) {
     var selected by remember { mutableStateOf(category.selected) }
-    val categoriesWithId = viewModel.uiState.collectAsState().value.categoriesFull
 
     FilterChip(
         selected = selected,
         onClick = {
             selected = !selected
-            if ((selectedCategories.isEmpty() || !selectedCategories.contains(category.category)) && selected) {
-                selectedCategories = selectedCategories.plus(category.category)
-            }
-            if (selectedCategories.contains(category.category) && !selected) {
-                selectedCategories = selectedCategories.minus(category.category)
-            }
             viewModel.categoryClicked(category, selected)
         },
         label = { Text(category.category.name) },
