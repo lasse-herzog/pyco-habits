@@ -13,7 +13,7 @@
     - Navigation
     - Kalender View
 - Maximilian Hartmann
-    - Habits Overview Liste
+    - Habits Overview Liste und HabitItems
     - Datenbankprepopulation
     - Einbinden der Quotes
 
